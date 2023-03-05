@@ -37,6 +37,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "heartrate";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int HeartRateId { get; set; }
         [Required]
@@ -79,5 +81,12 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+        public string TargetHRName { get; set; }
+        public string GenderName { get; set; }
+        public string AgeName { get; set; }
+        public string BeatsPerSecondsName { get; set; }
+        public string SeeChartName { get; set; }
+        public string OfficerToActName { get; set; }
+
     }
 }

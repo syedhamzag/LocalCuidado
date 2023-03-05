@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
@@ -15,25 +17,27 @@ namespace AwesomeCare.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("AwesomeCare.Model.Models.AdlObsOfficerToAct", b =>
                 {
                     b.Property<int>("AdlObsOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("AdlObsOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("AdlObsOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdlObsOfficerToActId"), 1L, 1);
 
                     b.Property<int>("ObservationId")
-                        .HasColumnName("ObservationId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ObservationId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("AdlObsOfficerToActId");
 
@@ -41,7 +45,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_AdlObs_OfficerToAct");
+                    b.ToTable("tbl_AdlObs_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ApplicationUser", b =>
@@ -57,8 +61,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -70,12 +74,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -93,324 +97,256 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.AuditTrail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Duration")
-                        .HasColumnName("Duration")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Duration");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnName("UserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UserId");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasColumnName("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UserName");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_AuditTrail");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
-                {
-                    b.Property<int>("BMIChartOfficerToActId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("BMIChartOfficerToActId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BMIChartId")
-                        .HasColumnName("BMIChartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BMIChartOfficerToActId");
-
-                    b.HasIndex("BMIChartId");
-
-                    b.HasIndex("StaffPersonalInfoId");
-
-                    b.ToTable("tbl_BMIChart_OfficerToAct");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
-                {
-                    b.Property<int>("BMIChartPhysicianId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("BMIChartPhysicianId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BMIChartId")
-                        .HasColumnName("BMIChartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BMIChartPhysicianId");
-
-                    b.HasIndex("BMIChartId");
-
-                    b.HasIndex("StaffPersonalInfoId");
-
-                    b.ToTable("tbl_BMIChart_Physician");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
-                {
-                    b.Property<int>("BMIChartStaffNameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("BMIChartStaffNameId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BMIChartId")
-                        .HasColumnName("BMIChartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
-
-                    b.HasKey("BMIChartStaffNameId");
-
-                    b.HasIndex("BMIChartId");
-
-                    b.HasIndex("StaffPersonalInfoId");
-
-                    b.ToTable("tbl_BMIChart_StaffName");
+                    b.ToTable("tbl_AuditTrail", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Balance", b =>
                 {
                     b.Property<int>("BalanceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BalanceId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BalanceId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BalanceId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
 
                     b.Property<int>("Mobility")
-                        .HasColumnName("Mobility")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Mobility");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("BalanceId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Balance");
+                    b.ToTable("tbl_Balance", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
                 {
                     b.Property<int>("BaseRecordItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BaseRecordItemId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BaseRecordItemId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BaseRecordItemId"), 1L, 1);
 
                     b.Property<string>("AddLink")
-                        .HasColumnName("AddLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AddLink");
 
                     b.Property<int>("BaseRecordId")
-                        .HasColumnName("BaseRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordId");
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<int>("ExpiryInMonths")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ExpiryInMonths")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("ExpiryInMonths");
 
                     b.Property<bool>("HasGoogleForm")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HasGoogleForm")
                         .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(false)
+                        .HasColumnName("HasGoogleForm");
 
                     b.Property<string>("ValueName")
                         .IsRequired()
-                        .HasColumnName("ValueName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ValueName");
 
                     b.Property<string>("ViewLink")
-                        .HasColumnName("ViewLink")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ViewLink");
 
                     b.HasKey("BaseRecordItemId");
 
                     b.HasIndex("BaseRecordId");
 
-                    b.ToTable("tbl_BaseRecordItem");
+                    b.ToTable("tbl_BaseRecordItem", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordModel", b =>
                 {
                     b.Property<int>("BaseRecordId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BaseRecordId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BaseRecordId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BaseRecordId"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .HasColumnName("Description")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Description");
 
                     b.Property<string>("KeyName")
                         .IsRequired()
-                        .HasColumnName("KeyName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("KeyName");
 
                     b.HasKey("BaseRecordId");
 
-                    b.ToTable("tbl_BaseRecord");
+                    b.ToTable("tbl_BaseRecord", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BelieveTask", b =>
                 {
                     b.Property<int>("BelieveTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BelieveTaskId"), 1L, 1);
 
                     b.Property<int>("BestId")
-                        .HasColumnName("BestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BestId");
 
                     b.Property<int>("ReasonableBelieve")
-                        .HasColumnName("ReasonableBelieve")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReasonableBelieve");
 
                     b.HasKey("BelieveTaskId");
 
                     b.HasIndex("BestId");
 
-                    b.ToTable("tbl_BelieveTask");
+                    b.ToTable("tbl_BelieveTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BestInterestAssessment", b =>
                 {
                     b.Property<int>("BestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BestId"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.Property<string>("Position")
                         .IsRequired()
-                        .HasColumnName("Position")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Position");
 
                     b.Property<string>("Signature")
                         .IsRequired()
-                        .HasColumnName("Signature")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Signature");
 
                     b.HasKey("BestId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_BestInterestAssessment");
+                    b.ToTable("tbl_BestInterestAssessment", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagOfficerToAct", b =>
                 {
                     b.Property<int>("BloodCoagOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodCoagOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodCoagOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodCoagOfficerToActId"), 1L, 1);
 
                     b.Property<int>("BloodRecordId")
-                        .HasColumnName("BloodRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodRecordId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodCoagOfficerToActId");
 
@@ -418,24 +354,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodCoag_OfficerToAct");
+                    b.ToTable("tbl_BloodCoag_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagPhysician", b =>
                 {
                     b.Property<int>("BloodCoagPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodCoagPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodCoagPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodCoagPhysicianId"), 1L, 1);
 
                     b.Property<int>("BloodRecordId")
-                        .HasColumnName("BloodRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodRecordId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodCoagPhysicianId");
 
@@ -443,24 +380,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodCoag_Physician");
+                    b.ToTable("tbl_BloodCoag_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagStaffName", b =>
                 {
                     b.Property<int>("BloodCoagStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodCoagStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodCoagStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodCoagStaffNameId"), 1L, 1);
 
                     b.Property<int>("BloodRecordId")
-                        .HasColumnName("BloodRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodRecordId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodCoagStaffNameId");
 
@@ -468,24 +406,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodCoag_StaffName");
+                    b.ToTable("tbl_BloodCoag_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureOfficerToAct", b =>
                 {
                     b.Property<int>("BloodPressureOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodPressureOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodPressureOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodPressureOfficerToActId"), 1L, 1);
 
                     b.Property<int>("BloodPressureId")
-                        .HasColumnName("BloodPressureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodPressureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodPressureOfficerToActId");
 
@@ -493,24 +432,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodPressure_OfficerToAct");
+                    b.ToTable("tbl_BloodPressure_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressurePhysician", b =>
                 {
                     b.Property<int>("BloodPressurePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodPressurePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodPressurePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodPressurePhysicianId"), 1L, 1);
 
                     b.Property<int>("BloodPressureId")
-                        .HasColumnName("BloodPressureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodPressureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodPressurePhysicianId");
 
@@ -518,24 +458,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodPressure_Physician");
+                    b.ToTable("tbl_BloodPressure_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureStaffName", b =>
                 {
                     b.Property<int>("BloodPressureStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BloodPressureStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BloodPressureStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodPressureStaffNameId"), 1L, 1);
 
                     b.Property<int>("BloodPressureId")
-                        .HasColumnName("BloodPressureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodPressureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BloodPressureStaffNameId");
 
@@ -543,24 +484,103 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BloodPressure_StaffName");
+                    b.ToTable("tbl_BloodPressure_StaffName", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
+                {
+                    b.Property<int>("BMIChartOfficerToActId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BMIChartOfficerToActId"), 1L, 1);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartId");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("BMIChartOfficerToActId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_OfficerToAct", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
+                {
+                    b.Property<int>("BMIChartPhysicianId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BMIChartPhysicianId"), 1L, 1);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartId");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("BMIChartPhysicianId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_Physician", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
+                {
+                    b.Property<int>("BMIChartStaffNameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BMIChartStaffNameId"), 1L, 1);
+
+                    b.Property<int>("BMIChartId")
+                        .HasColumnType("int")
+                        .HasColumnName("BMIChartId");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.HasKey("BMIChartStaffNameId");
+
+                    b.HasIndex("BMIChartId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_BMIChart_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempOfficerToAct", b =>
                 {
                     b.Property<int>("BodyTempOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BodyTempOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BodyTempOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BodyTempOfficerToActId"), 1L, 1);
 
                     b.Property<int>("BodyTempId")
-                        .HasColumnName("BodyTempId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BodyTempId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BodyTempOfficerToActId");
 
@@ -568,24 +588,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BodyTemp_OfficerToAct");
+                    b.ToTable("tbl_BodyTemp_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempPhysician", b =>
                 {
                     b.Property<int>("BodyTempPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BodyTempPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BodyTempPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BodyTempPhysicianId"), 1L, 1);
 
                     b.Property<int>("BodyTempId")
-                        .HasColumnName("BodyTempId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BodyTempId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BodyTempPhysicianId");
 
@@ -593,24 +614,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BodyTemp_Physician");
+                    b.ToTable("tbl_BodyTemp_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempStaffName", b =>
                 {
                     b.Property<int>("BodyTempStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BodyTempStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BodyTempStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BodyTempStaffNameId"), 1L, 1);
 
                     b.Property<int>("BodyTempId")
-                        .HasColumnName("BodyTempId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BodyTempId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BodyTempStaffNameId");
 
@@ -618,24 +640,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BodyTemp_StaffName");
+                    b.ToTable("tbl_BodyTemp_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementOfficerToAct", b =>
                 {
                     b.Property<int>("BowelMovementOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BowelMovementOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BowelMovementOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BowelMovementOfficerToActId"), 1L, 1);
 
                     b.Property<int>("BowelMovementId")
-                        .HasColumnName("BowelMovementId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BowelMovementId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BowelMovementOfficerToActId");
 
@@ -643,24 +666,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BowelMovement_OfficerToAct");
+                    b.ToTable("tbl_BowelMovement_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementPhysician", b =>
                 {
                     b.Property<int>("BowelMovementPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BowelMovementPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BowelMovementPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BowelMovementPhysicianId"), 1L, 1);
 
                     b.Property<int>("BowelMovementId")
-                        .HasColumnName("BowelMovementId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BowelMovementId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BowelMovementPhysicianId");
 
@@ -668,24 +692,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BowelMovement_Physician");
+                    b.ToTable("tbl_BowelMovement_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementStaffName", b =>
                 {
                     b.Property<int>("BowelMovementStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("BowelMovementStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("BowelMovementStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BowelMovementStaffNameId"), 1L, 1);
 
                     b.Property<int>("BowelMovementId")
-                        .HasColumnName("BowelMovementId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BowelMovementId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("BowelMovementStaffNameId");
 
@@ -693,98 +718,102 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_BowelMovement_StaffName");
+                    b.ToTable("tbl_BowelMovement_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
                 {
                     b.Property<int>("CapacityId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CapacityId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CapacityId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CapacityId"), 1L, 1);
 
                     b.Property<string>("Implications")
                         .IsRequired()
-                        .HasColumnName("Implications")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Implications");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<int>("Pointer")
-                        .HasColumnName("Pointer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Pointer");
 
                     b.HasKey("CapacityId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_Capacity");
+                    b.ToTable("tbl_Capacity", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CapacityIndicator", b =>
                 {
                     b.Property<int>("CapacityIndicatorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CapacityIndicatorId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CapacityIndicatorId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CapacityIndicatorId"), 1L, 1);
 
                     b.Property<int>("BaseRecordId")
-                        .HasColumnName("BaseRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordId");
 
                     b.Property<int>("CapacityId")
-                        .HasColumnName("CapacityId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CapacityId");
 
                     b.HasKey("CapacityIndicatorId");
 
                     b.HasIndex("CapacityId");
 
-                    b.ToTable("tbl_CapacityIndicator");
+                    b.ToTable("tbl_CapacityIndicator", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareIssuesTask", b =>
                 {
                     b.Property<int>("CareIssuesTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CareIssuesTaskId"), 1L, 1);
 
                     b.Property<int>("BestId")
-                        .HasColumnName("BestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BestId");
 
                     b.Property<int>("Issues")
-                        .HasColumnName("Issues")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Issues");
 
                     b.HasKey("CareIssuesTaskId");
 
                     b.HasIndex("BestId");
 
-                    b.ToTable("tbl_CareIssuesTask");
+                    b.ToTable("tbl_CareIssuesTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareObjPersonToAct", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Id")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CareObjId")
-                        .HasColumnName("CareObjId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CareObjId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("Id");
 
@@ -792,807 +821,823 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_CareObjPersonToAct");
+                    b.ToTable("tbl_CareObjPersonToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CarePlanNutrition", b =>
                 {
                     b.Property<int>("NutritionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("NutritionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("NutritionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NutritionId"), 1L, 1);
 
                     b.Property<string>("AvoidFood")
                         .IsRequired()
-                        .HasColumnName("AvoidFood")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AvoidFood");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("DrinkType")
                         .IsRequired()
-                        .HasColumnName("DrinkType")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DrinkType");
 
                     b.Property<int>("EatingDifficulty")
-                        .HasColumnName("EatingDifficulty")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EatingDifficulty");
 
                     b.Property<int>("FoodIntake")
-                        .HasColumnName("FoodIntake")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FoodIntake");
 
                     b.Property<int>("FoodStorage")
-                        .HasColumnName("FoodStorage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FoodStorage");
 
                     b.Property<int>("MealPreparation")
-                        .HasColumnName("MealPreparation")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MealPreparation");
 
                     b.Property<string>("RiskMitigations")
                         .IsRequired()
-                        .HasColumnName("RiskMitigations")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RiskMitigations");
 
                     b.Property<string>("ServingMeal")
                         .IsRequired()
-                        .HasColumnName("ServingMeal")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ServingMeal");
 
                     b.Property<string>("SpecialDiet")
                         .IsRequired()
-                        .HasColumnName("SpecialDiet")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SpecialDiet");
 
                     b.Property<int>("ThingsILike")
-                        .HasColumnName("ThingsILike")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ThingsILike");
 
                     b.Property<string>("WhenRestock")
                         .IsRequired()
-                        .HasColumnName("WhenRestock")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WhenRestock");
 
                     b.Property<int>("WhoRestock")
-                        .HasColumnName("WhoRestock")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WhoRestock");
 
                     b.HasKey("NutritionId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_CarePlanNutrition");
+                    b.ToTable("tbl_CarePlanNutrition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareReview", b =>
                 {
                     b.Property<int>("CareReviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CareReviewId"), 1L, 1);
 
                     b.Property<int>("Action")
-                        .HasColumnName("Action")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Action");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnName("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Note");
 
                     b.HasKey("CareReviewId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_CareReview");
+                    b.ToTable("tbl_CareReview", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Chat", b =>
                 {
                     b.Property<int>("ChatId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ChatId"), 1L, 1);
 
                     b.Property<DateTime>("Dated")
-                        .HasColumnName("Dated")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Dated");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnName("Message")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Message");
 
                     b.Property<int>("ReceiverId")
-                        .HasColumnName("ReceiverId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReceiverId");
 
                     b.Property<int>("SenderId")
-                        .HasColumnName("SenderId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SenderId");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnName("Type")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Type");
 
                     b.HasKey("ChatId");
 
-                    b.ToTable("tbl_ClientChat");
+                    b.ToTable("tbl_ClientChat", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Client", b =>
                 {
                     b.Property<int>("ClientId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientId"), 1L, 1);
 
                     b.Property<string>("About")
                         .IsRequired()
-                        .HasColumnName("About")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("About");
 
                     b.Property<string>("Address")
-                        .HasColumnName("Address")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Address");
 
                     b.Property<int>("Aid")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Aid")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("Aid");
 
                     b.Property<int>("AreaCodeId")
-                        .HasColumnName("AreaCodeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreaCodeId");
 
                     b.Property<int>("CapacityId")
-                        .HasColumnName("CapacityId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CapacityId");
 
                     b.Property<int>("ChoiceOfStaffId")
-                        .HasColumnName("ChoiceOfStaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ChoiceOfStaffId");
 
                     b.Property<int>("ClientManager")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientManager")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("ClientManager");
 
                     b.Property<string>("DateOfBirth")
                         .IsRequired()
-                        .HasColumnName("DateOfBirth")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("DateOfBirth");
 
                     b.Property<int>("Denture")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Denture")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("Denture");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Email");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnName("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EndDate");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasColumnName("Firstname")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Firstname");
 
                     b.Property<int>("GenderId")
-                        .HasColumnName("GenderId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GenderId");
 
                     b.Property<string>("Hobbies")
                         .IsRequired()
-                        .HasColumnName("Hobbies")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Hobbies");
 
                     b.Property<string>("IdNumber")
                         .IsRequired()
-                        .HasColumnName("IdNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("IdNumber");
 
                     b.Property<string>("KeySafe")
                         .IsRequired()
-                        .HasColumnName("KeySafe")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("KeySafe");
 
                     b.Property<string>("Keyworker")
                         .IsRequired()
-                        .HasColumnName("Keyworker")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Keyworker");
 
                     b.Property<int>("KeyworkerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("KeyworkerId")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("KeyworkerId");
 
                     b.Property<int>("LanguageId")
-                        .HasColumnName("LanguageId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LanguageId");
 
                     b.Property<string>("Latitude")
-                        .HasColumnName("Latitude")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Latitude");
+
+                    b.Property<double>("LocationDistance")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("float")
+                        .HasDefaultValue(0.01)
+                        .HasColumnName("LocationDistance");
 
                     b.Property<string>("Longitude")
-                        .HasColumnName("Longitude")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Longitude");
 
                     b.Property<string>("Middlename")
                         .IsRequired()
-                        .HasColumnName("Middlename")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Middlename");
 
                     b.Property<int>("NumberOfCalls")
-                        .HasColumnName("NumberOfCalls")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfCalls");
 
                     b.Property<int>("NumberOfStaff")
-                        .HasColumnName("NumberOfStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfStaff");
 
                     b.Property<string>("PassportFilePath")
-                        .HasColumnName("PassportFilePath")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PassportFilePath");
 
                     b.Property<string>("Pin")
                         .IsRequired()
-                        .HasColumnName("Pin")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Pin");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
-                        .HasColumnName("PostCode")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PostCode");
 
                     b.Property<string>("PreferredName")
-                        .HasColumnName("PreferredName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PreferredName");
 
                     b.Property<string>("ProviderReference")
                         .IsRequired()
-                        .HasColumnName("ProviderReference")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ProviderReference");
 
                     b.Property<string>("ProvisionVenue")
                         .IsRequired()
-                        .HasColumnName("ProvisionVenue")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ProvisionVenue");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnName("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Rate");
 
                     b.Property<int>("ServiceId")
-                        .HasColumnName("ServiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServiceId");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.Property<int>("StatusId")
-                        .HasColumnName("StatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusId");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnName("Surname")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Surname");
 
                     b.Property<string>("TeamLeader")
                         .IsRequired()
-                        .HasColumnName("TeamLeader")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("TeamLeader");
 
                     b.Property<int>("TeamLeaderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TeamLeaderId")
                         .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasDefaultValue(0)
+                        .HasColumnName("TeamLeaderId");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("Telephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Telephone");
 
                     b.Property<int>("TeritoryId")
-                        .HasColumnName("TeritoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TeritoryId");
 
                     b.Property<string>("UniqueId")
-                        .HasColumnName("UniqueId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UniqueId");
 
                     b.HasKey("ClientId");
 
                     b.HasIndex("IdNumber")
                         .IsUnique();
 
-                    b.ToTable("tbl_Client");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
-                {
-                    b.Property<int>("BMIChartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Height")
-                        .HasColumnName("Height")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberRange")
-                        .HasColumnName("NumberRange")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PhysicianResponse")
-                        .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Reference")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("SeeChart")
-                        .HasColumnName("SeeChart")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SeeChartAttach")
-                        .HasColumnName("SeeChartAttach")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Weight")
-                        .IsRequired()
-                        .HasColumnName("Weight")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BMIChartId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("tbl_Client_BMIChart");
+                    b.ToTable("tbl_Client", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", b =>
                 {
                     b.Property<int>("BloodRecordId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodRecordId"), 1L, 1);
 
                     b.Property<int>("BloodStatus")
-                        .HasColumnName("BloodStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BloodStatus");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<int>("CurrentDose")
-                        .HasColumnName("CurrentDose")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CurrentDose");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("INR")
-                        .HasColumnName("INR")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("INR");
 
                     b.Property<int>("Indication")
-                        .HasColumnName("Indication")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Indication");
 
                     b.Property<int>("NewDose")
-                        .HasColumnName("NewDose")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NewDose");
 
                     b.Property<int>("NewINR")
-                        .HasColumnName("NewINR")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NewINR");
 
                     b.Property<string>("PhysicianResponce")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponce")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponce");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TargetINR")
-                        .HasColumnName("TargetINR")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetINR");
 
                     b.Property<string>("TargetINRAttach")
-                        .HasColumnName("TargetINRAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TargetINRAttach");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("BloodRecordId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_BloodCoagulationRecord");
+                    b.ToTable("tbl_Client_BloodCoagulationRecord", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodPressure", b =>
                 {
                     b.Property<int>("BloodPressureId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BloodPressureId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("GoalDiastolic")
-                        .HasColumnName("GoalDiastolic")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GoalDiastolic");
 
                     b.Property<int>("GoalSystolic")
-                        .HasColumnName("GoalSystolic")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GoalSystolic");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<int>("ReadingDiastolic")
-                        .HasColumnName("ReadingDiastolic")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReadingDiastolic");
 
                     b.Property<int>("ReadingSystolic")
-                        .HasColumnName("ReadingSystolic")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReadingSystolic");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("BloodPressureId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_BloodPressure");
+                    b.ToTable("tbl_Client_BloodPressure", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
+                {
+                    b.Property<int>("BMIChartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BMIChartId"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
+
+                    b.Property<DateTime>("Deadline")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int")
+                        .HasColumnName("Height");
+
+                    b.Property<int>("NumberRange")
+                        .HasColumnType("int")
+                        .HasColumnName("NumberRange");
+
+                    b.Property<string>("PhysicianResponse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
+
+                    b.Property<string>("Reference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Remarks")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
+
+                    b.Property<int>("SeeChart")
+                        .HasColumnType("int")
+                        .HasColumnName("SeeChart");
+
+                    b.Property<string>("SeeChartAttach")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeeChartAttach");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
+
+                    b.Property<string>("Weight")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Weight");
+
+                    b.HasKey("BMIChartId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("tbl_Client_BMIChart", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBodyTemp", b =>
                 {
                     b.Property<int>("BodyTempId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BodyTempId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<string>("CurrentReading")
                         .IsRequired()
-                        .HasColumnName("CurrentReading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CurrentReading");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("SeeChart")
-                        .HasColumnName("SeeChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeeChart");
 
                     b.Property<string>("SeeChartAttach")
-                        .HasColumnName("SeeChartAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeeChartAttach");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TargetTemp")
-                        .HasColumnName("TargetTemp")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetTemp");
 
                     b.Property<string>("TargetTempAttach")
-                        .HasColumnName("TargetTempAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TargetTempAttach");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("BodyTempId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_BodyTemp");
+                    b.ToTable("tbl_Client_BodyTemp", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBowelMovement", b =>
                 {
                     b.Property<int>("BowelMovementId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BowelMovementId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("Color")
-                        .HasColumnName("Color")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Color");
 
                     b.Property<string>("ColorAttach")
-                        .HasColumnName("ColorAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ColorAttach");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Size")
-                        .HasColumnName("Size")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Size");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<string>("TypeAttach")
-                        .HasColumnName("TypeAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TypeAttach");
 
                     b.HasKey("BowelMovementId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_BowelMovement");
+                    b.ToTable("tbl_Client_BowelMovement", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
                 {
                     b.Property<int>("ClientCareDetailsId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientCareDetailsId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientCareDetailsId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientCareDetailsId"), 1L, 1);
 
                     b.Property<int>("ClientCareDetailsTaskId")
-                        .HasColumnName("ClientCareDetailsTaskId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientCareDetailsTaskId");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Description")
-                        .HasColumnName("Description")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Description");
 
                     b.Property<string>("Location")
-                        .HasColumnName("Location")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Location");
 
                     b.Property<string>("Mitigation")
-                        .HasColumnName("Mitigation")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Mitigation");
 
                     b.Property<string>("Remark")
-                        .HasColumnName("Remark")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Remark");
 
                     b.Property<string>("Risk")
                         .IsRequired()
-                        .HasColumnName("Risk")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Risk");
 
                     b.HasKey("ClientCareDetailsId");
 
@@ -1600,189 +1645,193 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientCareDetails");
+                    b.ToTable("tbl_ClientCareDetails", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsHeading", b =>
                 {
                     b.Property<int>("ClientCareDetailsHeadingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientCareDetailsHeadingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientCareDetailsHeadingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientCareDetailsHeadingId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Heading");
 
                     b.HasKey("ClientCareDetailsHeadingId");
 
                     b.HasIndex("Heading")
                         .IsUnique()
-                        .HasName("IX_tbl_ClientCareDetailsHeading_Heading");
+                        .HasDatabaseName("IX_tbl_ClientCareDetailsHeading_Heading");
 
-                    b.ToTable("tbl_ClientCareDetailsHeading");
+                    b.ToTable("tbl_ClientCareDetailsHeading", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsTask", b =>
                 {
                     b.Property<int>("ClientCareDetailsTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientCareDetailsTaskId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientCareDetailsTaskId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientCareDetailsTaskId"), 1L, 1);
 
                     b.Property<int>("ClientCareDetailsHeadingId")
-                        .HasColumnName("ClientCareDetailsHeadingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientCareDetailsHeadingId");
 
                     b.Property<bool>("Deleted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Deleted")
                         .HasColumnType("bit")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(false)
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("Task")
                         .IsRequired()
-                        .HasColumnName("Task")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Task");
 
                     b.HasKey("ClientCareDetailsTaskId");
 
                     b.HasIndex("ClientCareDetailsHeadingId");
 
-                    b.ToTable("tbl_ClientCareDetailsTask");
+                    b.ToTable("tbl_ClientCareDetailsTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareObj", b =>
                 {
                     b.Property<int>("CareObjId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CareObjId"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnName("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Note");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("CareObjId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientCareObj");
+                    b.ToTable("tbl_ClientCareObj", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b =>
                 {
                     b.Property<int>("CleaningId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CleaningId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CleaningId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CleaningId"), 1L, 1);
 
                     b.Property<int>("AreasAndItems")
-                        .HasColumnName("AreasAndItems")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreasAndItems");
 
                     b.Property<DateTime>("DATEFROM")
-                        .HasColumnName("DATEFROM")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATEFROM");
 
                     b.Property<DateTime>("DATETO")
-                        .HasColumnName("DATETO")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATETO");
 
                     b.Property<string>("DAYOFCLEANING")
                         .IsRequired()
-                        .HasColumnName("DAYOFCLEANING")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DAYOFCLEANING");
 
                     b.Property<string>("DescOfItem")
                         .IsRequired()
-                        .HasColumnName("DescOfItem")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DescOfItem");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Details");
 
                     b.Property<string>("Disposal")
                         .IsRequired()
-                        .HasColumnName("Disposal")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Disposal");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnName("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Image");
 
                     b.Property<string>("LocationOfItem")
                         .IsRequired()
-                        .HasColumnName("LocationOfItem")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("LocationOfItem");
 
                     b.Property<DateTime>("MinuteAlloted")
-                        .HasColumnName("MinuteAlloted")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("MinuteAlloted");
 
                     b.Property<int>("NutritionId")
-                        .HasColumnName("NutritionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NutritionId");
 
                     b.Property<string>("SEEVIDEO")
                         .IsRequired()
-                        .HasColumnName("SEEVIDEO")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("SEEVIDEO");
 
                     b.Property<int>("STAFFId")
-                        .HasColumnName("STAFFId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("STAFFId");
 
                     b.Property<string>("SafetyHazard")
                         .IsRequired()
-                        .HasColumnName("SafetyHazard")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("SafetyHazard");
 
                     b.Property<int>("WhereToGet")
-                        .HasColumnName("WhereToGet")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WhereToGet");
 
                     b.Property<string>("WhereToKeep")
                         .IsRequired()
-                        .HasColumnName("WhereToKeep")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WhereToKeep");
 
                     b.HasKey("CleaningId");
 
@@ -1790,476 +1839,484 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("STAFFId");
 
-                    b.ToTable("tbl_Client_Cleaning");
+                    b.ToTable("tbl_Client_Cleaning", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
                 {
                     b.Property<int>("ComplainId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComplainId"), 1L, 1);
 
                     b.Property<string>("ACTIONTAKEN")
                         .IsRequired()
-                        .HasColumnName("ACTIONTAKEN")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ACTIONTAKEN");
 
                     b.Property<string>("COMPLAINANTCONTACT")
                         .IsRequired()
-                        .HasColumnName("COMPLAINANTCONTACT")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("COMPLAINANTCONTACT");
 
                     b.Property<string>("CONCERNSRAISED")
                         .IsRequired()
-                        .HasColumnName("CONCERNSRAISED")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CONCERNSRAISED");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("DATEOFACKNOWLEDGEMENT")
-                        .HasColumnName("DATEOFACKNOWLEDGEMENT")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATEOFACKNOWLEDGEMENT");
 
                     b.Property<DateTime>("DATERECIEVED")
-                        .HasColumnName("DATERECIEVED")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATERECIEVED");
 
                     b.Property<DateTime>("DUEDATE")
-                        .HasColumnName("DUEDATE")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DUEDATE");
 
                     b.Property<string>("EvidenceFilePath")
-                        .HasColumnName("EvidenceFilePath")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceFilePath");
 
                     b.Property<string>("FINALRESPONSETOFAMILY")
                         .IsRequired()
-                        .HasColumnName("FINALRESPONSETOFAMILY")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FINALRESPONSETOFAMILY");
 
                     b.Property<DateTime>("INCIDENTDATE")
-                        .HasColumnName("INCIDENTDATE")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("INCIDENTDATE");
 
                     b.Property<string>("INVESTIGATIONOUTCOME")
                         .IsRequired()
-                        .HasColumnName("INVESTIGATIONOUTCOME")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("INVESTIGATIONOUTCOME");
 
                     b.Property<string>("IRFNUMBER")
                         .IsRequired()
-                        .HasColumnName("IRFNUMBER ")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IRFNUMBER ");
 
                     b.Property<string>("LETTERTOSTAFF")
                         .IsRequired()
-                        .HasColumnName("LETTERTOSTAFF")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LETTERTOSTAFF");
 
                     b.Property<string>("LINK")
                         .IsRequired()
-                        .HasColumnName("LINK")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LINK");
 
                     b.Property<string>("REMARK")
                         .IsRequired()
-                        .HasColumnName("REMARK")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("REMARK");
 
                     b.Property<string>("ROOTCAUSE")
                         .IsRequired()
-                        .HasColumnName("ROOTCAUSE")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ROOTCAUSE");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("SOURCEOFCOMPLAINTS")
                         .IsRequired()
-                        .HasColumnName("SOURCEOFCOMPLAINTS")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SOURCEOFCOMPLAINTS");
 
                     b.Property<int>("StatusId")
-                        .HasColumnName("StatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusId");
 
                     b.HasKey("ComplainId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_ComplainRegister");
+                    b.ToTable("tbl_Client_ComplainRegister", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
                 {
                     b.Property<int>("DailyTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DailyTaskId"), 1L, 1);
 
                     b.Property<DateTime>("AmendmentDate")
-                        .HasColumnName("AmendmentDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("AmendmentDate");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("DailyTaskName")
                         .IsRequired()
-                        .HasColumnName("DailyTaskName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DailyTaskName");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.HasKey("DailyTaskId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientDailyTask");
+                    b.ToTable("tbl_ClientDailyTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
                 {
                     b.Property<int>("EyeHealthId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EyeHealthId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<int>("CurrentScore")
-                        .HasColumnName("CurrentScore")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CurrentScore");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("MethodUsed")
-                        .HasColumnName("MethodUsed")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MethodUsed");
 
                     b.Property<string>("MethodUsedAttach")
-                        .HasColumnName("MethodUsedAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MethodUsedAttach");
 
                     b.Property<int>("PatientGlasses")
-                        .HasColumnName("PatientGlasses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PatientGlasses");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<int>("TargetSet")
-                        .HasColumnName("TargetSet")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetSet");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<int>("ToolUsed")
-                        .HasColumnName("ToolUsed")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ToolUsed");
 
                     b.Property<string>("ToolUsedAttach")
-                        .HasColumnName("ToolUsedAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ToolUsedAttach");
 
                     b.HasKey("EyeHealthId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_EyeHealthMonitoring");
+                    b.ToTable("tbl_Client_EyeHealthMonitoring", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientFoodIntake", b =>
                 {
                     b.Property<int>("FoodIntakeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodIntakeId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<int>("CurrentIntake")
-                        .HasColumnName("CurrentIntake")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CurrentIntake");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Goal")
-                        .HasColumnName("Goal")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Goal");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("FoodIntakeId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_FoodIntake");
+                    b.ToTable("tbl_Client_FoodIntake", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHealthCondition", b =>
                 {
                     b.Property<int>("CHCId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CHCId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("HCId")
-                        .HasColumnName("HCId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HCId");
 
                     b.HasKey("CHCId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientHealthCondition");
+                    b.ToTable("tbl_ClientHealthCondition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHeartRate", b =>
                 {
                     b.Property<int>("HeartRateId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HeartRateId"), 1L, 1);
 
                     b.Property<int>("Age")
-                        .HasColumnName("Age")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Age");
 
                     b.Property<int>("BeatsPerSeconds")
-                        .HasColumnName("BeatsPerSeconds")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BeatsPerSeconds");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Gender")
-                        .HasColumnName("Gender")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Gender");
 
                     b.Property<string>("GenderAttach")
-                        .HasColumnName("GenderAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("GenderAttach");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("SeeChart")
-                        .HasColumnName("SeeChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeeChart");
 
                     b.Property<string>("SeeChartAttach")
-                        .HasColumnName("SeeChartAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeeChartAttach");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TargetHR")
-                        .HasColumnName("TargetHR")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetHR");
 
                     b.Property<string>("TargetHRAttach")
-                        .HasColumnName("TargetHRAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TargetHRAttach");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("HeartRateId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_HeartRate");
+                    b.ToTable("tbl_Client_HeartRate", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHobbies", b =>
                 {
                     b.Property<int>("CHId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CHId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("HId")
-                        .HasColumnName("HId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HId");
 
                     b.HasKey("CHId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientHobbies");
+                    b.ToTable("tbl_ClientHobbies", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>
                 {
                     b.Property<int>("ClientInvolvingPartyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientInvolvingPartyId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientInvolvingPartyId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientInvolvingPartyId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Address");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("ClientInvolvingPartyItemId")
-                        .HasColumnName("ClientInvolvingPartyItemId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientInvolvingPartyItemId");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Email");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Name");
 
                     b.Property<string>("Relationship")
                         .IsRequired()
-                        .HasColumnName("Relationship")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Relationship");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("Telephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Telephone");
 
                     b.HasKey("ClientInvolvingPartyId");
 
@@ -2267,169 +2324,171 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientInvolvingPartyItemId");
 
-                    b.ToTable("tbl_ClientInvolvingParty");
+                    b.ToTable("tbl_ClientInvolvingParty", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingPartyItem", b =>
                 {
                     b.Property<int>("ClientInvolvingPartyItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientInvolvingPartyItemId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientInvolvingPartyItemId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientInvolvingPartyItemId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Description");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasColumnName("ItemName")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("ItemName");
 
                     b.HasKey("ClientInvolvingPartyItemId");
 
                     b.HasIndex("ItemName")
                         .IsUnique()
-                        .HasName("IX_tbl_ClientInvolvingPartyItem_ItemName");
+                        .HasDatabaseName("IX_tbl_ClientInvolvingPartyItem_ItemName");
 
-                    b.ToTable("tbl_ClientInvolvingPartyItem");
+                    b.ToTable("tbl_ClientInvolvingPartyItem", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
                 {
                     b.Property<int>("LogAuditId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogAuditId"), 1L, 1);
 
                     b.Property<string>("ActionRecommended")
                         .IsRequired()
-                        .HasColumnName("ActionRecommended")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRecommended");
 
                     b.Property<string>("ActionTaken")
                         .IsRequired()
-                        .HasColumnName("ActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionTaken");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Communication")
                         .IsRequired()
-                        .HasColumnName("Communication")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Communication");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("EvidenceFilePath")
-                        .HasColumnName("EvidenceFilePath")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceFilePath");
 
                     b.Property<string>("EvidenceOfActionTaken")
                         .IsRequired()
-                        .HasColumnName("EvidenceOfActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceOfActionTaken");
 
                     b.Property<string>("ImproperDocumentation")
                         .IsRequired()
-                        .HasColumnName("ImproperDocumentation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ImproperDocumentation");
 
                     b.Property<string>("IsCareDifference")
                         .IsRequired()
-                        .HasColumnName("IsCareDifference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IsCareDifference");
 
                     b.Property<string>("IsCareExpected")
                         .IsRequired()
-                        .HasColumnName("IsCareExpected")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IsCareExpected");
 
                     b.Property<string>("LessonLearntAndShared")
                         .IsRequired()
-                        .HasColumnName("LessonLearntAndShared")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LessonLearntAndShared");
 
                     b.Property<string>("LogURL")
                         .IsRequired()
-                        .HasColumnName("LogURL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LogURL");
 
                     b.Property<string>("NameOfAuditor")
                         .IsRequired()
-                        .HasColumnName("NameOfAuditor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NameOfAuditor");
 
                     b.Property<DateTime>("NextDueDate")
-                        .HasColumnName("NextDueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextDueDate");
 
                     b.Property<string>("Observations")
                         .IsRequired()
-                        .HasColumnName("Observations")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Observations");
 
                     b.Property<string>("ProperDocumentation")
                         .IsRequired()
-                        .HasColumnName("ProperDocumentation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ProperDocumentation");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("RepeatOfIncident")
-                        .HasColumnName("RepeatOfIncident")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RepeatOfIncident");
 
                     b.Property<string>("RotCause")
                         .IsRequired()
-                        .HasColumnName("RotCause")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RotCause");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("ThinkingServiceUsers")
                         .IsRequired()
-                        .HasColumnName("ThinkingServiceUsers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThinkingServiceUsers");
 
                     b.Property<string>("ThinkingStaff")
                         .IsRequired()
-                        .HasColumnName("ThinkingStaff")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThinkingStaff");
 
                     b.Property<string>("ThinkingStaffStop")
                         .IsRequired()
-                        .HasColumnName("ThinkingStaffStop")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThinkingStaffStop");
 
                     b.HasKey("LogAuditId");
 
@@ -2437,52 +2496,53 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_LogAudit");
+                    b.ToTable("tbl_Client_LogAudit", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b =>
                 {
                     b.Property<int>("ClientMealId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMealId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientMealId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientMealId"), 1L, 1);
 
                     b.Property<int>("ClientMealTypeId")
-                        .HasColumnName("ClientMealTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientMealTypeId");
 
                     b.Property<string>("HOWTOPREPARE")
                         .IsRequired()
-                        .HasColumnName("HOWTOPREPARE")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("HOWTOPREPARE");
 
                     b.Property<string>("MEALDETAILS")
                         .IsRequired()
-                        .HasColumnName("MEALDETAILS")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MEALDETAILS");
 
                     b.Property<int>("MealDayofWeekId")
-                        .HasColumnName("MealDayofWeekId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MealDayofWeekId");
 
                     b.Property<int>("NutritionId")
-                        .HasColumnName("NutritionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NutritionId");
 
                     b.Property<string>("PICTURE")
                         .IsRequired()
-                        .HasColumnName("PICTURE")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PICTURE");
 
                     b.Property<string>("SEEVIDEO")
                         .IsRequired()
-                        .HasColumnName("SEEVIDEO")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SEEVIDEO");
 
                     b.Property<int>("TypeId")
-                        .HasColumnName("TypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TypeId");
 
                     b.HasKey("ClientMealId");
 
@@ -2492,152 +2552,154 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("NutritionId");
 
-                    b.ToTable("tbl_Client_MealDay");
+                    b.ToTable("tbl_Client_MealDay", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealType", b =>
                 {
                     b.Property<int>("ClientMealTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMealTypeId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientMealTypeId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientMealTypeId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("MealType")
                         .IsRequired()
-                        .HasColumnName("MealType")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("MealType");
 
                     b.HasKey("ClientMealTypeId");
 
                     b.HasIndex("MealType")
                         .IsUnique()
-                        .HasName("IX_tbl_Client_MealType_MealType");
+                        .HasDatabaseName("IX_tbl_Client_MealType_MealType");
 
-                    b.ToTable("tbl_Client_MealType");
+                    b.ToTable("tbl_Client_MealType", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
                 {
                     b.Property<int>("MedAuditId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedAuditId"), 1L, 1);
 
                     b.Property<string>("ActionRecommended")
                         .IsRequired()
-                        .HasColumnName("ActionRecommended")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRecommended");
 
                     b.Property<string>("ActionTaken")
                         .IsRequired()
-                        .HasColumnName("ActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("EvidenceOfActionTaken")
                         .IsRequired()
-                        .HasColumnName("EvidenceOfActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceOfActionTaken");
 
                     b.Property<int>("GapsInAdmistration")
-                        .HasColumnName("GapsInAdmistration")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GapsInAdmistration");
 
                     b.Property<int>("HardCopyReview")
-                        .HasColumnName("HardCopyReview")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HardCopyReview");
 
                     b.Property<string>("LessonLearntAndShared")
                         .IsRequired()
-                        .HasColumnName("LessonLearntAndShared")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LessonLearntAndShared");
 
                     b.Property<string>("LogURL")
                         .IsRequired()
-                        .HasColumnName("LogURL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LogURL");
 
                     b.Property<int>("MarChartReview")
-                        .HasColumnName("MarChartReview")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MarChartReview");
 
                     b.Property<int>("MedicationConcern")
-                        .HasColumnName("MedicationConcern")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationConcern");
 
                     b.Property<int>("MedicationInfoUploadEefficiency")
-                        .HasColumnName("MedicationInfoUploadEefficiency")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationInfoUploadEefficiency");
 
                     b.Property<int>("MedicationSupplyEfficiency")
-                        .HasColumnName("MedicationSupplyEfficiency")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationSupplyEfficiency");
 
                     b.Property<DateTime>("NextDueDate")
-                        .HasColumnName("NextDueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextDueDate");
 
                     b.Property<string>("Observations")
                         .IsRequired()
-                        .HasColumnName("Observations")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Observations");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("RepeatOfIncident")
-                        .HasColumnName("RepeatOfIncident")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RepeatOfIncident");
 
                     b.Property<string>("RightsOfMedication")
                         .IsRequired()
-                        .HasColumnName("RightsOfMedication")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RightsOfMedication");
 
                     b.Property<string>("RotCause")
                         .IsRequired()
-                        .HasColumnName("RotCause")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RotCause");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("ThinkingServiceUsers")
                         .IsRequired()
-                        .HasColumnName("ThinkingServiceUsers")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThinkingServiceUsers");
 
                     b.HasKey("MedAuditId");
 
@@ -2645,97 +2707,98 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_MedAudit");
+                    b.ToTable("tbl_Client_MedAudit", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
                 {
                     b.Property<int>("ClientMedicationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientMedicationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientMedicationId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("ClientMedImage")
                         .IsRequired()
-                        .HasColumnName("ClientMedImage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClientMedImage");
 
                     b.Property<string>("Dossage")
                         .IsRequired()
-                        .HasColumnName("Dossage")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Dossage");
 
                     b.Property<string>("ExpiryDate")
                         .IsRequired()
-                        .HasColumnName("ExpiryDate")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("ExpiryDate");
 
                     b.Property<string>("Frequency")
                         .IsRequired()
-                        .HasColumnName("Frequency")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Frequency");
 
                     b.Property<int>("Gap_Hour")
-                        .HasColumnName("Gap_Hour")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Gap_Hour");
 
                     b.Property<int>("Means")
-                        .HasColumnName("Means")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Means");
 
                     b.Property<int>("MedicationId")
-                        .HasColumnName("MedicationId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationId");
 
                     b.Property<int>("MedicationManufacturerId")
-                        .HasColumnName("MedicationManufacturerId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationManufacturerId");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Remark");
 
                     b.Property<string>("Route")
                         .IsRequired()
-                        .HasColumnName("Route")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Route");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
-                        .HasColumnName("StartDate")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("StartDate");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnName("Status")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Status");
 
                     b.Property<string>("StopDate")
                         .IsRequired()
-                        .HasColumnName("StopDate")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("StopDate");
 
                     b.Property<int>("TimeCritical")
-                        .HasColumnName("TimeCritical")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TimeCritical");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.HasKey("ClientMedicationId");
 
@@ -2745,27 +2808,28 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("MedicationManufacturerId");
 
-                    b.ToTable("tbl_ClientMedication");
+                    b.ToTable("tbl_ClientMedication", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
                 {
                     b.Property<int>("ClientMedicationDayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationDayId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientMedicationDayId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientMedicationDayId"), 1L, 1);
 
                     b.Property<int>("ClientMedicationId")
-                        .HasColumnName("ClientMedicationId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientMedicationId");
 
                     b.Property<int?>("ClientMedicationId1")
                         .HasColumnType("int");
 
                     b.Property<int>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaDayofWeekId");
 
                     b.HasKey("ClientMedicationDayId");
 
@@ -2776,24 +2840,25 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasIndex("RotaDayofWeekId")
                         .IsUnique();
 
-                    b.ToTable("tbl_ClientMedicationDay");
+                    b.ToTable("tbl_ClientMedicationDay", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationPeriod", b =>
                 {
                     b.Property<int>("ClientMedicationPeriodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientMedicationPeriodId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientMedicationPeriodId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientMedicationPeriodId"), 1L, 1);
 
                     b.Property<int>("ClientMedicationDayId")
-                        .HasColumnName("ClientMedicationDayId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientMedicationDayId");
 
                     b.Property<int>("ClientRotaTypeId")
-                        .HasColumnName("ClientRotaTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaTypeId");
 
                     b.Property<int>("RotaId")
                         .HasColumnType("int");
@@ -2810,108 +2875,109 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientRotaTypeId");
 
-                    b.ToTable("tbl_ClientMedicationPeriod");
+                    b.ToTable("tbl_ClientMedicationPeriod", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMgtVisit", b =>
                 {
                     b.Property<int>("VisitId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VisitId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("ActionsTakenByMPCC")
                         .IsRequired()
-                        .HasColumnName("ActionsTakenByMPCC")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionsTakenByMPCC");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("EvidenceOfActionTaken")
                         .IsRequired()
-                        .HasColumnName("EvidenceOfActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceOfActionTaken");
 
                     b.Property<int>("HowToComplain")
-                        .HasColumnName("HowToComplain")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HowToComplain");
 
                     b.Property<string>("ImprovementExpect")
                         .IsRequired()
-                        .HasColumnName("ImprovementExpect")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ImprovementExpect");
 
                     b.Property<string>("LessonLearntAndShared")
                         .IsRequired()
-                        .HasColumnName("LessonLearntAndShared")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LessonLearntAndShared");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Observation")
                         .IsRequired()
-                        .HasColumnName("Observation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Observation");
 
                     b.Property<int>("RateManagers")
-                        .HasColumnName("RateManagers")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RateManagers");
 
                     b.Property<int>("RateServiceRecieving")
-                        .HasColumnName("RateServiceRecieving")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RateServiceRecieving");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("RotCause")
                         .IsRequired()
-                        .HasColumnName("RotCause")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RotCause");
 
                     b.Property<int>("ServiceRecommended")
-                        .HasColumnName("ServiceRecommended")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServiceRecommended");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("VisitId");
 
@@ -2919,47 +2985,48 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_MgtVisit");
+                    b.ToTable("tbl_Client_MgtVisit", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
                 {
                     b.Property<int>("NutritionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("NutritionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("NutritionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NutritionId"), 1L, 1);
 
                     b.Property<string>("CleaningSpecialNote")
                         .IsRequired()
-                        .HasColumnName("CleaningSpecialNote")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CleaningSpecialNote");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("DATEFROM")
-                        .HasColumnName("DATEFROM")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATEFROM");
 
                     b.Property<DateTime>("DATETO")
-                        .HasColumnName("DATETO")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATETO");
 
                     b.Property<string>("MealSpecialNote")
                         .IsRequired()
-                        .HasColumnName("MealSpecialNote")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MealSpecialNote");
 
                     b.Property<string>("ShoppingSpecialNote")
                         .IsRequired()
-                        .HasColumnName("ShoppingSpecialNote")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ShoppingSpecialNote");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.HasKey("NutritionId");
 
@@ -2967,300 +3034,305 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Client_Nutrition");
+                    b.ToTable("tbl_Client_Nutrition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientOxygenLvl", b =>
                 {
                     b.Property<int>("OxygenLvlId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OxygenLvlId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<string>("CurrentReading")
                         .IsRequired()
-                        .HasColumnName("CurrentReading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CurrentReading");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("SeeChart")
-                        .HasColumnName("SeeChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeeChart");
 
                     b.Property<string>("SeeChartAttach")
-                        .HasColumnName("SeeChartAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeeChartAttach");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TargetOxygen")
-                        .HasColumnName("TargetOxygen")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetOxygen");
 
                     b.Property<string>("TargetOxygenAttach")
-                        .HasColumnName("TargetOxygenAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TargetOxygenAttach");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("OxygenLvlId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_Oxygenlvl");
+                    b.ToTable("tbl_Client_Oxygenlvl", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPainChart", b =>
                 {
                     b.Property<int>("PainChartId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PainChartId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Location")
-                        .HasColumnName("Location")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Location");
 
                     b.Property<string>("LocationAttach")
-                        .HasColumnName("LocationAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LocationAttach");
 
                     b.Property<int>("PainLvl")
-                        .HasColumnName("PainLvl")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PainLvl");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<string>("TypeAttach")
-                        .HasColumnName("TypeAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TypeAttach");
 
                     b.HasKey("PainChartId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_PainChart");
+                    b.ToTable("tbl_Client_PainChart", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPerformanceIndicator", b =>
                 {
                     b.Property<int>("PerformanceIndicatorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PerformanceIndicatorId"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnName("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DueDate");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("Rating")
-                        .HasColumnName("Rating")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Rating");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.HasKey("PerformanceIndicatorId");
 
-                    b.ToTable("tbl_ClientPerformanceIndicator");
+                    b.ToTable("tbl_ClientPerformanceIndicator", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPerformanceIndicatorTask", b =>
                 {
                     b.Property<int>("PerformanceIndicatorTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PerformanceIndicatorTaskId"), 1L, 1);
 
                     b.Property<int>("PerformanceIndicatorId")
-                        .HasColumnName("StaffCompetenceTestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffCompetenceTestId");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("PerformanceIndicatorTaskId");
 
                     b.HasIndex("PerformanceIndicatorId");
 
-                    b.ToTable("tbl_ClientPerformanceIndicatorTask");
+                    b.ToTable("tbl_ClientPerformanceIndicatorTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientProgram", b =>
                 {
                     b.Property<int>("ProgramId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProgramId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("DaysOfChoice")
-                        .HasColumnName("DaysOfChoice")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DaysOfChoice");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("DetailsOfProgram")
-                        .HasColumnName("DetailsOfProgram")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DetailsOfProgram");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Observation")
                         .IsRequired()
-                        .HasColumnName("Observation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Observation");
 
                     b.Property<int>("PlaceLocationProgram")
-                        .HasColumnName("PlaceLocationProgram")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PlaceLocationProgram");
 
                     b.Property<int>("ProgramOfChoice")
-                        .HasColumnName("ProgramOfChoice")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProgramOfChoice");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("ProgramId");
 
@@ -3268,114 +3340,116 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_Program");
+                    b.ToTable("tbl_Client_Program", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPulseRate", b =>
                 {
                     b.Property<int>("PulseRateId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PulseRateId"), 1L, 1);
 
                     b.Property<string>("Chart")
                         .IsRequired()
-                        .HasColumnName("Chart")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Chart");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<string>("CurrentPulse")
                         .IsRequired()
-                        .HasColumnName("CurrentPulse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CurrentPulse");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("SeeChart")
-                        .HasColumnName("SeeChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeeChart");
 
                     b.Property<string>("SeeChartAttach")
-                        .HasColumnName("SeeChartAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeeChartAttach");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TargetPulse")
-                        .HasColumnName("TargetPulse")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TargetPulse");
 
                     b.Property<string>("TargetPulseAttach")
-                        .HasColumnName("TargetPulseAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TargetPulseAttach");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.HasKey("PulseRateId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_PulseRate");
+                    b.ToTable("tbl_Client_PulseRate", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRegulatoryContact", b =>
                 {
                     b.Property<int>("ClientRegulatoryContactId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRegulatoryContactId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientRegulatoryContactId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientRegulatoryContactId"), 1L, 1);
 
                     b.Property<int>("BaseRecordItemId")
-                        .HasColumnName("BaseRecordItemId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordItemId");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime?>("DatePerformed")
-                        .HasColumnName("DatePerformed")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DatePerformed");
 
                     b.Property<DateTime?>("DueDate")
-                        .HasColumnName("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DueDate");
 
                     b.Property<string>("Evidence")
-                        .HasColumnName("Evidence")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Evidence");
 
                     b.HasKey("ClientRegulatoryContactId");
 
@@ -3383,24 +3457,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ClientRegulatoryContact");
+                    b.ToTable("tbl_ClientRegulatoryContact", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRota", b =>
                 {
                     b.Property<int>("ClientRotaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRotaId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientRotaId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientRotaId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("ClientRotaTypeId")
-                        .HasColumnName("ClientRotaTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaTypeId");
 
                     b.HasKey("ClientRotaId");
 
@@ -3408,53 +3483,54 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("ClientRotaTypeId");
 
-                    b.ToTable("tbl_ClientRota");
+                    b.ToTable("tbl_ClientRota", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
                 {
                     b.Property<int>("ClientRotaDaysId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRotaDaysId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientRotaDaysId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientRotaDaysId"), 1L, 1);
 
                     b.Property<int?>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("ClientRotaId")
-                        .HasColumnName("ClientRotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaId");
 
                     b.Property<int?>("ClientRotaTypeId")
-                        .HasColumnName("ClientRotaTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaTypeId");
 
                     b.Property<int>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaDayofWeekId");
 
                     b.Property<int>("RotaId")
-                        .HasColumnName("RotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaId");
 
                     b.Property<string>("StartTime")
                         .IsRequired()
-                        .HasColumnName("StartTime")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("StartTime");
 
                     b.Property<string>("StopTime")
                         .IsRequired()
-                        .HasColumnName("StopTime")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("StopTime");
 
                     b.Property<string>("WeekDay")
-                        .HasColumnName("WeekDay")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("WeekDay");
 
                     b.HasKey("ClientRotaDaysId");
 
@@ -3464,24 +3540,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("RotaId");
 
-                    b.ToTable("tbl_ClientRotaDays");
+                    b.ToTable("tbl_ClientRotaDays", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaTask", b =>
                 {
                     b.Property<int>("ClientRotaTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRotaTaskId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientRotaTaskId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientRotaTaskId"), 1L, 1);
 
                     b.Property<int>("ClientRotaDaysId")
-                        .HasColumnName("ClientRotaDaysId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaDaysId");
 
                     b.Property<int>("RotaTaskId")
-                        .HasColumnName("RotaTaskId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaTaskId");
 
                     b.HasKey("ClientRotaTaskId");
 
@@ -3489,280 +3566,286 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("RotaTaskId");
 
-                    b.ToTable("tbl_ClientRotaTask");
+                    b.ToTable("tbl_ClientRotaTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaType", b =>
                 {
                     b.Property<int>("ClientRotaTypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientRotaTypeId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientRotaTypeId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientRotaTypeId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("RotaType")
                         .IsRequired()
-                        .HasColumnName("RotaType")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("RotaType");
 
                     b.HasKey("ClientRotaTypeId");
 
                     b.HasIndex("RotaType")
                         .IsUnique()
-                        .HasName("IX_tbl_ClientRotaType_RotaType");
+                        .HasDatabaseName("IX_tbl_ClientRotaType_RotaType");
 
-                    b.ToTable("tbl_ClientRotaType");
+                    b.ToTable("tbl_ClientRotaType", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientSeizure", b =>
                 {
                     b.Property<int>("SeizureId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeizureId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Often")
-                        .HasColumnName("Often")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Often");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("SeizureLength")
-                        .HasColumnName("SeizureLength")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeizureLength");
 
                     b.Property<string>("SeizureLengthAttach")
-                        .HasColumnName("SeizureLengthAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeizureLengthAttach");
 
                     b.Property<int>("SeizureType")
-                        .HasColumnName("SeizureType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeizureType");
 
                     b.Property<string>("SeizureTypeAttach")
-                        .HasColumnName("SeizureTypeAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SeizureTypeAttach");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<string>("WhatHappened")
                         .IsRequired()
-                        .HasColumnName("WhatHappened")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WhatHappened");
 
                     b.HasKey("SeizureId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_Seizure");
+                    b.ToTable("tbl_Client_Seizure", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetail", b =>
                 {
                     b.Property<int>("ClientServiceDetailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientServiceDetailId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientServiceDetailId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientServiceDetailId"), 1L, 1);
 
                     b.Property<decimal>("AmountGiven")
-                        .HasColumnName("AmountGiven")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("AmountGiven");
 
                     b.Property<decimal>("AmountReturned")
-                        .HasColumnName("AmountReturned")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("AmountReturned");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTimeOffset>("ServiceDate")
-                        .HasColumnName("ServiceDate")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ServiceDate");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ClientServiceDetailId");
 
-                    b.ToTable("tbl_ClientServiceDetail");
+                    b.ToTable("tbl_ClientServiceDetail", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailItem", b =>
                 {
                     b.Property<int>("ClientServiceDetailItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientServiceDetailItemId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientServiceDetailItemId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientServiceDetailItemId"), 1L, 1);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnName("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
 
                     b.Property<int>("ClientServiceDetailId")
-                        .HasColumnName("ClientServiceDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientServiceDetailId");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasColumnName("ItemName")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("ItemName");
 
                     b.Property<int>("Quantity")
-                        .HasColumnName("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Quantity");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnName("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Rate");
 
                     b.HasKey("ClientServiceDetailItemId");
 
                     b.HasIndex("ClientServiceDetailId");
 
-                    b.ToTable("tbl_ClientServiceDetailItem");
+                    b.ToTable("tbl_ClientServiceDetailItem", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailReceipt", b =>
                 {
                     b.Property<int>("ClientServiceDetailReceiptId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ClientServiceDetailReceiptId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ClientServiceDetailReceiptId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClientServiceDetailReceiptId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientServiceDetailId")
-                        .HasColumnName("ClientServiceDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientServiceDetailId");
 
                     b.HasKey("ClientServiceDetailReceiptId");
 
                     b.HasIndex("ClientServiceDetailId");
 
-                    b.ToTable("tbl_ClientServiceDetailReceipt");
+                    b.ToTable("tbl_ClientServiceDetailReceipt", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceWatch", b =>
                 {
                     b.Property<int>("WatchId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WatchId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("Contact")
-                        .HasColumnName("Contact")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Contact");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Details")
-                        .HasColumnName("Details")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Details");
 
                     b.Property<int>("Incident")
-                        .HasColumnName("Incident")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Incident");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Observation")
                         .IsRequired()
-                        .HasColumnName("Observation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Observation");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("WatchId");
 
@@ -3770,75 +3853,76 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_ServiceWatch");
+                    b.ToTable("tbl_Client_ServiceWatch", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b =>
                 {
                     b.Property<int>("ShoppingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ShoppingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ShoppingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShoppingId"), 1L, 1);
 
                     b.Property<decimal>("Amount")
-                        .HasColumnName("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
 
                     b.Property<DateTime>("DATEFROM")
-                        .HasColumnName("DATEFROM")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATEFROM");
 
                     b.Property<DateTime>("DATETO")
-                        .HasColumnName("DATETO")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DATETO");
 
                     b.Property<string>("DAYOFSHOPPING")
                         .IsRequired()
-                        .HasColumnName("DAYOFSHOPPING")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DAYOFSHOPPING");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Description");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnName("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Image");
 
                     b.Property<string>("Item")
                         .IsRequired()
-                        .HasColumnName("Item")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("Item");
 
                     b.Property<string>("LocationOfPurchase")
                         .IsRequired()
-                        .HasColumnName("LocationOfPurchase")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("LocationOfPurchase");
 
                     b.Property<string>("MeansOfPurchase")
                         .IsRequired()
-                        .HasColumnName("MeansOfPurchase")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("MeansOfPurchase");
 
                     b.Property<int>("NutritionId")
-                        .HasColumnName("NutritionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NutritionId");
 
                     b.Property<int>("Quantity")
-                        .HasColumnName("Quantity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Quantity");
 
                     b.Property<int>("STAFFId")
-                        .HasColumnName("STAFFId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("STAFFId");
 
                     b.HasKey("ShoppingId");
 
@@ -3846,118 +3930,119 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("STAFFId");
 
-                    b.ToTable("tbl_Client_Shopping");
+                    b.ToTable("tbl_Client_Shopping", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
                 {
                     b.Property<int>("VoiceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoiceId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("ActionsTakenByMPCC")
                         .IsRequired()
-                        .HasColumnName("ActionsTakenByMPCC")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionsTakenByMPCC");
 
                     b.Property<string>("AreasOfImprovements")
                         .IsRequired()
-                        .HasColumnName("AreasOfImprovements")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AreasOfImprovements");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("EvidenceOfActionTaken")
                         .IsRequired()
-                        .HasColumnName("EvidenceOfActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("EvidenceOfActionTaken");
 
                     b.Property<string>("HealthGoalLongTerm")
                         .IsRequired()
-                        .HasColumnName("HealthGoalLongTerm")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("HealthGoalLongTerm");
 
                     b.Property<string>("HealthGoalShortTerm")
                         .IsRequired()
-                        .HasColumnName("HealthGoalShortTerm")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("HealthGoalShortTerm");
 
                     b.Property<int>("InterestedInPrograms")
-                        .HasColumnName("InterestedInPrograms")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("InterestedInPrograms");
 
                     b.Property<string>("LessonLearntAndShared")
                         .IsRequired()
-                        .HasColumnName("LessonLearntAndShared")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LessonLearntAndShared");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<int>("OfficeStaffSupport")
-                        .HasColumnName("OfficeStaffSupport")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OfficeStaffSupport");
 
                     b.Property<int>("RateServiceRecieving")
-                        .HasColumnName("RateServiceRecieving")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RateServiceRecieving");
 
                     b.Property<int>("RateStaffAttending")
-                        .HasColumnName("RateStaffAttending")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RateStaffAttending");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("RotCause")
                         .IsRequired()
-                        .HasColumnName("RotCause")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RotCause");
 
                     b.Property<string>("SomethingSpecial")
                         .IsRequired()
-                        .HasColumnName("SomethingSpecial")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SomethingSpecial");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("VoiceId");
 
@@ -3965,254 +4050,259 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Client_Voice");
+                    b.ToTable("tbl_Client_Voice", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientWoundCare", b =>
                 {
                     b.Property<int>("WoundCareId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WoundCareId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<int>("Goal")
-                        .HasColumnName("Goal")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Goal");
 
                     b.Property<int>("Location")
-                        .HasColumnName("Location")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Location");
 
                     b.Property<string>("LocationAttach")
-                        .HasColumnName("LocationAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LocationAttach");
 
                     b.Property<string>("MeasurementAttach")
-                        .HasColumnName("MeasurementAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MeasurementAttach");
 
                     b.Property<int>("Measurment")
-                        .HasColumnName("Measurment")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Measurment");
 
                     b.Property<int>("PainLvl")
-                        .HasColumnName("PainLvl")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PainLvl");
 
                     b.Property<string>("PhysicianResponse")
                         .IsRequired()
-                        .HasColumnName("PhysicianResponse")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PhysicianResponse");
 
                     b.Property<string>("Reference")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("StatusAttach")
-                        .HasColumnName("StatusAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StatusAttach");
 
                     b.Property<int>("StatusImage")
-                        .HasColumnName("StatusImage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StatusImage");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<string>("TypeAttach")
-                        .HasColumnName("TypeAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TypeAttach");
 
                     b.Property<int>("UlcerStage")
-                        .HasColumnName("UlcerStage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UlcerStage");
 
                     b.Property<string>("UlcerStageAttach")
-                        .HasColumnName("UlcerStageAttach")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("UlcerStageAttach");
 
                     b.Property<int>("WoundCause")
-                        .HasColumnName("WoundCause")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WoundCause");
 
                     b.HasKey("WoundCareId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Client_WoundCare");
+                    b.ToTable("tbl_Client_WoundCare", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Communication", b =>
                 {
                     b.Property<int>("CommunicationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CommunicationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CommunicationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommunicationId"), 1L, 1);
 
                     b.Property<DateTime>("CommuncationDate")
-                        .HasColumnName("CommuncationDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CommuncationDate");
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasColumnName("FromUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FromUserId");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnName("IsRead")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsRead");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnName("Message")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Message");
 
                     b.Property<string>("Subject")
-                        .HasColumnName("Subject")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Subject");
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasColumnName("ToUserId")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ToUserId");
 
                     b.HasKey("CommunicationId");
 
-                    b.ToTable("tbl_Communication");
+                    b.ToTable("tbl_Communication", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CompanyContactModel", b =>
                 {
                     b.Property<int>("CompanyContactId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CompanyContactId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CompanyContactId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyContactId"), 1L, 1);
 
                     b.Property<int>("CompanyId")
-                        .HasColumnName("CompanyId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyId");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("ContactEmail")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactEmail");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("ContactName")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactName");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("ContactTelephone")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactTelephone");
 
                     b.HasKey("CompanyContactId");
 
                     b.HasIndex("CompanyId")
                         .IsUnique();
 
-                    b.ToTable("tbl_CompanyContact");
+                    b.ToTable("tbl_CompanyContact", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CompanyModel", b =>
                 {
                     b.Property<int>("CompanyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CompanyId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CompanyId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Address");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnName("CompanyName")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("CompanyName");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Email");
 
                     b.Property<string>("Language")
                         .IsRequired()
-                        .HasColumnName("Language")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Language");
 
                     b.Property<string>("LogoUrl")
-                        .HasColumnName("LogoUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LogoUrl");
 
                     b.Property<string>("Website")
                         .IsRequired()
-                        .HasColumnName("Website")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Website");
 
                     b.HasKey("CompanyId");
 
-                    b.ToTable("tbl_Company");
+                    b.ToTable("tbl_Company", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ComplainOfficerToAct", b =>
                 {
                     b.Property<int>("ComplainOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ComplainOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ComplainOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComplainOfficerToActId"), 1L, 1);
 
                     b.Property<int>("ComplainId")
-                        .HasColumnName("ComplainId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ComplainId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ComplainOfficerToActId");
 
@@ -4220,24 +4310,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Complain_OfficerToAct");
+                    b.ToTable("tbl_Complain_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ComplainStaffName", b =>
                 {
                     b.Property<int>("ComplainStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ComplainStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ComplainStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComplainStaffNameId"), 1L, 1);
 
                     b.Property<int>("ComplainId")
-                        .HasColumnName("ComplainId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ComplainId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ComplainStaffNameId");
 
@@ -4245,280 +4336,287 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Complain_StaffName");
+                    b.ToTable("tbl_Complain_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentCare", b =>
                 {
                     b.Property<int>("CareId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("CareId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("CareId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CareId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("Name")
-                        .HasColumnName("Name")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Name");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<int>("Signature")
-                        .HasColumnName("Signature")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Signature");
 
                     b.HasKey("CareId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_ConsentCare");
+                    b.ToTable("tbl_ConsentCare", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentData", b =>
                 {
                     b.Property<int>("DataId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("DataId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("DataId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DataId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("Name")
-                        .HasColumnName("Name")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Name");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<int>("Signature")
-                        .HasColumnName("Signature")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Signature");
 
                     b.HasKey("DataId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_ConsentData");
+                    b.ToTable("tbl_ConsentData", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
                 {
                     b.Property<int>("LandlineId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("LandlineId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("LandlineId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LandlineId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("Name")
-                        .HasColumnName("Name")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Name");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<int>("Signature")
-                        .HasColumnName("Signature")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Signature");
 
                     b.HasKey("LandlineId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_ConsentLandLine");
+                    b.ToTable("tbl_ConsentLandLine", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandlineLog", b =>
                 {
                     b.Property<int>("ConsentLandlineLogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ConsentLandlineLogId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ConsentLandlineLogId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConsentLandlineLogId"), 1L, 1);
 
                     b.Property<int>("BaseRecordId")
-                        .HasColumnName("BaseRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordId");
 
                     b.Property<int>("LandlineId")
-                        .HasColumnName("LandlineId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LandlineId");
 
                     b.HasKey("ConsentLandlineLogId");
 
                     b.HasIndex("LandlineId");
 
-                    b.ToTable("tbl_ConsentLandlineLog");
+                    b.ToTable("tbl_ConsentLandlineLog", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CuidiBuddy", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("CuidiBuddyId")
-                        .HasColumnName("CuidiBuddyId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CuidiBuddyId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_CuidiBuddy");
+                    b.ToTable("tbl_CuidiBuddy", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCall", b =>
                 {
                     b.Property<int>("DutyOnCallId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DutyOnCallId"), 1L, 1);
 
                     b.Property<string>("ActionTaken")
                         .IsRequired()
-                        .HasColumnName("ActionTaken")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("ClientInitial")
                         .IsRequired()
-                        .HasColumnName("ClientInitial")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClientInitial");
 
                     b.Property<DateTime>("DateOfCall")
-                        .HasColumnName("DateOfCall")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateOfCall");
 
                     b.Property<DateTime>("DateOfIncident")
-                        .HasColumnName("DateOfIncident")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateOfIncident");
 
                     b.Property<string>("DetailsOfIncident")
                         .IsRequired()
-                        .HasColumnName("DetailsOfIncident")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DetailsOfIncident");
 
                     b.Property<string>("DetailsRequired")
                         .IsRequired()
-                        .HasColumnName("DetailsRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DetailsRequired");
 
                     b.Property<int>("NotificationStatus")
-                        .HasColumnName("NotificationStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NotificationStatus");
 
                     b.Property<bool>("NotifyPerson")
-                        .HasColumnName("NotifyPerson")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("NotifyPerson");
 
                     b.Property<bool>("NotifyStaffInvolved")
-                        .HasColumnName("NotifyStaffInvolved")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("NotifyStaffInvolved");
 
                     b.Property<int>("PositionOfReporting")
-                        .HasColumnName("PositionOfReporting")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PositionOfReporting");
 
                     b.Property<int>("Priority")
-                        .HasColumnName("Priority")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Priority");
 
                     b.Property<string>("RefNo")
                         .IsRequired()
-                        .HasColumnName("RefNo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefNo");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("ReportedBy")
                         .IsRequired()
-                        .HasColumnName("ReportedBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ReportedBy");
 
                     b.Property<bool>("StaffBlacklisted")
-                        .HasColumnName("StaffBlacklisted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("StaffBlacklisted");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnName("Subject")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Subject");
 
                     b.Property<int>("TelephoneToCall")
-                        .HasColumnName("TelephoneToCall")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TelephoneToCall");
 
                     b.Property<DateTime>("TimeOfCall")
-                        .HasColumnName("TimeOfCall")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TimeOfCall");
 
                     b.Property<int>("TypeOfDutyCall")
-                        .HasColumnName("TypeOfDutyCall")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TypeOfDutyCall");
 
                     b.Property<int>("TypeOfIncident")
-                        .HasColumnName("TypeOfIncident")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TypeOfIncident");
 
                     b.HasKey("DutyOnCallId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_DutyOnCall");
+                    b.ToTable("tbl_DutyOnCall", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonResponsible", b =>
                 {
                     b.Property<int>("PersonResponsibleId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonResponsibleId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PersonResponsibleId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonResponsibleId"), 1L, 1);
 
                     b.Property<int>("DutyOnCallId")
-                        .HasColumnName("DutyOnCallId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DutyOnCallId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PersonResponsibleId");
 
@@ -4526,24 +4624,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_DutyOnCallPersonResponsible");
+                    b.ToTable("tbl_DutyOnCallPersonResponsible", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonToAct", b =>
                 {
                     b.Property<int>("PersonToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PersonToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonToActId"), 1L, 1);
 
                     b.Property<int>("DutyOnCallId")
-                        .HasColumnName("DutyOnCallId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DutyOnCallId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PersonToActId");
 
@@ -4551,100 +4650,102 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_DutyOnCallPersonToAct");
+                    b.ToTable("tbl_DutyOnCallPersonToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Enotice", b =>
                 {
                     b.Property<int>("EnoticeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EnoticeId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnName("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Image");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnName("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Note");
 
                     b.Property<string>("PublishBy")
                         .IsRequired()
-                        .HasColumnName("PublishBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PublishBy");
 
                     b.Property<int>("PublishTo")
-                        .HasColumnName("PublishTo")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PublishTo");
 
                     b.Property<string>("Video")
                         .IsRequired()
-                        .HasColumnName("Video")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Video");
 
                     b.HasKey("EnoticeId");
 
                     b.HasIndex("PublishTo");
 
-                    b.ToTable("tbl_Enotice_");
+                    b.ToTable("tbl_Enotice_", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Equipment", b =>
                 {
                     b.Property<int>("EquipmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EquipmentId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("EquipmentId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EquipmentId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("Location")
-                        .HasColumnName("Location")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Location");
 
                     b.Property<int>("Name")
-                        .HasColumnName("Name")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Name");
 
                     b.Property<DateTime>("NextServiceDate")
-                        .HasColumnName("NextServiceDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextServiceDate");
 
                     b.Property<int>("PersonToAct")
-                        .HasColumnName("PersonToAct")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonToAct");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<DateTime>("ServiceDate")
-                        .HasColumnName("ServiceDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ServiceDate");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.HasKey("EquipmentId");
 
@@ -4652,24 +4753,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("PersonalDetailId");
 
-                    b.ToTable("tbl_Equipment");
+                    b.ToTable("tbl_Equipment", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthOfficerToAct", b =>
                 {
                     b.Property<int>("EyeHealthOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EyeHealthOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("EyeHealthOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EyeHealthOfficerToActId"), 1L, 1);
 
                     b.Property<int>("EyeHealthId")
-                        .HasColumnName("EyeHealthId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EyeHealthId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("EyeHealthOfficerToActId");
 
@@ -4677,24 +4779,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_EyeHealth_OfficerToAct");
+                    b.ToTable("tbl_EyeHealth_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthPhysician", b =>
                 {
                     b.Property<int>("EyeHealthPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EyeHealthPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("EyeHealthPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EyeHealthPhysicianId"), 1L, 1);
 
                     b.Property<int>("EyeHealthId")
-                        .HasColumnName("EyeHealthId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EyeHealthId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("EyeHealthPhysicianId");
 
@@ -4702,24 +4805,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_EyeHealth_Physician");
+                    b.ToTable("tbl_EyeHealth_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthStaffName", b =>
                 {
                     b.Property<int>("EyeHealthStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("EyeHealthStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("EyeHealthStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EyeHealthStaffNameId"), 1L, 1);
 
                     b.Property<int>("EyeHealthId")
-                        .HasColumnName("EyeHealthId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EyeHealthId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("EyeHealthStaffNameId");
 
@@ -4727,45 +4831,46 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_EyeHealth_StaffName");
+                    b.ToTable("tbl_EyeHealth_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FilesAndRecord", b =>
                 {
                     b.Property<int>("FilesAndRecordId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FilesAndRecordId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnName("Subject")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Subject");
 
                     b.HasKey("FilesAndRecordId");
 
@@ -4773,24 +4878,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_FilesAndRecord");
+                    b.ToTable("tbl_FilesAndRecord", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeOfficerToAct", b =>
                 {
                     b.Property<int>("FoodIntakeOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("FoodIntakeOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("FoodIntakeOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodIntakeOfficerToActId"), 1L, 1);
 
                     b.Property<int>("FoodIntakeId")
-                        .HasColumnName("FoodIntakeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FoodIntakeId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("FoodIntakeOfficerToActId");
 
@@ -4798,24 +4904,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_FoodIntake_OfficerToAct");
+                    b.ToTable("tbl_FoodIntake_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakePhysician", b =>
                 {
                     b.Property<int>("FoodIntakePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("FoodIntakePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("FoodIntakePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodIntakePhysicianId"), 1L, 1);
 
                     b.Property<int>("FoodIntakeId")
-                        .HasColumnName("FoodIntakeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FoodIntakeId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("FoodIntakePhysicianId");
 
@@ -4823,24 +4930,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_FoodIntake_Physician");
+                    b.ToTable("tbl_FoodIntake_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeStaffName", b =>
                 {
                     b.Property<int>("FoodIntakeStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("FoodIntakeStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("FoodIntakeStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FoodIntakeStaffNameId"), 1L, 1);
 
                     b.Property<int>("FoodIntakeId")
-                        .HasColumnName("FoodIntakeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FoodIntakeId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("FoodIntakeStaffNameId");
 
@@ -4848,286 +4956,291 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_FoodIntake_StaffName");
+                    b.ToTable("tbl_FoodIntake_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthAndLiving", b =>
                 {
                     b.Property<int>("HLId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HLId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HLId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HLId"), 1L, 1);
 
                     b.Property<int>("AbilityToRead")
-                        .HasColumnName("AbilityToRead")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AbilityToRead");
 
                     b.Property<int>("AlcoholicDrink")
-                        .HasColumnName("AlcoholicDrink")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AlcoholicDrink");
 
                     b.Property<int>("AllowChats")
-                        .HasColumnName("AllowChats")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AllowChats");
 
                     b.Property<string>("BriefHealth")
                         .IsRequired()
-                        .HasColumnName("BriefHealth")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("BriefHealth");
 
                     b.Property<string>("CareSupport")
                         .IsRequired()
-                        .HasColumnName("CareSupport")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CareSupport");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("ConstraintAttachment")
                         .IsRequired()
-                        .HasColumnName("ConstraintAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ConstraintAttachment");
 
                     b.Property<string>("ConstraintDetails")
                         .IsRequired()
-                        .HasColumnName("ConstraintDetails")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ConstraintDetails");
 
                     b.Property<int>("ConstraintRequired")
-                        .HasColumnName("ConstraintRequired")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ConstraintRequired");
 
                     b.Property<int>("ContinenceIssue")
-                        .HasColumnName("ContinenceIssue")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ContinenceIssue");
 
                     b.Property<string>("ContinenceNeeds")
                         .IsRequired()
-                        .HasColumnName("ContinenceNeeds")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ContinenceNeeds");
 
                     b.Property<string>("ContinenceSource")
                         .IsRequired()
-                        .HasColumnName("ContinenceSource")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ContinenceSource");
 
                     b.Property<int>("DehydrationRisk")
-                        .HasColumnName("DehydrationRisk")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DehydrationRisk");
 
                     b.Property<int>("EatingWithStaff")
-                        .HasColumnName("EatingWithStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EatingWithStaff");
 
                     b.Property<int>("Email")
-                        .HasColumnName("Email")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Email");
 
                     b.Property<int>("FamilyUpdate")
-                        .HasColumnName("FamilyUpdate")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FamilyUpdate");
 
                     b.Property<int>("FinanceManagement")
-                        .HasColumnName("FinanceManagement")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FinanceManagement");
 
                     b.Property<int>("LaundaryRequired")
-                        .HasColumnName("LaundaryRequired")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LaundaryRequired");
 
                     b.Property<int>("LetterOpening")
-                        .HasColumnName("LetterOpening")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LetterOpening");
 
                     b.Property<int>("LifeStyle")
-                        .HasColumnName("LifeStyle")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LifeStyle");
 
                     b.Property<int>("MeansOfComm")
-                        .HasColumnName("MeansOfComm")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MeansOfComm");
 
                     b.Property<string>("MovingAndHandling")
                         .IsRequired()
-                        .HasColumnName("MovingAndHandling")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MovingAndHandling");
 
                     b.Property<int>("NeighbourInvolment")
-                        .HasColumnName("NeighbourInvolment")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NeighbourInvolment");
 
                     b.Property<string>("ObserveHealth")
                         .IsRequired()
-                        .HasColumnName("ObserveHealth")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ObserveHealth");
 
                     b.Property<int>("PostalService")
-                        .HasColumnName("PostalService")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PostalService");
 
                     b.Property<int>("PressureSore")
-                        .HasColumnName("PressureSore")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PressureSore");
 
                     b.Property<int>("ShoppingRequired")
-                        .HasColumnName("ShoppingRequired")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ShoppingRequired");
 
                     b.Property<int>("Smoking")
-                        .HasColumnName("Smoking")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Smoking");
 
                     b.Property<string>("SpecialCaution")
                         .IsRequired()
-                        .HasColumnName("SpecialCaution")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SpecialCaution");
 
                     b.Property<int>("SpecialCleaning")
-                        .HasColumnName("SpecialCleaning")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SpecialCleaning");
 
                     b.Property<string>("SupportToBed")
                         .IsRequired()
-                        .HasColumnName("SupportToBed")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SupportToBed");
 
                     b.Property<int>("TVandMusic")
-                        .HasColumnName("TVandMusic")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TVandMusic");
 
                     b.Property<int>("TeaChocolateCoffee")
-                        .HasColumnName("TeaChocolateCoffee")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TeaChocolateCoffee");
 
                     b.Property<int>("TextFontSize")
-                        .HasColumnName("TextFontSize")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TextFontSize");
 
                     b.Property<int>("VideoCallRequired")
-                        .HasColumnName("VideoCallRequired")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VideoCallRequired");
 
                     b.Property<string>("WakeUp")
                         .IsRequired()
-                        .HasColumnName("WakeUp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WakeUp");
 
                     b.HasKey("HLId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HealthAndLiving");
+                    b.ToTable("tbl_HealthAndLiving", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthCondition", b =>
                 {
                     b.Property<int>("HCId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HCId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.HasKey("HCId");
 
-                    b.ToTable("tbl_HealthCondition");
+                    b.ToTable("tbl_HealthCondition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask", b =>
                 {
                     b.Property<int>("HealthTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HealthTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<int>("BestId")
-                        .HasColumnName("BestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BestId");
 
                     b.Property<int>("HeadingId")
-                        .HasColumnName("HeadingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HeadingId");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("HealthTaskId");
 
                     b.HasIndex("BestId");
 
-                    b.ToTable("tbl_HealthTask");
+                    b.ToTable("tbl_HealthTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask2", b =>
                 {
                     b.Property<int>("HealthTask2Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HealthTask2Id"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<int>("BestId")
-                        .HasColumnName("BestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BestId");
 
                     b.Property<int>("Heading2Id")
-                        .HasColumnName("Heading2Id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Heading2Id");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("HealthTask2Id");
 
                     b.HasIndex("BestId");
 
-                    b.ToTable("tbl_HealthTask2");
+                    b.ToTable("tbl_HealthTask2", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateOfficerToAct", b =>
                 {
                     b.Property<int>("HeartRateOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HeartRateOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HeartRateOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HeartRateOfficerToActId"), 1L, 1);
 
                     b.Property<int>("HeartRateId")
-                        .HasColumnName("HeartRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HeartRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HeartRateOfficerToActId");
 
@@ -5135,24 +5248,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HeartRate_OfficerToAct");
+                    b.ToTable("tbl_HeartRate_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRatePhysician", b =>
                 {
                     b.Property<int>("HeartRatePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HeartRatePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HeartRatePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HeartRatePhysicianId"), 1L, 1);
 
                     b.Property<int>("HeartRateId")
-                        .HasColumnName("HeartRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HeartRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HeartRatePhysicianId");
 
@@ -5160,24 +5274,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HeartRate_Physician");
+                    b.ToTable("tbl_HeartRate_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateStaffName", b =>
                 {
                     b.Property<int>("HeartRateStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HeartRateStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HeartRateStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HeartRateStaffNameId"), 1L, 1);
 
                     b.Property<int>("HeartRateId")
-                        .HasColumnName("HeartRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HeartRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HeartRateStaffNameId");
 
@@ -5185,236 +5300,242 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HeartRate_StaffName");
+                    b.ToTable("tbl_HeartRate_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HistoryOfFall", b =>
                 {
                     b.Property<int>("HistoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HistoryId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HistoryId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HistoryId"), 1L, 1);
 
                     b.Property<string>("Cause")
                         .IsRequired()
-                        .HasColumnName("Cause")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Cause");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<string>("Prevention")
                         .IsRequired()
-                        .HasColumnName("Prevention")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Prevention");
 
                     b.HasKey("HistoryId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HistoryOfFall");
+                    b.ToTable("tbl_HistoryOfFall", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Hobbies", b =>
                 {
                     b.Property<int>("HId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.HasKey("HId");
 
-                    b.ToTable("tbl_Hobbies");
+                    b.ToTable("tbl_Hobbies", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessment", b =>
                 {
                     b.Property<int>("HomeRiskAssessmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HomeRiskAssessmentId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.HasKey("HomeRiskAssessmentId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HomeRiskAssessment");
+                    b.ToTable("tbl_HomeRiskAssessment", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessmentTask", b =>
                 {
                     b.Property<int>("HomeRiskAssessmentTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HomeRiskAssessmentTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("HomeRiskAssessmentId")
-                        .HasColumnName("HomeRiskAssessmentId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HomeRiskAssessmentId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("HomeRiskAssessmentTaskId");
 
                     b.HasIndex("HomeRiskAssessmentId");
 
-                    b.ToTable("tbl_HomeRiskAssessmentTask");
+                    b.ToTable("tbl_HomeRiskAssessmentTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
                 {
                     b.Property<int>("HospitalEntryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalEntryId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("CauseofAdmission")
                         .IsRequired()
-                        .HasColumnName("CauseofAdmission")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CauseofAdmission");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("ConditionOfAdmission")
-                        .HasColumnName("ConditionOfAdmission")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ConditionOfAdmission");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("IsFamilyInformed")
-                        .HasColumnName("IsFamilyInformed")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsFamilyInformed");
 
                     b.Property<int>("IsHomeCleaned")
-                        .HasColumnName("IsHomeCleaned")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsHomeCleaned");
 
                     b.Property<DateTime>("LastDateofAdmission")
-                        .HasColumnName("LastDateofAdmission")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastDateofAdmission");
 
                     b.Property<int>("MeansOfTransport")
-                        .HasColumnName("MeansOfTransport")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MeansOfTransport");
 
                     b.Property<int>("NameParamedicStaff")
-                        .HasColumnName("NameParamedicStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NameParamedicStaff");
 
                     b.Property<int>("ParamicStaffTeamNo")
-                        .HasColumnName("ParamicStaffTeamNo")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ParamicStaffTeamNo");
 
                     b.Property<DateTime>("PossibleDateReturn")
-                        .HasColumnName("PossibleDateReturn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("PossibleDateReturn");
 
                     b.Property<string>("PurposeofAdmission")
                         .IsRequired()
-                        .HasColumnName("PurposeofAdmission")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PurposeofAdmission");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<string>("URLLINK")
                         .IsRequired()
-                        .HasColumnName("URLLINK")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URLLINK");
 
                     b.HasKey("HospitalEntryId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HospitalEntry");
+                    b.ToTable("tbl_HospitalEntry", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
                 {
                     b.Property<int>("HospitalEntryPersonToTakeActionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HospitalEntryPersonToTakeActionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HospitalEntryPersonToTakeActionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalEntryPersonToTakeActionId"), 1L, 1);
 
                     b.Property<int>("HospitalEntryId")
-                        .HasColumnName("HospitalEntryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HospitalEntryId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HospitalEntryPersonToTakeActionId");
 
@@ -5422,24 +5543,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HospitalEntryPersonToTakeAction");
+                    b.ToTable("tbl_HospitalEntryPersonToTakeAction", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
                 {
                     b.Property<int>("HospitalEntryStaffInvolvedId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HospitalEntryStaffInvolvedId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HospitalEntryStaffInvolvedId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalEntryStaffInvolvedId"), 1L, 1);
 
                     b.Property<int>("HospitalEntryId")
-                        .HasColumnName("HospitalEntryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HospitalEntryId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HospitalEntryStaffInvolvedId");
 
@@ -5447,143 +5569,145 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HospitalEntryStaffInvolved");
+                    b.ToTable("tbl_HospitalEntryStaffInvolved", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
                 {
                     b.Property<int>("HospitalExitId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalExitId"), 1L, 1);
 
                     b.Property<int>("AreContinentProductNeedAndAvailable")
-                        .HasColumnName("AreContinentProductNeedAndAvailable")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreContinentProductNeedAndAvailable");
 
                     b.Property<int>("AreEqipmentNeededAvailable")
-                        .HasColumnName("AreEqipmentNeededAvailable")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreEqipmentNeededAvailable");
 
                     b.Property<int>("AreLocalSupportOrProgramNeeded")
-                        .HasColumnName("AreLocalSupportOrProgramNeeded")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreLocalSupportOrProgramNeeded");
 
                     b.Property<int>("AreStaffTrainnedOnEquipmentNeeded")
-                        .HasColumnName("AreStaffTrainnedOnEquipmentNeeded")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AreStaffTrainnedOnEquipmentNeeded");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<int>("ConditionOnDischarge")
-                        .HasColumnName("ConditionOnDischarge")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ConditionOnDischarge");
 
                     b.Property<string>("ContactIncaseOfReAdmission")
                         .IsRequired()
-                        .HasColumnName("ContactIncaseOfReAdmission")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ContactIncaseOfReAdmission");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("IsCarePlanUpdated")
-                        .HasColumnName("IsCarePlanUpdated")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsCarePlanUpdated");
 
                     b.Property<int>("IsGrosSriesAvaible")
-                        .HasColumnName("IsGrosSriesAvaible")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsGrosSriesAvaible");
 
                     b.Property<int>("IsHomeCleaned")
-                        .HasColumnName("IsHomeCleaned")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsHomeCleaned");
 
                     b.Property<int>("IsMedicationAvaialable")
-                        .HasColumnName("IsMedicationAvaialable")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsMedicationAvaialable");
 
                     b.Property<int>("IsServiceUseronRota")
-                        .HasColumnName("IsServiceUseronRota")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IsServiceUseronRota");
 
                     b.Property<int>("ModeOfMeansOfTrasportBackHome")
-                        .HasColumnName("ModeOfMeansOfTrasportBackHome")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ModeOfMeansOfTrasportBackHome");
 
                     b.Property<int>("NumberOfStaffRequiredOnDischarge")
-                        .HasColumnName("NumberOfStaffRequiredOnDischarge")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfStaffRequiredOnDischarge");
 
                     b.Property<string>("PurposeofAdmission")
                         .IsRequired()
-                        .HasColumnName("PurposeofAdmission")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PurposeofAdmission");
 
                     b.Property<int>("ReablementRequired")
-                        .HasColumnName("ReablementRequired")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReablementRequired");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<DateTime>("Time")
-                        .HasColumnName("Time")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Time");
 
                     b.Property<string>("URLLINK")
                         .IsRequired()
-                        .HasColumnName("URLLINK")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URLLINK");
 
                     b.Property<string>("WhichSupportIsNeeded")
                         .IsRequired()
-                        .HasColumnName("WhichSupportIsNeeded")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WhichSupportIsNeeded");
 
                     b.Property<int>("isLittleCashAvailableForServiceUser")
-                        .HasColumnName("isLittleCashAvailableForServiceUser")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("isLittleCashAvailableForServiceUser");
 
                     b.Property<int>("isRotaTeamInformed")
-                        .HasColumnName("isRotaTeamInformed")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("isRotaTeamInformed");
 
                     b.HasKey("HospitalExitId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_HospitalExit");
+                    b.ToTable("tbl_HospitalExit", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
                 {
                     b.Property<int>("HospitalExitOfficerToTakeActionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HospitalExitOfficerToTakeActionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HospitalExitOfficerToTakeActionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HospitalExitOfficerToTakeActionId"), 1L, 1);
 
                     b.Property<int>("HospitalExitId")
-                        .HasColumnName("HospitalExitId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HospitalExitId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("HospitalExitOfficerToTakeActionId");
 
@@ -5591,364 +5715,374 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_HospitalExitOfficerToTakeAction");
+                    b.ToTable("tbl_HospitalExitOfficerToTakeAction", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncidentReporting", b =>
                 {
                     b.Property<int>("IncidentReportingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("IncidentReportingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("IncidentReportingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IncidentReportingId"), 1L, 1);
 
                     b.Property<string>("ActionTaken")
-                        .HasColumnName("ActionTaken")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("IncidentDetails")
                         .IsRequired()
-                        .HasColumnName("IncidentDetails")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IncidentDetails");
 
                     b.Property<int>("IncidentTypeId")
-                        .HasColumnName("IncidentTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IncidentTypeId");
 
                     b.Property<int?>("ReportingStaffId")
-                        .HasColumnName("ReportingStaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReportingStaffId");
 
                     b.Property<int>("StaffInvolvedId")
-                        .HasColumnName("StaffInvolvedId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffInvolvedId");
 
                     b.Property<string>("Witness")
-                        .HasColumnName("Witness")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Witness");
 
                     b.HasKey("IncidentReportingId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_IncidentReporting");
+                    b.ToTable("tbl_IncidentReporting", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
                 {
                     b.Property<int>("IncomingMedsId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IncomingMedsId"), 1L, 1);
 
                     b.Property<string>("ChartImage")
                         .IsRequired()
-                        .HasColumnName("ChartImage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ChartImage");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("MedsImage")
                         .IsRequired()
-                        .HasColumnName("MedsImage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MedsImage");
 
                     b.Property<string>("StaffName")
                         .IsRequired()
-                        .HasColumnName("StaffName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffName");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
-                        .HasColumnName("StartDate")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StartDate");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("UserName")
-                        .HasColumnName("UserName")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UserName");
 
                     b.HasKey("IncomingMedsId");
 
                     b.HasIndex("UserName");
 
-                    b.ToTable("tbl_Incoming_Meds");
+                    b.ToTable("tbl_Incoming_Meds", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
                 {
                     b.Property<int>("InfectionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("InfectionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("InfectionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InfectionId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Guideline")
                         .IsRequired()
-                        .HasColumnName("Guideline")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Guideline");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<DateTime>("TestDate")
-                        .HasColumnName("TestDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TestDate");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<int>("VaccStatus")
-                        .HasColumnName("VaccStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VaccStatus");
 
                     b.HasKey("InfectionId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_InfectionControl");
+                    b.ToTable("tbl_InfectionControl", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
                 {
                     b.Property<int>("InterestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("InterestId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("InterestId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InterestId"), 1L, 1);
 
                     b.Property<int>("CommunityActivity")
-                        .HasColumnName("CommunityActivity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CommunityActivity");
 
                     b.Property<int>("EventAwarness")
-                        .HasColumnName("EventAwarness")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EventAwarness");
 
                     b.Property<int>("GoalAndObjective")
-                        .HasColumnName("GoalAndObjective")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GoalAndObjective");
 
                     b.Property<int>("GoalId")
-                        .HasColumnName("GoalId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GoalId");
 
                     b.Property<int>("InformalActivity")
-                        .HasColumnName("InformalActivity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("InformalActivity");
 
                     b.Property<int>("LeisureActivity")
-                        .HasColumnName("LeisureActivity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LeisureActivity");
 
                     b.Property<int>("MaintainContact")
-                        .HasColumnName("MaintainContact")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MaintainContact");
 
                     b.HasKey("InterestId");
 
                     b.HasIndex("GoalId");
 
-                    b.ToTable("tbl_Interest");
+                    b.ToTable("tbl_Interest", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
                 {
                     b.Property<int>("GoalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("GoalId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("GoalId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GoalId"), 1L, 1);
 
                     b.Property<string>("Brief")
                         .IsRequired()
-                        .HasColumnName("Brief")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Brief");
 
                     b.Property<string>("CareGoal")
                         .IsRequired()
-                        .HasColumnName("CareGoal")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CareGoal");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.HasKey("GoalId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_InterestAndObjective");
+                    b.ToTable("tbl_InterestAndObjective", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Investigation", b =>
                 {
                     b.Property<int>("InvestigationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("InvestigationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("InvestigationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvestigationId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTimeOffset?>("ConclusionDate")
-                        .HasColumnName("ConclusionDate")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ConclusionDate");
 
                     b.Property<int>("IncidentClass")
-                        .HasColumnName("IncidentClass")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IncidentClass");
 
                     b.Property<DateTimeOffset>("IncidentDate")
-                        .HasColumnName("IncidentDate")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("IncidentDate");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("InvestigationId");
 
-                    b.ToTable("tbl_Investigation");
+                    b.ToTable("tbl_Investigation", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
                 {
                     b.Property<int>("InvestigationAttachmentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("InvestigationAttachmentId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("InvestigationAttachmentId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InvestigationAttachmentId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("InvestigationId")
-                        .HasColumnName("InvestigationId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("InvestigationId");
 
                     b.HasKey("InvestigationAttachmentId");
 
                     b.HasIndex("InvestigationId");
 
-                    b.ToTable("tbl_InvestigationAttachment");
+                    b.ToTable("tbl_InvestigationAttachment", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicatorLog", b =>
                 {
                     b.Property<int>("KeyIndicatorLogId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("KeyIndicatorLogId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("KeyIndicatorLogId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyIndicatorLogId"), 1L, 1);
 
                     b.Property<int>("BaseRecordId")
-                        .HasColumnName("BaseRecordId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordId");
 
                     b.Property<int>("KeyId")
-                        .HasColumnName("KeyId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KeyId");
 
                     b.HasKey("KeyIndicatorLogId");
 
                     b.HasIndex("KeyId");
 
-                    b.ToTable("tbl_KeyIndicatorLog");
+                    b.ToTable("tbl_KeyIndicatorLog", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
                 {
                     b.Property<int>("KeyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("KeyId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("KeyId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyId"), 1L, 1);
 
                     b.Property<string>("AboutMe")
                         .IsRequired()
-                        .HasColumnName("AboutMe")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AboutMe");
 
                     b.Property<int>("Debture")
-                        .HasColumnName("Debture")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Debture");
 
                     b.Property<string>("FamilyRole")
                         .IsRequired()
-                        .HasColumnName("FamilyRole")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FamilyRole");
 
                     b.Property<int>("LivingStatus")
-                        .HasColumnName("LivingStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LivingStatus");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<string>("ThingsILike")
                         .IsRequired()
-                        .HasColumnName("ThingsILike")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ThingsILike");
 
                     b.HasKey("KeyId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_KeyIndicators");
+                    b.ToTable("tbl_KeyIndicators", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerOfficerToAct", b =>
                 {
                     b.Property<int>("KeyWorkerOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("KeyWorkerOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("KeyWorkerOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyWorkerOfficerToActId"), 1L, 1);
 
                     b.Property<int>("KeyWorkerId")
-                        .HasColumnName("KeyWorkerId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KeyWorkerId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("KeyWorkerOfficerToActId");
 
@@ -5956,24 +6090,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_KeyWorker_OfficerToAct");
+                    b.ToTable("tbl_KeyWorker_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerWorkteam", b =>
                 {
                     b.Property<int>("KeyWorkerWorkteamId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("KeyWorkerWorkteamId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("KeyWorkerWorkteamId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyWorkerWorkteamId"), 1L, 1);
 
                     b.Property<int>("KeyWorkerId")
-                        .HasColumnName("KeyWorkerId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("KeyWorkerId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("KeyWorkerWorkteamId");
 
@@ -5981,24 +6116,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_KeyWorker_StaffName");
+                    b.ToTable("tbl_KeyWorker_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.LogAuditOfficerToAct", b =>
                 {
                     b.Property<int>("LogAuditOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("LogAuditOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("LogAuditOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LogAuditOfficerToActId"), 1L, 1);
 
                     b.Property<int>("LogAuditId")
-                        .HasColumnName("LogAuditId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LogAuditId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("LogAuditOfficerToActId");
 
@@ -6006,56 +6142,58 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_LogAudit_OfficerToAct");
+                    b.ToTable("tbl_LogAudit_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ManagingTasksId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ManagingTasksId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Help")
                         .IsRequired()
-                        .HasColumnName("Help")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Help");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("Task")
-                        .HasColumnName("Task")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Task");
 
                     b.HasKey("TaskId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_ManagingTasks");
+                    b.ToTable("tbl_ManagingTasks", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
                 {
                     b.Property<int>("MedAuditOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MedAuditOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MedAuditOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedAuditOfficerToActId"), 1L, 1);
 
                     b.Property<int>("MedAuditId")
-                        .HasColumnName("MedAuditId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedAuditId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("MedAuditOfficerToActId");
 
@@ -6063,24 +6201,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_MedAudit_OfficerToAct");
+                    b.ToTable("tbl_MedAudit_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditStaffName", b =>
                 {
                     b.Property<int>("MedAuditStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MedAuditStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MedAuditStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedAuditStaffNameId"), 1L, 1);
 
                     b.Property<int>("MedAuditId")
-                        .HasColumnName("MedAuditId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedAuditId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("MedAuditStaffNameId");
 
@@ -6088,24 +6227,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_MedAudit_AuditorName");
+                    b.ToTable("tbl_MedAudit_AuditorName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedCompOfficerToAct", b =>
                 {
                     b.Property<int>("MedCompOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MedCompOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MedCompOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedCompOfficerToActId"), 1L, 1);
 
                     b.Property<int>("MedCompId")
-                        .HasColumnName("MedCompId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedCompId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("MedCompOfficerToActId");
 
@@ -6113,216 +6253,221 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_MedComp_OfficerToAct");
+                    b.ToTable("tbl_MedComp_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Medication", b =>
                 {
                     b.Property<int>("MedicationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MedicationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MedicationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicationId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("MedicationName")
                         .IsRequired()
-                        .HasColumnName("MedicationName")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("MedicationName");
 
                     b.Property<string>("Strength")
                         .IsRequired()
-                        .HasColumnName("Strength")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Strength");
 
                     b.HasKey("MedicationId");
 
-                    b.ToTable("tbl_Medication");
+                    b.ToTable("tbl_Medication", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedicationManufacturer", b =>
                 {
                     b.Property<int>("MedicationManufacturerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("MedicationManufacturerId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("MedicationManufacturerId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedicationManufacturerId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("Manufacturer")
                         .IsRequired()
-                        .HasColumnName("Manufacturer")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Manufacturer");
 
                     b.HasKey("MedicationManufacturerId");
 
                     b.HasIndex("Manufacturer")
                         .IsUnique()
-                        .HasName("IX_tbl_MedicationManufacturer_Manufacturer");
+                        .HasDatabaseName("IX_tbl_MedicationManufacturer_Manufacturer");
 
-                    b.ToTable("tbl_MedicationManufacturer");
+                    b.ToTable("tbl_MedicationManufacturer", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OfficeAttendance", b =>
                 {
                     b.Property<int>("AttendanceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AttendanceId"), 1L, 1);
 
                     b.Property<string>("ClockDiff")
-                        .HasColumnName("ClockDiff")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockDiff");
 
                     b.Property<DateTimeOffset?>("ClockIn")
-                        .HasColumnName("ClockIn")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ClockIn");
 
                     b.Property<string>("ClockInAddress")
-                        .HasColumnName("ClockInAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockInAddress");
 
                     b.Property<string>("ClockInDistance")
-                        .HasColumnName("ClockInDistance")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockInDistance");
 
                     b.Property<string>("ClockInMethod")
-                        .HasColumnName("ClockInMethod")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockInMethod");
 
                     b.Property<DateTimeOffset?>("ClockOut")
-                        .HasColumnName("ClockOut")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ClockOut");
 
                     b.Property<string>("ClockOutAddress")
-                        .HasColumnName("ClockOutAddress")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockOutAddress");
 
                     b.Property<string>("ClockOutDistance")
-                        .HasColumnName("ClockOutDistance")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockOutDistance");
 
                     b.Property<string>("ClockOutMethod")
-                        .HasColumnName("ClockOutMethod")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClockOutMethod");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("JobTitle")
-                        .HasColumnName("JobTitle")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("JobTitle");
 
                     b.Property<string>("Latitude")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
-                        .HasColumnName("Location")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Location");
 
                     b.Property<string>("Longitude")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remark")
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Staff")
-                        .HasColumnName("Staff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Staff");
 
                     b.Property<int?>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("StartTime")
-                        .HasColumnName("StartTime")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StartTime");
 
                     b.Property<string>("StopTime")
-                        .HasColumnName("StopTime")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StopTime");
 
                     b.HasKey("AttendanceId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_OfficeAttendance");
+                    b.ToTable("tbl_OfficeAttendance", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OfficeLocation", b =>
                 {
                     b.Property<int>("OfficeLocationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OfficeLocationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("OfficeLocationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OfficeLocationId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Address");
 
                     b.Property<string>("ContactPersonEmail")
-                        .HasColumnName("ContactPersonEmail")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactPersonEmail");
 
                     b.Property<string>("ContactPersonFullName")
-                        .HasColumnName("ContactPersonFullName")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactPersonFullName");
 
                     b.Property<string>("ContactPersonPhoneNumber")
-                        .HasColumnName("ContactPersonPhoneNumber")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ContactPersonPhoneNumber");
 
                     b.Property<string>("Latitude")
-                        .HasColumnName("Latitude")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Latitude");
 
                     b.Property<string>("Longitude")
-                        .HasColumnName("Longitude")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Longitude");
 
                     b.Property<string>("UniqueId")
-                        .HasColumnName("UniqueId")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("UniqueId");
 
                     b.HasKey("OfficeLocationId");
 
-                    b.ToTable("tbl_OfficeLocation");
+                    b.ToTable("tbl_OfficeLocation", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OneToOneOfficerToAct", b =>
                 {
                     b.Property<int>("OneToOneOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OneToOneOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("OneToOneOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OneToOneOfficerToActId"), 1L, 1);
 
                     b.Property<int>("OneToOneId")
-                        .HasColumnName("OneToOneId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OneToOneId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("OneToOneOfficerToActId");
 
@@ -6330,24 +6475,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_OneToOne_OfficerToAct");
+                    b.ToTable("tbl_OneToOne_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlOfficerToAct", b =>
                 {
                     b.Property<int>("OxygenLvlOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OxygenLvlOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("OxygenLvlOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OxygenLvlOfficerToActId"), 1L, 1);
 
                     b.Property<int>("OxygenLvlId")
-                        .HasColumnName("OxygenLvlId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OxygenLvlId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("OxygenLvlOfficerToActId");
 
@@ -6355,24 +6501,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_OxygenLvl_OfficerToAct");
+                    b.ToTable("tbl_OxygenLvl_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlPhysician", b =>
                 {
                     b.Property<int>("OxygenLvlPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OxygenLvlPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("OxygenLvlPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OxygenLvlPhysicianId"), 1L, 1);
 
                     b.Property<int>("OxygenLvlId")
-                        .HasColumnName("OxygenLvlId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OxygenLvlId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("OxygenLvlPhysicianId");
 
@@ -6380,24 +6527,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_OxygenLvl_Physician");
+                    b.ToTable("tbl_OxygenLvl_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlStaffName", b =>
                 {
                     b.Property<int>("OxygenLvlStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("OxygenLvlStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("OxygenLvlStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OxygenLvlStaffNameId"), 1L, 1);
 
                     b.Property<int>("OxygenLvlId")
-                        .HasColumnName("OxygenLvlId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OxygenLvlId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("OxygenLvlStaffNameId");
 
@@ -6405,24 +6553,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_OxygenLvl_StaffName");
+                    b.ToTable("tbl_OxygenLvl_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartOfficerToAct", b =>
                 {
                     b.Property<int>("PainChartOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PainChartOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PainChartOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PainChartOfficerToActId"), 1L, 1);
 
                     b.Property<int>("PainChartId")
-                        .HasColumnName("PainChartId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PainChartId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PainChartOfficerToActId");
 
@@ -6430,24 +6579,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PainChart_OfficerToAct");
+                    b.ToTable("tbl_PainChart_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartPhysician", b =>
                 {
                     b.Property<int>("PainChartPhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PainChartPhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PainChartPhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PainChartPhysicianId"), 1L, 1);
 
                     b.Property<int>("PainChartId")
-                        .HasColumnName("PainChartId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PainChartId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PainChartPhysicianId");
 
@@ -6455,24 +6605,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PainChart_Physician");
+                    b.ToTable("tbl_PainChart_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartStaffName", b =>
                 {
                     b.Property<int>("PainChartStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PainChartStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PainChartStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PainChartStaffNameId"), 1L, 1);
 
                     b.Property<int>("PainChartId")
-                        .HasColumnName("PainChartId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PainChartId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PainChartStaffNameId");
 
@@ -6480,395 +6631,406 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PainChart_StaffName");
+                    b.ToTable("tbl_PainChart_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicator", b =>
                 {
                     b.Property<int>("PerformanceIndicatorId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PerformanceIndicatorId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnName("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DueDate");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("Rating")
-                        .HasColumnName("Rating")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Rating");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.HasKey("PerformanceIndicatorId");
 
-                    b.ToTable("tbl_PerformanceIndicator");
+                    b.ToTable("tbl_PerformanceIndicator", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicatorTask", b =>
                 {
                     b.Property<int>("PerformanceIndicatorTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PerformanceIndicatorTaskId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("PerformanceIndicatorId")
-                        .HasColumnName("StaffCompetenceTestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffCompetenceTestId");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("PerformanceIndicatorTaskId");
 
                     b.HasIndex("PerformanceIndicatorId");
 
-                    b.ToTable("tbl_PerformanceIndicatorTask");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
-                {
-                    b.Property<int>("PersonCentredId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonCentredId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Class")
-                        .HasColumnName("Class")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ExpSupport")
-                        .IsRequired()
-                        .HasColumnName("ExpSupport")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonCentredId");
-
-                    b.HasIndex("PersonalDetailId");
-
-                    b.ToTable("tbl_PersonCentred");
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
-                {
-                    b.Property<int>("PersonCentredFocusId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonCentredFocusId")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BaseRecordId")
-                        .HasColumnName("BaseRecordId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonCentredId")
-                        .HasColumnName("PersonCentredId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PersonCentredFocusId");
-
-                    b.HasIndex("PersonCentredId");
-
-                    b.ToTable("tbl_PersonCentredFocus");
+                    b.ToTable("tbl_PerformanceIndicatorTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Personal", b =>
                 {
                     b.Property<int>("PersonalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonalId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PersonalId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonalId"), 1L, 1);
 
                     b.Property<int>("DNR")
-                        .HasColumnName("DNR")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DNR");
 
                     b.Property<string>("Nationality")
                         .IsRequired()
-                        .HasColumnName("Nationality")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Nationality");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<string>("Religion")
                         .IsRequired()
-                        .HasColumnName("Religion")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Religion");
 
                     b.Property<int>("Smoking")
-                        .HasColumnName("Smoking")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Smoking");
 
                     b.HasKey("PersonalId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_Personal");
+                    b.ToTable("tbl_Personal", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
                 {
                     b.Property<int>("PersonalDetailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PersonalDetailId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PersonalDetailId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonalDetailId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.HasKey("PersonalDetailId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_PersonalDetail");
+                    b.ToTable("tbl_PersonalDetail", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
                 {
                     b.Property<int>("HygieneId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HygieneId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HygieneId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HygieneId"), 1L, 1);
 
                     b.Property<int>("Cleaning")
-                        .HasColumnName("Cleaning")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Cleaning");
 
                     b.Property<int>("CleaningFreq")
-                        .HasColumnName("CleaningFreq")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CleaningFreq");
 
                     b.Property<int>("CleaningTools")
-                        .HasColumnName("CleaningTools")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CleaningTools");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("DesiredCleaning")
-                        .HasColumnName("DesiredCleaning")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DesiredCleaning");
 
                     b.Property<int>("DirtyLaundry")
-                        .HasColumnName("DirtyLaundry")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DirtyLaundry");
 
                     b.Property<int>("DryLaundry")
-                        .HasColumnName("DryLaundry")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DryLaundry");
 
                     b.Property<int>("GeneralAppliance")
-                        .HasColumnName("GeneralAppliance")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GeneralAppliance");
 
                     b.Property<int>("Ironing")
-                        .HasColumnName("Ironing")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Ironing");
 
                     b.Property<string>("LaundryGuide")
                         .IsRequired()
-                        .HasColumnName("LaundryGuide")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LaundryGuide");
 
                     b.Property<string>("LaundrySupport")
                         .IsRequired()
-                        .HasColumnName("LaundrySupport")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LaundrySupport");
 
                     b.Property<int>("WashingMachine")
-                        .HasColumnName("WashingMachine")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WashingMachine");
 
                     b.Property<int>("WhoClean")
-                        .HasColumnName("WhoClean")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WhoClean");
 
                     b.HasKey("HygieneId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_PersonalHygiene");
+                    b.ToTable("tbl_PersonalHygiene", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
                 {
                     b.Property<int>("TestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TestId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TestId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<int>("GoalId")
-                        .HasColumnName("GoalId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("GoalId");
 
                     b.Property<int>("Question")
-                        .HasColumnName("Question")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Question");
 
                     b.HasKey("TestId");
 
                     b.HasIndex("GoalId");
 
-                    b.ToTable("tbl_PersonalityTest");
+                    b.ToTable("tbl_PersonalityTest", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
+                {
+                    b.Property<int>("PersonCentredId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("PersonCentredId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonCentredId"), 1L, 1);
+
+                    b.Property<int>("Class")
+                        .HasColumnType("int")
+                        .HasColumnName("Class");
+
+                    b.Property<string>("ExpSupport")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExpSupport");
+
+                    b.Property<int>("PersonalDetailId")
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
+
+                    b.HasKey("PersonCentredId");
+
+                    b.HasIndex("PersonalDetailId");
+
+                    b.ToTable("tbl_PersonCentred", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
+                {
+                    b.Property<int>("PersonCentredFocusId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("PersonCentredFocusId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonCentredFocusId"), 1L, 1);
+
+                    b.Property<int>("BaseRecordId")
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordId");
+
+                    b.Property<int>("PersonCentredId")
+                        .HasColumnType("int")
+                        .HasColumnName("PersonCentredId");
+
+                    b.HasKey("PersonCentredFocusId");
+
+                    b.HasIndex("PersonCentredId");
+
+                    b.ToTable("tbl_PersonCentredFocus", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
                 {
                     b.Property<int>("PetsId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PetsId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PetsId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PetsId"), 1L, 1);
 
                     b.Property<string>("Age")
                         .IsRequired()
-                        .HasColumnName("Age")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Age");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("Gender")
-                        .HasColumnName("Gender")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Gender");
 
                     b.Property<string>("MealPattern")
                         .IsRequired()
-                        .HasColumnName("MealPattern")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MealPattern");
 
                     b.Property<int>("MealStorage")
-                        .HasColumnName("MealStorage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MealStorage");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.Property<string>("PetActivities")
                         .IsRequired()
-                        .HasColumnName("PetActivities")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PetActivities");
 
                     b.Property<string>("PetCare")
                         .IsRequired()
-                        .HasColumnName("PetCare")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PetCare");
 
                     b.Property<int>("PetInsurance")
-                        .HasColumnName("PetInsurance")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PetInsurance");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<int>("VetVisit")
-                        .HasColumnName("VetVisit")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VetVisit");
 
                     b.HasKey("PetsId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_Pets");
+                    b.ToTable("tbl_Pets", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PhysicalAbility", b =>
                 {
                     b.Property<int>("PhysicalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PhysicalId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PhysicalId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PhysicalId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnName("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Description");
 
                     b.Property<int>("Mobility")
-                        .HasColumnName("Mobility")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Mobility");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnName("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("PhysicalId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_PhysicalAbility");
+                    b.ToTable("tbl_PhysicalAbility", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
                 {
                     b.Property<int>("ProgramOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ProgramOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ProgramOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProgramOfficerToActId"), 1L, 1);
 
                     b.Property<int>("ProgramId")
-                        .HasColumnName("ProgramId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProgramId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ProgramOfficerToActId");
 
@@ -6876,24 +7038,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Program_OfficerToAct");
+                    b.ToTable("tbl_Program_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateOfficerToAct", b =>
                 {
                     b.Property<int>("PulseRateOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PulseRateOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PulseRateOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PulseRateOfficerToActId"), 1L, 1);
 
                     b.Property<int>("PulseRateId")
-                        .HasColumnName("PulseRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PulseRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PulseRateOfficerToActId");
 
@@ -6901,24 +7064,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PulseRate_OfficerToAct");
+                    b.ToTable("tbl_PulseRate_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRatePhysician", b =>
                 {
                     b.Property<int>("PulseRatePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PulseRatePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PulseRatePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PulseRatePhysicianId"), 1L, 1);
 
                     b.Property<int>("PulseRateId")
-                        .HasColumnName("PulseRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PulseRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PulseRatePhysicianId");
 
@@ -6926,24 +7090,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PulseRate_Physician");
+                    b.ToTable("tbl_PulseRate_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateStaffName", b =>
                 {
                     b.Property<int>("PulseRateStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("PulseRateStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("PulseRateStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PulseRateStaffNameId"), 1L, 1);
 
                     b.Property<int>("PulseRateId")
-                        .HasColumnName("PulseRateId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PulseRateId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("PulseRateStaffNameId");
 
@@ -6951,150 +7116,154 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_PulseRate_StaffName");
+                    b.ToTable("tbl_PulseRate_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Resources", b =>
                 {
                     b.Property<int>("ResourcesId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ResourcesId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<string>("Image")
                         .IsRequired()
-                        .HasColumnName("Image")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Image");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnName("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Note");
 
                     b.Property<string>("PublishBy")
                         .IsRequired()
-                        .HasColumnName("PublishBy")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PublishBy");
 
                     b.Property<int>("PublishTo")
-                        .HasColumnName("PublishTo")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PublishTo");
 
                     b.Property<string>("Video")
                         .IsRequired()
-                        .HasColumnName("Video")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Video");
 
                     b.HasKey("ResourcesId");
 
                     b.HasIndex("PublishTo");
 
-                    b.ToTable("tbl_Resources_");
+                    b.ToTable("tbl_Resources_", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Review", b =>
                 {
                     b.Property<int>("ReviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ReviewId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ReviewId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewId"), 1L, 1);
 
                     b.Property<DateTime>("CP_PreDate")
-                        .HasColumnName("CP_PreDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CP_PreDate");
 
                     b.Property<DateTime>("CP_ReviewDate")
-                        .HasColumnName("CP_ReviewDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CP_ReviewDate");
 
                     b.Property<int>("PersonalDetailId")
-                        .HasColumnName("PersonalDetailId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonalDetailId");
 
                     b.Property<DateTime>("RA_PreDate")
-                        .HasColumnName("RA_PreDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("RA_PreDate");
 
                     b.Property<DateTime>("RA_ReviewDate")
-                        .HasColumnName("RA_ReviewDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("RA_ReviewDate");
 
                     b.HasKey("ReviewId");
 
                     b.HasIndex("PersonalDetailId")
                         .IsUnique();
 
-                    b.ToTable("tbl_Review");
+                    b.ToTable("tbl_Review", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Rota", b =>
                 {
                     b.Property<int>("RotaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RotaId"), 1L, 1);
 
                     b.Property<string>("Area")
-                        .HasColumnName("Area")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Area");
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnName("Gender")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("Gender");
 
                     b.Property<int>("NumberOfStaff")
-                        .HasColumnName("NumberOfStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfStaff");
 
                     b.Property<string>("RotaName")
                         .IsRequired()
-                        .HasColumnName("RotaName")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("RotaName");
 
                     b.HasKey("RotaId");
 
-                    b.ToTable("tbl_ClientRotaName");
+                    b.ToTable("tbl_ClientRotaName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.RotaDayofWeek", b =>
                 {
                     b.Property<int>("RotaDayofWeekId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RotaDayofWeekId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("RotaDayofWeekId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RotaDayofWeekId"), 1L, 1);
 
                     b.Property<string>("DayofWeek")
                         .IsRequired()
-                        .HasColumnName("DayofWeek")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("DayofWeek");
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.HasKey("RotaDayofWeekId");
 
-                    b.ToTable("tbl_RotaDayofWeek");
+                    b.ToTable("tbl_RotaDayofWeek", (string)null);
 
                     b.HasData(
                         new
@@ -7145,183 +7314,188 @@ namespace AwesomeCare.DataAccess.Migrations
                 {
                     b.Property<int>("PinId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PinId"), 1L, 1);
 
                     b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnName("Key")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Key");
 
                     b.Property<int>("Pin")
-                        .HasColumnName("Pin")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Pin");
 
                     b.HasKey("PinId");
 
-                    b.ToTable("tbl_RotaPin");
+                    b.ToTable("tbl_RotaPin", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.RotaTask", b =>
                 {
                     b.Property<int>("RotaTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("RotaTaskId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("RotaTaskId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RotaTaskId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("GivenAcronym")
                         .IsRequired()
-                        .HasColumnName("GivenAcronym")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("GivenAcronym");
 
                     b.Property<string>("NotGivenAcronym")
                         .IsRequired()
-                        .HasColumnName("NotGivenAcronym")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("NotGivenAcronym");
 
                     b.Property<string>("Remark")
-                        .HasColumnName("Remark")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Remark");
 
                     b.Property<string>("TaskName")
                         .IsRequired()
-                        .HasColumnName("TaskName")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("TaskName");
 
                     b.HasKey("RotaTaskId");
 
                     b.HasIndex("GivenAcronym")
                         .IsUnique()
-                        .HasName("IX_tbl_RotaTask_GivenAcronym");
+                        .HasDatabaseName("IX_tbl_RotaTask_GivenAcronym");
 
                     b.HasIndex("NotGivenAcronym")
                         .IsUnique()
-                        .HasName("IX_tbl_RotaTask_NotGivenAcronym");
+                        .HasDatabaseName("IX_tbl_RotaTask_NotGivenAcronym");
 
                     b.HasIndex("TaskName")
                         .IsUnique()
-                        .HasName("IX_tbl_RotaTask_TaskName");
+                        .HasDatabaseName("IX_tbl_RotaTask_TaskName");
 
-                    b.ToTable("tbl_RotaTask");
+                    b.ToTable("tbl_RotaTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SalaryAllowance", b =>
                 {
                     b.Property<int>("SalaryAllowanceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AllowanceType")
-                        .HasColumnName("AllowanceType")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalaryAllowanceId"), 1L, 1);
+
+                    b.Property<int>("AllowanceType")
+                        .HasColumnType("int")
+                        .HasColumnName("AllowanceType");
+
                     b.Property<decimal>("Amount")
-                        .HasColumnName("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnName("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EndDate");
 
                     b.Property<decimal>("Percentage")
-                        .HasColumnName("Percentage")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Percentage");
 
                     b.Property<string>("Reoccurent")
                         .IsRequired()
-                        .HasColumnName("Reoccurent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reoccurent");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.HasKey("SalaryAllowanceId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_SalaryAllowance");
+                    b.ToTable("tbl_SalaryAllowance", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SalaryDeduction", b =>
                 {
                     b.Property<int>("SalaryDeductionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("AllowanceType")
-                        .HasColumnName("AllowanceType")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SalaryDeductionId"), 1L, 1);
+
+                    b.Property<int>("AllowanceType")
+                        .HasColumnType("int")
+                        .HasColumnName("AllowanceType");
+
                     b.Property<decimal>("Amount")
-                        .HasColumnName("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnName("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EndDate");
 
                     b.Property<decimal>("Percentage")
-                        .HasColumnName("Percentage")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Percentage");
 
                     b.Property<string>("Reoccurent")
                         .IsRequired()
-                        .HasColumnName("Reoccurent")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reoccurent");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.HasKey("SalaryDeductionId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_SalaryDeduction");
+                    b.ToTable("tbl_SalaryDeduction", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizureOfficerToAct", b =>
                 {
                     b.Property<int>("SeizureOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SeizureOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SeizureOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeizureOfficerToActId"), 1L, 1);
 
                     b.Property<int>("SeizureId")
-                        .HasColumnName("SeizureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeizureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("SeizureOfficerToActId");
 
@@ -7329,24 +7503,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Seizure_OfficerToAct");
+                    b.ToTable("tbl_Seizure_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizurePhysician", b =>
                 {
                     b.Property<int>("SeizurePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SeizurePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SeizurePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeizurePhysicianId"), 1L, 1);
 
                     b.Property<int>("SeizureId")
-                        .HasColumnName("SeizureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeizureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("SeizurePhysicianId");
 
@@ -7354,24 +7529,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Seizure_Physician");
+                    b.ToTable("tbl_Seizure_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizureStaffName", b =>
                 {
                     b.Property<int>("SeizureStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SeizureStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SeizureStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeizureStaffNameId"), 1L, 1);
 
                     b.Property<int>("SeizureId")
-                        .HasColumnName("SeizureId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SeizureId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("SeizureStaffNameId");
 
@@ -7379,24 +7555,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Seizure_StaffName");
+                    b.ToTable("tbl_Seizure_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ServiceOfficerToAct", b =>
                 {
                     b.Property<int>("ServiceOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ServiceOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ServiceOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceOfficerToActId"), 1L, 1);
 
                     b.Property<int>("ServiceId")
-                        .HasColumnName("ServiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServiceId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ServiceOfficerToActId");
 
@@ -7404,24 +7581,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Service_OfficerToAct");
+                    b.ToTable("tbl_Service_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ServiceStaffName", b =>
                 {
                     b.Property<int>("ServiceStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ServiceStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ServiceStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ServiceStaffNameId"), 1L, 1);
 
                     b.Property<int>("ServiceId")
-                        .HasColumnName("ServiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServiceId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("ServiceStaffNameId");
 
@@ -7429,369 +7607,375 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_Service_StaffName");
+                    b.ToTable("tbl_Service_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SetupStaffHoliday", b =>
                 {
                     b.Property<int>("SetupHolidayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SetupHolidayId"), 1L, 1);
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("HoursSoFar")
-                        .HasColumnName("HoursSoFar")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HoursSoFar");
 
                     b.Property<int>("IncrementalDailyHolidayByHrs")
-                        .HasColumnName("IncrementalDailyHolidayByHrs")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IncrementalDailyHolidayByHrs");
 
                     b.Property<int>("NumberOfDays")
-                        .HasColumnName("NumberOfDays")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfDays");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("TypeOfHoliday")
-                        .HasColumnName("TypeOfHoliday")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TypeOfHoliday");
 
                     b.Property<DateTime>("YearEndPeriodStartDate")
-                        .HasColumnName("YearEndPeriodStartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("YearEndPeriodStartDate");
 
                     b.Property<DateTime>("YearOfEmployment")
-                        .HasColumnName("YearOfEmployment")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("YearOfEmployment");
 
                     b.HasKey("SetupHolidayId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_SetupStaffHoliday");
+                    b.ToTable("tbl_SetupStaffHoliday", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBooking", b =>
                 {
                     b.Property<int>("ShiftBookingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ShiftBookingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ShiftBookingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftBookingId"), 1L, 1);
 
                     b.Property<bool>("DriverRequired")
-                        .HasColumnName("DriverRequired")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("DriverRequired");
 
                     b.Property<int>("NumberOfStaff")
-                        .HasColumnName("NumberOfStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NumberOfStaff");
 
                     b.Property<int?>("PublishTo")
-                        .HasColumnName("PublishTo")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PublishTo");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Remark");
 
                     b.Property<int>("Rota")
-                        .HasColumnName("Rota")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Rota");
 
                     b.Property<string>("ShiftDate")
                         .IsRequired()
-                        .HasColumnName("ShiftDate")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("ShiftDate");
 
                     b.Property<string>("StartTime")
                         .IsRequired()
-                        .HasColumnName("StartTime")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("StartTime");
 
                     b.Property<string>("StopTime")
                         .IsRequired()
-                        .HasColumnName("StopTime")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("StopTime");
 
                     b.Property<int>("Team")
-                        .HasColumnName("Team_StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Team_StaffPersonalInfoId");
 
                     b.HasKey("ShiftBookingId");
 
-                    b.ToTable("tbl_ShiftBooking");
+                    b.ToTable("tbl_ShiftBooking", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBookingBlockedDays", b =>
                 {
                     b.Property<int>("ShiftBookingBlockedDaysId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("ShiftBookingBlockedDaysId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("ShiftBookingBlockedDaysId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftBookingBlockedDaysId"), 1L, 1);
 
                     b.Property<string>("Day")
                         .IsRequired()
-                        .HasColumnName("Day")
+                        .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)")
-                        .HasMaxLength(2);
+                        .HasColumnName("Day");
 
                     b.Property<int>("ShiftBookingId")
-                        .HasColumnName("ShiftBookingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ShiftBookingId");
 
                     b.Property<string>("WeekDay")
                         .IsRequired()
-                        .HasColumnName("WeekDay")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("WeekDay");
 
                     b.HasKey("ShiftBookingBlockedDaysId");
 
                     b.HasIndex("ShiftBookingId");
 
-                    b.ToTable("tbl_ShiftBookingBlockedDays");
+                    b.ToTable("tbl_ShiftBookingBlockedDays", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthAndMedication", b =>
                 {
                     b.Property<int>("SHMId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SHMId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SHMId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SHMId"), 1L, 1);
 
                     b.Property<int>("AccessMedication")
-                        .HasColumnName("AccessMedication")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AccessMedication");
 
                     b.Property<int>("AdminLvl")
-                        .HasColumnName("AdminLvl")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AdminLvl");
 
                     b.Property<string>("By")
                         .IsRequired()
-                        .HasColumnName("By")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("By");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("Consent")
-                        .HasColumnName("Consent")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Consent");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("FamilyMeds")
-                        .HasColumnName("FamilyMeds")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FamilyMeds");
 
                     b.Property<int>("FamilyReturnMed")
-                        .HasColumnName("FamilyReturnMed")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FamilyReturnMed");
 
                     b.Property<int>("LeftoutMedicine")
-                        .HasColumnName("LeftoutMedicine")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LeftoutMedicine");
 
                     b.Property<int>("MedAccessDenial")
-                        .HasColumnName("MedAccessDenial")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedAccessDenial");
 
                     b.Property<string>("MedKeyCode")
                         .IsRequired()
-                        .HasColumnName("MedKeyCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MedKeyCode");
 
                     b.Property<int>("MedicationAllergy")
-                        .HasColumnName("MedicationAllergy")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedicationAllergy");
 
                     b.Property<string>("MedicationStorage")
                         .IsRequired()
-                        .HasColumnName("MedicationStorage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MedicationStorage");
 
                     b.Property<int>("MedsGPOrder")
-                        .HasColumnName("MedsGPOrder")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MedsGPOrder");
 
                     b.Property<int>("NameFormMedicaiton")
-                        .HasColumnName("NameFormMedicaiton")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NameFormMedicaiton");
 
                     b.Property<int>("NoMedAccess")
-                        .HasColumnName("NoMedAccess")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NoMedAccess");
 
                     b.Property<int>("OverdoseContact")
-                        .HasColumnName("OverdoseContact")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("OverdoseContact");
 
                     b.Property<int>("PNRDoses")
-                        .HasColumnName("PNRDoses")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PNRDoses");
 
                     b.Property<string>("PNRMedList")
                         .IsRequired()
-                        .HasColumnName("PNRMedList")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PNRMedList");
 
                     b.Property<int>("PNRMedReq")
-                        .HasColumnName("PNRMedReq")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PNRMedReq");
 
                     b.Property<int>("PNRMedsAdmin")
-                        .HasColumnName("PNRMedsAdmin")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PNRMedsAdmin");
 
                     b.Property<string>("PNRMedsMissing")
                         .IsRequired()
-                        .HasColumnName("PNRMedsMissing")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PNRMedsMissing");
 
                     b.Property<int>("PharmaMARChart")
-                        .HasColumnName("PharmaMARChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PharmaMARChart");
 
                     b.Property<int>("SpecialStorage")
-                        .HasColumnName("SpecialStorage")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SpecialStorage");
 
                     b.Property<int>("TempMARChart")
-                        .HasColumnName("TempMARChart")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TempMARChart");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<int>("WhoAdminister")
-                        .HasColumnName("WhoAdminister")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WhoAdminister");
 
                     b.HasKey("SHMId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_SpecialHealthAndMedication");
+                    b.ToTable("tbl_SpecialHealthAndMedication", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthCondition", b =>
                 {
                     b.Property<int>("HealthCondId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("HealthCondId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("HealthCondId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HealthCondId"), 1L, 1);
 
                     b.Property<string>("ClientAction")
                         .IsRequired()
-                        .HasColumnName("ClientAction")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClientAction");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("ClinicRecommendation")
                         .IsRequired()
-                        .HasColumnName("ClinicRecommendation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ClinicRecommendation");
 
                     b.Property<string>("ConditionName")
                         .IsRequired()
-                        .HasColumnName("ConditionName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ConditionName");
 
                     b.Property<string>("FeelingAfterIncident")
                         .IsRequired()
-                        .HasColumnName("FeelingAfterIncident")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FeelingAfterIncident");
 
                     b.Property<string>("FeelingBeforeIncident")
                         .IsRequired()
-                        .HasColumnName("FeelingBeforeIncident")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FeelingBeforeIncident");
 
                     b.Property<string>("Frequency")
                         .IsRequired()
-                        .HasColumnName("Frequency")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Frequency");
 
                     b.Property<string>("LifestyleSupport")
                         .IsRequired()
-                        .HasColumnName("LifestyleSupport")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LifestyleSupport");
 
                     b.Property<string>("LivingActivities")
                         .IsRequired()
-                        .HasColumnName("LivingActivities")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("LivingActivities");
 
                     b.Property<string>("PlanningHealthCondition")
                         .IsRequired()
-                        .HasColumnName("PlanningHealthCondition")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PlanningHealthCondition");
 
                     b.Property<string>("SourceInformation")
                         .IsRequired()
-                        .HasColumnName("SourceInformation")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("SourceInformation");
 
                     b.Property<string>("Trigger")
                         .IsRequired()
-                        .HasColumnName("Trigger")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Trigger");
 
                     b.HasKey("HealthCondId");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("tbl_SpecialHealthCondition");
+                    b.ToTable("tbl_SpecialHealthCondition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpotCheckOfficerToAct", b =>
                 {
                     b.Property<int>("SpotCheckOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SpotCheckOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SpotCheckOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpotCheckOfficerToActId"), 1L, 1);
 
                     b.Property<int>("SpotCheckId")
-                        .HasColumnName("SpotCheckId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SpotCheckId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("SpotCheckOfficerToActId");
 
@@ -7799,92 +7983,93 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_SpotCheck_OfficerToAct");
+                    b.ToTable("tbl_SpotCheck_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffAdlObs", b =>
                 {
                     b.Property<int>("ObservationID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ObservationID"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comments")
                         .IsRequired()
-                        .HasColumnName("Comments")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Comments");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Details");
 
                     b.Property<int>("FivePrinciples")
-                        .HasColumnName("FivePrinciples")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("FivePrinciples");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.Property<int>("UnderstandingofControl")
-                        .HasColumnName("UnderstandingofControl")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnderstandingofControl");
 
                     b.Property<int>("UnderstandingofEquipment")
-                        .HasColumnName("UnderstandingofEquipment")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnderstandingofEquipment");
 
                     b.Property<int>("UnderstandingofService")
-                        .HasColumnName("UnderstandingofService")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnderstandingofService");
 
                     b.HasKey("ObservationID");
 
@@ -7892,33 +8077,34 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_AdlObs");
+                    b.ToTable("tbl_Staff_AdlObs", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffBlackList", b =>
                 {
                     b.Property<int>("StaffBlackListId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffBlackListId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffBlackListId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffBlackListId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffBlackListId");
 
@@ -7926,653 +8112,666 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffBlackList");
+                    b.ToTable("tbl_StaffBlackList", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffCommunication", b =>
                 {
                     b.Property<int>("StaffCommunicationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffCommunicationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffCommunicationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffCommunicationId"), 1L, 1);
 
                     b.Property<string>("ActionTaken")
                         .IsRequired()
-                        .HasColumnName("ActionTaken")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("CommunicationClassId")
-                        .HasColumnName("CommunicationClass")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CommunicationClass");
 
                     b.Property<string>("Concern")
                         .IsRequired()
-                        .HasColumnName("Concern")
+                        .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)")
-                        .HasMaxLength(500);
+                        .HasColumnName("Concern");
 
                     b.Property<string>("ExpectedAction")
                         .IsRequired()
-                        .HasColumnName("ExpectedAction")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("ExpectedAction");
 
                     b.Property<int>("PersonInvolved")
-                        .HasColumnName("PersonInvolved")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonInvolved");
 
                     b.Property<int>("PersonResponsibleForAction")
-                        .HasColumnName("PersonResponsibleForAction")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PersonResponsibleForAction");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("Telephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Telephone");
 
                     b.Property<DateTime>("ValueDate")
-                        .HasColumnName("ValueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ValueDate");
 
                     b.HasKey("StaffCommunicationId");
 
-                    b.ToTable("tbl_StaffCommunication");
+                    b.ToTable("tbl_StaffCommunication", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTest", b =>
                 {
                     b.Property<int>("StaffCompetenceTestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffCompetenceTestId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffCompetenceTestId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffCompetenceTest");
+                    b.ToTable("tbl_StaffCompetenceTest", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTestTask", b =>
                 {
                     b.Property<int>("StaffCompetenceTestTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffCompetenceTestTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Point")
-                        .HasColumnName("Point")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Point");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("StaffCompetenceTestId")
-                        .HasColumnName("StaffCompetenceTestId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffCompetenceTestId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("StaffCompetenceTestTaskId");
 
                     b.HasIndex("StaffCompetenceTestId");
 
-                    b.ToTable("tbl_StaffCompetenceTestTask");
+                    b.ToTable("tbl_StaffCompetenceTestTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
                 {
                     b.Property<int>("StaffEducationId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffEducationId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffEducationId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffEducationId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Address");
 
                     b.Property<string>("Certificate")
                         .IsRequired()
-                        .HasColumnName("Certificate")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Certificate");
 
                     b.Property<string>("CertificateAttachment")
-                        .HasColumnName("CertificateAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CertificateAttachment");
 
                     b.Property<string>("EndDate")
-                        .HasColumnName("EndDate")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("EndDate");
 
                     b.Property<string>("Institution")
                         .IsRequired()
-                        .HasColumnName("Institution")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Institution");
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnName("Location")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Location");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
-                        .HasColumnName("StartDate")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("StartDate");
 
                     b.HasKey("StaffEducationId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffEducation");
+                    b.ToTable("tbl_StaffEducation", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEmergencyContact", b =>
                 {
                     b.Property<int>("StaffEmergencyContactId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffEmergencyContactId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffEmergencyContactId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffEmergencyContactId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("Address");
 
                     b.Property<string>("ContactName")
                         .IsRequired()
-                        .HasColumnName("ContactName")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("ContactName");
 
                     b.Property<string>("Email")
-                        .HasColumnName("Email")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("Email");
 
                     b.Property<string>("Relationship")
                         .IsRequired()
-                        .HasColumnName("Relationship")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Relationship");
 
                     b.Property<int>("StaffPersonalInfoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("Telephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Telephone");
 
                     b.HasKey("StaffEmergencyContactId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffEmergencyContact");
+                    b.ToTable("tbl_StaffEmergencyContact", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealth", b =>
                 {
                     b.Property<int>("StaffHealthId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffHealthId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffHealthId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffHealth");
+                    b.ToTable("tbl_StaffHealth", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealthTask", b =>
                 {
                     b.Property<int>("StaffHealthTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffHealthTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Point")
-                        .HasColumnName("Point")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Point");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("StaffHealthId")
-                        .HasColumnName("StaffHealthId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffHealthId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("StaffHealthTaskId");
 
                     b.HasIndex("StaffHealthId");
 
-                    b.ToTable("tbl_StaffHealthTask");
+                    b.ToTable("tbl_StaffHealthTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHoliday", b =>
                 {
                     b.Property<int>("StaffHolidayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffHolidayId"), 1L, 1);
 
                     b.Property<decimal>("AllocatedDays")
-                        .HasColumnName("AllocatedDays")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("AllocatedDays");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("Class")
-                        .HasColumnName("Class")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Class");
 
                     b.Property<string>("CopyOfHandover")
                         .IsRequired()
-                        .HasColumnName("CopyOfHandover")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CopyOfHandover");
 
                     b.Property<decimal>("Days")
-                        .HasColumnName("Days")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Days");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("EndDate")
-                        .HasColumnName("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EndDate");
 
                     b.Property<string>("PersonOnResponsibility")
                         .IsRequired()
-                        .HasColumnName("PersonOnResponsibility")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("PersonOnResponsibility");
 
                     b.Property<string>("Purpose")
                         .IsRequired()
-                        .HasColumnName("Purpose")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Purpose");
 
                     b.Property<string>("Remark")
                         .IsRequired()
-                        .HasColumnName("Remark")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remark");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.Property<decimal>("YearOfService")
-                        .HasColumnName("YearOfService")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("YearOfService");
 
                     b.HasKey("StaffHolidayId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffHoliday");
+                    b.ToTable("tbl_StaffHoliday", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffIncidentReporting", b =>
                 {
                     b.Property<int>("StaffIncidentReportingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffIncidentReportingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffIncidentReportingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffIncidentReportingId"), 1L, 1);
 
                     b.Property<string>("ActionTaken")
-                        .HasColumnName("ActionTaken")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("IncidentDetails")
                         .IsRequired()
-                        .HasColumnName("IncidentDetails")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IncidentDetails");
 
                     b.Property<int>("IncidentType")
-                        .HasColumnName("IncidentType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("IncidentType");
 
                     b.Property<string>("LoggedById")
                         .IsRequired()
-                        .HasColumnName("LoggedById")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("LoggedById");
 
                     b.Property<DateTimeOffset>("LoggedDate")
-                        .HasColumnName("LoggedDate")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("LoggedDate");
 
                     b.Property<int?>("ReportingStaffId")
-                        .HasColumnName("ReportingStaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReportingStaffId");
 
                     b.Property<int>("StaffInvolvedId")
-                        .HasColumnName("StaffInvolvedId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffInvolvedId");
 
                     b.Property<string>("Witness")
-                        .HasColumnName("Witness")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Witness");
 
                     b.HasKey("StaffIncidentReportingId");
 
-                    b.ToTable("tbl_StaffIncidentReporting");
+                    b.ToTable("tbl_StaffIncidentReporting", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInfectionControl", b =>
                 {
                     b.Property<int>("InfectionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("InfectionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("InfectionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InfectionId"), 1L, 1);
 
                     b.Property<string>("Guideline")
                         .IsRequired()
-                        .HasColumnName("Guideline")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Guideline");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<DateTime>("TestDate")
-                        .HasColumnName("TestDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TestDate");
 
                     b.Property<int>("Type")
-                        .HasColumnName("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Type");
 
                     b.Property<int>("VaccStatus")
-                        .HasColumnName("VaccStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VaccStatus");
 
                     b.HasKey("InfectionId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffInfectionControl");
+                    b.ToTable("tbl_StaffInfectionControl", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterview", b =>
                 {
                     b.Property<int>("StaffInterviewId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffInterviewId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffInterviewId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffInterview");
+                    b.ToTable("tbl_StaffInterview", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterviewTask", b =>
                 {
                     b.Property<int>("StaffInterviewTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffInterviewTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Point")
-                        .HasColumnName("Point")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Point");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("StaffInterviewId")
-                        .HasColumnName("StaffInterviewId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffInterviewId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("StaffInterviewTaskId");
 
                     b.HasIndex("StaffInterviewId");
 
-                    b.ToTable("tbl_StaffInterviewTask");
+                    b.ToTable("tbl_StaffInterviewTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffKeyWorkerVoice", b =>
                 {
                     b.Property<int>("KeyWorkerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KeyWorkerId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("ChangesWeNeed")
                         .IsRequired()
-                        .HasColumnName("ChangesWeNeed")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ChangesWeNeed");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<string>("HealthAndWellNessChanges")
                         .IsRequired()
-                        .HasColumnName("HealthAndWellNessChanges")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("HealthAndWellNessChanges");
 
                     b.Property<string>("MedicationChanges")
                         .IsRequired()
-                        .HasColumnName("MedicationChanges")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MedicationChanges");
 
                     b.Property<string>("MovingAndHandling")
                         .IsRequired()
-                        .HasColumnName("MovingAndHandling")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MovingAndHandling");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<int>("NotComfortableServices")
-                        .HasColumnName("NotComfortableServices")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("NotComfortableServices");
 
                     b.Property<string>("NutritionalChanges")
                         .IsRequired()
-                        .HasColumnName("NutritionalChanges")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NutritionalChanges");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("RiskAssessment")
                         .IsRequired()
-                        .HasColumnName("RiskAssessment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RiskAssessment");
 
                     b.Property<int>("ServicesRequiresServices")
-                        .HasColumnName("ServicesRequiresServices")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServicesRequiresServices");
 
                     b.Property<int>("ServicesRequiresTime")
-                        .HasColumnName("ServicesRequiresTime")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ServicesRequiresTime");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.Property<int>("WellSupportedServices")
-                        .HasColumnName("WellSupportedServices")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WellSupportedServices");
 
                     b.HasKey("KeyWorkerId");
 
@@ -8580,89 +8779,142 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_KeyWorkerVoice");
+                    b.ToTable("tbl_Staff_KeyWorkerVoice", (string)null);
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffLateness", b =>
+                {
+                    b.Property<int>("StaffLatenessId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffLatenessId"), 1L, 1);
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reason");
+
+                    b.Property<string>("Response")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Response");
+
+                    b.Property<int>("Rota")
+                        .HasColumnType("int")
+                        .HasColumnName("Rota");
+
+                    b.Property<int>("SN")
+                        .HasColumnType("int")
+                        .HasColumnName("SN");
+
+                    b.Property<int>("StaffPersonalInfoId")
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
+
+                    b.Property<DateTime>("TimeCritical")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("TimeCritical");
+
+                    b.HasKey("StaffLatenessId");
+
+                    b.HasIndex("StaffPersonalInfoId");
+
+                    b.ToTable("tbl_StaffLateness", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
                 {
                     b.Property<int>("MedCompId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MedCompId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("CarePlan")
-                        .HasColumnName("CarePlan")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CarePlan");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<int>("RateStaff")
-                        .HasColumnName("RateStaff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RateStaff");
 
                     b.Property<int>("ReadingMedicalPrescriptions")
-                        .HasColumnName("ReadingMedicalPrescriptions")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ReadingMedicalPrescriptions");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.Property<int>("UnderstandingofMedication")
-                        .HasColumnName("UnderstandingofMedication")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnderstandingofMedication");
 
                     b.Property<int>("UnderstandingofRights")
-                        .HasColumnName("UnderstandingofRights")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UnderstandingofRights");
 
                     b.HasKey("MedCompId");
 
@@ -8670,127 +8922,130 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_MedCompObs");
+                    b.ToTable("tbl_Staff_MedCompObs", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedRota", b =>
                 {
                     b.Property<int>("StaffRotaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaId"), 1L, 1);
 
                     b.Property<string>("DoseGiven")
-                        .HasColumnName("DoseGiven")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DoseGiven");
 
                     b.Property<string>("Feedback")
-                        .HasColumnName("Feedback")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Feedback");
 
                     b.Property<string>("Location")
-                        .HasColumnName("Location")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Location");
 
                     b.Property<string>("Measurement")
-                        .HasColumnName("Measurement")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Measurement");
 
                     b.Property<string>("ReferenceNumber")
                         .IsRequired()
-                        .HasColumnName("ReferenceNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ReferenceNumber");
 
                     b.Property<string>("Remark")
-                        .HasColumnName("Remark")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Remark");
 
                     b.Property<DateTime>("RotaDate")
-                        .HasColumnName("RotaDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("RotaDate");
 
                     b.Property<int?>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaDayofWeekId");
 
                     b.Property<int>("RotaId")
-                        .HasColumnName("RotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaId");
 
                     b.Property<int>("Staff")
-                        .HasColumnName("Staff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Staff");
 
                     b.Property<string>("Time")
-                        .HasColumnName("Time")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Time");
 
                     b.HasKey("StaffRotaId");
 
                     b.HasIndex("RotaId");
 
-                    b.ToTable("tbl_StaffMedRota");
+                    b.ToTable("tbl_StaffMedRota", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedTracker", b =>
                 {
                     b.Property<int>("StaffMedTrackerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffMedTrackerId"), 1L, 1);
 
                     b.Property<int>("ClientMedId")
-                        .HasColumnName("ClientMedId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientMedId");
 
                     b.Property<string>("DoseGiven")
                         .IsRequired()
-                        .HasColumnName("DoseGiven")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DoseGiven");
 
                     b.Property<DateTime>("MedTrackDate")
-                        .HasColumnName("MedTrackDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("MedTrackDate");
 
                     b.Property<int>("RotaId")
-                        .HasColumnName("RotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("StaffMedTrackerId");
 
-                    b.ToTable("tbl_StaffMedTracker");
+                    b.ToTable("tbl_StaffMedTracker", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffOfficeLocation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Location")
-                        .HasColumnName("Location")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Location");
 
                     b.Property<int>("Staff")
-                        .HasColumnName("Staff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Staff");
 
                     b.HasKey("Id");
 
@@ -8798,340 +9053,342 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("Staff");
 
-                    b.ToTable("tbl_StaffOfficeLocation");
+                    b.ToTable("tbl_StaffOfficeLocation", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
                 {
                     b.Property<int>("OneToOneId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OneToOneId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("CurrentEventArea")
                         .IsRequired()
-                        .HasColumnName("CurrentEventArea")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CurrentEventArea");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("DecisionsReached")
                         .IsRequired()
-                        .HasColumnName("DecisionsReached")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DecisionsReached");
 
                     b.Property<string>("ImprovementRecorded")
                         .IsRequired()
-                        .HasColumnName("ImprovementRecorded")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ImprovementRecorded");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<int>("PreviousSupervision")
-                        .HasColumnName("PreviousSupervision")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PreviousSupervision");
 
                     b.Property<string>("Purpose")
                         .IsRequired()
-                        .HasColumnName("Purpose")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Purpose");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("StaffConclusion")
                         .IsRequired()
-                        .HasColumnName("StaffConclusion")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffConclusion");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<string>("StaffImprovedInAreas")
                         .IsRequired()
-                        .HasColumnName("StaffImprovedInAreas")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffImprovedInAreas");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("OneToOneId");
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_OneToOne");
+                    b.ToTable("tbl_Staff_OneToOne", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
                 {
                     b.Property<int>("StaffPersonalInfoId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffPersonalInfoId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffPersonalInfoId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffPersonalInfoId"), 1L, 1);
 
                     b.Property<string>("AboutMe")
-                        .HasColumnName("AboutMe")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("AboutMe");
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Address");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CV")
                         .IsRequired()
-                        .HasColumnName("CV")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CV");
 
                     b.Property<string>("CanDrive")
                         .IsRequired()
-                        .HasColumnName("CanDrive")
+                        .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasColumnName("CanDrive");
 
                     b.Property<string>("CoverLetter")
                         .IsRequired()
-                        .HasColumnName("CoverLetter")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CoverLetter");
 
                     b.Property<string>("DBS")
                         .IsRequired()
-                        .HasColumnName("DBS")
+                        .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasColumnName("DBS");
 
                     b.Property<string>("DBSAttachment")
-                        .HasColumnName("DBSAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DBSAttachment");
 
                     b.Property<DateTime?>("DBSExpiryDate")
-                        .HasColumnName("DBSExpiryDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DBSExpiryDate");
 
                     b.Property<string>("DBSUpdateNo")
-                        .HasColumnName("DBSUpdateNo")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DBSUpdateNo");
 
                     b.Property<string>("DateOfBirth")
                         .IsRequired()
-                        .HasColumnName("DateOfBirth")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("DateOfBirth");
 
                     b.Property<string>("DrivingLicense")
-                        .HasColumnName("DrivingLicense")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DrivingLicense");
 
                     b.Property<DateTime?>("DrivingLicenseExpiryDate")
-                        .HasColumnName("DrivingLicenseExpiryDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DrivingLicenseExpiryDate");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Email");
 
                     b.Property<DateTime?>("EmploymentDate")
-                        .HasColumnName("EmploymentDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EmploymentDate");
 
                     b.Property<DateTime?>("EndDate")
-                        .HasColumnName("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("EndDate");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnName("FirstName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("FirstName");
 
                     b.Property<string>("Gender")
                         .IsRequired()
-                        .HasColumnName("Gender")
+                        .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)")
-                        .HasMaxLength(7);
+                        .HasColumnName("Gender");
 
                     b.Property<bool?>("HasIdCard")
-                        .HasColumnName("HasIdCard")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("HasIdCard");
 
                     b.Property<bool?>("HasUniform")
-                        .HasColumnName("HasUniform")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("HasUniform");
 
                     b.Property<string>("Hobbies")
-                        .HasColumnName("Hobbies")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Hobbies");
 
                     b.Property<string>("IdNumber")
-                        .HasColumnName("IdNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("IdNumber");
 
                     b.Property<bool?>("IsKeyWorker")
-                        .HasColumnName("IsKeyWorker")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsKeyWorker");
 
                     b.Property<bool?>("IsTeamLeader")
-                        .HasColumnName("IsTeamLeader")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsTeamLeader");
 
                     b.Property<int?>("JobCategory")
-                        .HasColumnName("JobCategory")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("JobCategory");
 
                     b.Property<string>("Keyworker")
-                        .HasColumnName("Keyworker")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Keyworker");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnName("LastName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("LastName");
 
                     b.Property<string>("MiddleName")
-                        .HasColumnName("MiddleName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("MiddleName");
 
                     b.Property<string>("NI")
                         .IsRequired()
-                        .HasColumnName("NI")
+                        .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasColumnName("NI");
 
                     b.Property<string>("NIAttachment")
-                        .HasColumnName("NIAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NIAttachment");
 
                     b.Property<DateTime?>("NIExpiryDate")
-                        .HasColumnName("NIExpiryDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NIExpiryDate");
 
                     b.Property<string>("Passcode")
-                        .HasColumnName("Passcode")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("Passcode");
 
                     b.Property<string>("PlaceOfBirth")
-                        .HasColumnName("PlaceOfBirth")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PlaceOfBirth");
 
                     b.Property<string>("PostCode")
                         .IsRequired()
-                        .HasColumnName("PostCode")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PostCode");
 
                     b.Property<string>("ProfilePix")
                         .IsRequired()
-                        .HasColumnName("ProfilePix")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ProfilePix");
 
                     b.Property<decimal?>("Rate")
-                        .HasColumnName("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Rate");
 
                     b.Property<string>("RegistrationId")
-                        .HasColumnName("RegistrationId")
+                        .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasColumnName("RegistrationId");
 
                     b.Property<string>("RightToWork")
                         .IsRequired()
-                        .HasColumnName("RightToWork")
+                        .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasColumnName("RightToWork");
 
                     b.Property<string>("RightToWorkAttachment")
-                        .HasColumnName("RightToWorkAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RightToWorkAttachment");
 
                     b.Property<DateTime?>("RightToWorkExpiryDate")
-                        .HasColumnName("RightToWorkExpiryDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("RightToWorkExpiryDate");
 
                     b.Property<string>("Self_PYE")
                         .IsRequired()
-                        .HasColumnName("Self_PYE")
+                        .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasColumnName("Self_PYE");
 
                     b.Property<string>("Self_PYEAttachment")
-                        .HasColumnName("Self_PYEAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Self_PYEAttachment");
 
                     b.Property<int?>("StaffWorkTeamId")
-                        .HasColumnName("StaffWorkTeamId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffWorkTeamId");
 
                     b.Property<DateTime>("StartDate")
-                        .HasColumnName("StartDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("StartDate");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("TeamLeader")
-                        .HasColumnName("TeamLeader")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("TeamLeader");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
-                        .HasColumnName("Telephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("Telephone");
 
                     b.Property<string>("WorkTeam")
-                        .HasColumnName("WorkTeam")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("WorkTeam");
 
                     b.HasKey("StaffPersonalInfoId");
 
@@ -9141,273 +9398,278 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("RegistrationId")
                         .IsUnique()
-                        .HasName("IX_tbl_StaffPersonalInfo_RegistrationId")
+                        .HasDatabaseName("IX_tbl_StaffPersonalInfo_RegistrationId")
                         .HasFilter("[RegistrationId] IS NOT NULL");
 
                     b.HasIndex("StaffWorkTeamId");
 
-                    b.ToTable("tbl_StaffPersonalInfo");
+                    b.ToTable("tbl_StaffPersonalInfo", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfoComment", b =>
                 {
                     b.Property<int>("StaffPersonalInfoCommentId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffPersonalInfoCommentId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffPersonalInfoCommentId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffPersonalInfoCommentId"), 1L, 1);
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("Comment");
 
                     b.Property<int?>("CommentBy_UserId")
-                        .HasColumnName("CommentBy_UserId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CommentBy_UserId");
 
                     b.Property<DateTime>("CommentOn")
-                        .HasColumnName("CommentOn")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CommentOn");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffPersonalInfoCommentId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffPersonalInfoComment");
+                    b.ToTable("tbl_StaffPersonalInfoComment", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalityTest", b =>
                 {
                     b.Property<int>("TestId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TestId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TestId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TestId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<int>("Question")
-                        .HasColumnName("Question")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Question");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("TestId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffPersonalityTest");
+                    b.ToTable("tbl_StaffPersonalityTest", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRating", b =>
                 {
                     b.Property<int>("StaffRatingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRatingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRatingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRatingId"), 1L, 1);
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<DateTime?>("CommentDate")
                         .IsRequired()
-                        .HasColumnName("CommentDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CommentDate");
 
                     b.Property<int>("Rating")
-                        .HasColumnName("Rating")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Rating");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("SubmittedBy")
-                        .HasColumnName("SubmittedBy")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SubmittedBy");
 
                     b.HasKey("StaffRatingId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffRating");
+                    b.ToTable("tbl_StaffRating", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
                 {
                     b.Property<int>("StaffRefereeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRefereeId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRefereeId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRefereeId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Address");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
-                        .HasColumnName("CompanyName")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("CompanyName");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Email");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnName("PhoneNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PhoneNumber");
 
                     b.Property<string>("PositionofReferee")
                         .IsRequired()
-                        .HasColumnName("PositionofReferee")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("PositionofReferee");
 
                     b.Property<string>("Referee")
                         .IsRequired()
-                        .HasColumnName("Referee")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Referee");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffRefereeId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffReferee");
+                    b.ToTable("tbl_StaffReferee", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReference", b =>
                 {
                     b.Property<int>("StaffReferenceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffReferenceId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnName("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Address");
 
                     b.Property<int>("ApplicantRole")
-                        .HasColumnName("ApplicantRole")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ApplicantRole");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("Caring")
-                        .HasColumnName("Caring")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Caring");
 
                     b.Property<int>("ConfirmedBy")
-                        .HasColumnName("ConfirmedBy")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ConfirmedBy");
 
                     b.Property<string>("Contact")
                         .IsRequired()
-                        .HasColumnName("Contact")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Contact");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("DateofEmployement")
-                        .HasColumnName("DateofEmployement")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("DateofEmployement");
 
                     b.Property<string>("DateofExit")
                         .IsRequired()
-                        .HasColumnName("DateofExit")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DateofExit");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnName("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Email");
 
                     b.Property<int>("Integrity")
-                        .HasColumnName("Integrity")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Integrity");
 
                     b.Property<int>("Knowledgeable")
-                        .HasColumnName("Knowledgeable")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Knowledgeable");
 
                     b.Property<int>("PreviousExperience")
-                        .HasColumnName("PreviousExperience")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("PreviousExperience");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("RefreeName")
                         .IsRequired()
-                        .HasColumnName("RefreeName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RefreeName");
 
                     b.Property<string>("RehireStaff")
                         .IsRequired()
-                        .HasColumnName("RehireStaff")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("RehireStaff");
 
                     b.Property<string>("Relationship")
                         .IsRequired()
-                        .HasColumnName("Relationship")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Relationship");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TeamWork")
-                        .HasColumnName("TeamWork")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TeamWork");
 
                     b.Property<int>("WorkUnderPressure")
-                        .HasColumnName("WorkUnderPressure")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WorkUnderPressure");
 
                     b.HasKey("StaffReferenceId");
 
@@ -9415,36 +9677,37 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_Reference");
+                    b.ToTable("tbl_Staff_Reference", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRegulatoryContact", b =>
                 {
                     b.Property<int>("StaffRegulatoryContactId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRegulatoryContactId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRegulatoryContactId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRegulatoryContactId"), 1L, 1);
 
                     b.Property<int>("BaseRecordItemId")
-                        .HasColumnName("BaseRecordItemId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("BaseRecordItemId");
 
                     b.Property<DateTime?>("DatePerformed")
-                        .HasColumnName("DatePerformed")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DatePerformed");
 
                     b.Property<DateTime?>("DueDate")
-                        .HasColumnName("DueDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DueDate");
 
                     b.Property<string>("Evidence")
-                        .HasColumnName("Evidence")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Evidence");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffRegulatoryContactId");
 
@@ -9452,206 +9715,249 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffRegulatoryContact");
+                    b.ToTable("tbl_StaffRegulatoryContact", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRota", b =>
                 {
                     b.Property<int>("StaffRotaId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaId"), 1L, 1);
 
                     b.Property<string>("ReferenceNumber")
                         .IsRequired()
-                        .HasColumnName("ReferenceNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ReferenceNumber");
 
                     b.Property<string>("Remark")
-                        .HasColumnName("Remark")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Remark");
 
                     b.Property<DateTime>("RotaDate")
-                        .HasColumnName("RotaDate")
-                        .HasColumnType("date");
+                        .HasColumnType("date")
+                        .HasColumnName("RotaDate");
 
                     b.Property<int?>("RotaDayofWeekId")
-                        .HasColumnName("RotaDayofWeekId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaDayofWeekId");
 
                     b.Property<int>("RotaId")
-                        .HasColumnName("RotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaId");
 
                     b.Property<int>("Staff")
-                        .HasColumnName("Staff")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Staff");
 
                     b.HasKey("StaffRotaId");
 
                     b.HasIndex("RotaId");
 
-                    b.ToTable("tbl_StaffRota");
+                    b.ToTable("tbl_StaffRota", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaDynamicAddition", b =>
                 {
                     b.Property<int>("StaffRotaDynamicAdditionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaDynamicAdditionId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaDynamicAdditionId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaDynamicAdditionId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
-                        .HasColumnName("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Deleted");
 
                     b.Property<string>("ItemName")
                         .IsRequired()
-                        .HasColumnName("ItemName")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ItemName");
 
                     b.HasKey("StaffRotaDynamicAdditionId");
 
-                    b.ToTable("tbl_StaffRotaDynamicAddition");
+                    b.ToTable("tbl_StaffRotaDynamicAddition", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaItem", b =>
                 {
                     b.Property<int>("StaffRotaItemId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaItemId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaItemId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaItemId"), 1L, 1);
 
                     b.Property<int>("StaffRotaDynamicAdditionId")
                         .HasColumnType("int");
 
                     b.Property<int>("StaffRotaId")
-                        .HasColumnName("StaffRotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffRotaId");
 
                     b.HasKey("StaffRotaItemId");
 
                     b.HasIndex("StaffRotaId");
 
-                    b.ToTable("tbl_StaffRotaItem");
+                    b.ToTable("tbl_StaffRotaItem", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPartner", b =>
                 {
                     b.Property<int>("StaffRotaPartnerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaPartnerId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaPartnerId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaPartnerId"), 1L, 1);
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("StaffRotaId")
-                        .HasColumnName("StaffRotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffRotaId");
 
                     b.HasKey("StaffRotaPartnerId");
 
                     b.HasIndex("StaffRotaId");
 
-                    b.ToTable("tbl_StaffRotaPartner");
+                    b.ToTable("tbl_StaffRotaPartner", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPeriod", b =>
                 {
                     b.Property<int>("StaffRotaPeriodId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaPeriodId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaPeriodId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaPeriodId"), 1L, 1);
 
                     b.Property<string>("BowelMovement")
-                        .HasColumnName("BowelMovement")
+                        .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)")
-                        .HasMaxLength(5);
+                        .HasColumnName("BowelMovement");
 
                     b.Property<int?>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<int>("ClientRotaTypeId")
-                        .HasColumnName("ClientRotaTypeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientRotaTypeId");
 
                     b.Property<string>("ClockInAddress")
-                        .HasColumnName("ClockInAddress")
+                        .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnName("ClockInAddress");
+
+                    b.Property<string>("ClockInClientTelephone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ClockInClientTelephone");
+
+                    b.Property<int?>("ClockInCount")
+                        .HasColumnType("int")
+                        .HasColumnName("ClockInCount");
+
+                    b.Property<string>("ClockInDistance")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ClockInDistance");
+
+                    b.Property<string>("ClockInGeolocation")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("ClockInGeolocation");
 
                     b.Property<string>("ClockInMode")
-                        .HasColumnName("ClockInMode")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("ClockInMode");
 
                     b.Property<DateTimeOffset?>("ClockInTime")
-                        .HasColumnName("ClockInTime")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ClockInTime");
 
                     b.Property<string>("ClockOutAddress")
-                        .HasColumnName("ClockOutAddress")
+                        .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnName("ClockOutAddress");
+
+                    b.Property<string>("ClockOutClientTelephone")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ClockOutClientTelephone");
+
+                    b.Property<int?>("ClockOutCount")
+                        .HasColumnType("int")
+                        .HasColumnName("ClockOutCount");
+
+                    b.Property<string>("ClockOutDistance")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("ClockOutDistance");
+
+                    b.Property<string>("ClockOutGeolocation")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
+                        .HasColumnName("ClockOutGeolocation");
 
                     b.Property<string>("ClockOutMode")
-                        .HasColumnName("ClockOutMode")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("ClockOutMode");
 
                     b.Property<DateTimeOffset?>("ClockOutTime")
-                        .HasColumnName("ClockOutTime")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnName("ClockOutTime");
 
                     b.Property<string>("Comment")
-                        .HasColumnName("Comment")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Comment");
 
                     b.Property<string>("Feedback")
-                        .HasColumnName("Feedback")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Feedback");
 
                     b.Property<string>("FluidIntake")
-                        .HasColumnName("FluidIntake")
+                        .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)")
-                        .HasMaxLength(5);
+                        .HasColumnName("FluidIntake");
 
                     b.Property<string>("HandOver")
-                        .HasColumnName("HandOver")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("HandOver");
 
                     b.Property<string>("OralCare")
-                        .HasColumnName("OralCare")
+                        .HasMaxLength(5)
                         .HasColumnType("nvarchar(5)")
-                        .HasMaxLength(5);
+                        .HasColumnName("OralCare");
 
                     b.Property<int>("StaffRotaId")
-                        .HasColumnName("StaffRotaId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffRotaId");
 
                     b.Property<string>("StartTime")
-                        .HasColumnName("StartTime")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("StartTime");
 
                     b.Property<string>("StopTime")
-                        .HasColumnName("StopTime")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("StopTime");
 
                     b.HasKey("StaffRotaPeriodId");
 
@@ -9659,122 +9965,126 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffRotaId");
 
-                    b.ToTable("tbl_StaffRotaPeriod");
+                    b.ToTable("tbl_StaffRotaPeriod", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaTask", b =>
                 {
                     b.Property<int>("StaffRotaTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffRotaTaskId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffRotaTaskId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffRotaTaskId"), 1L, 1);
 
                     b.Property<bool>("IsGiven")
-                        .HasColumnName("IsGiven")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsGiven");
 
                     b.Property<int>("RotaTaskId")
-                        .HasColumnName("RotaTaskId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RotaTaskId");
 
                     b.Property<int>("StaffRotaPeriodId")
-                        .HasColumnName("StaffRotaPeriodId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffRotaPeriodId");
 
                     b.HasKey("StaffRotaTaskId");
 
                     b.HasIndex("StaffRotaPeriodId");
 
-                    b.ToTable("tbl_StaffRotaTask");
+                    b.ToTable("tbl_StaffRotaTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowing", b =>
                 {
                     b.Property<int>("StaffShadowingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffShadowingId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Heading")
                         .IsRequired()
-                        .HasColumnName("Heading")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Heading");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffShadowingId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffShadowing");
+                    b.ToTable("tbl_StaffShadowing", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowingTask", b =>
                 {
                     b.Property<int>("StaffShadowingTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffShadowingTaskId"), 1L, 1);
 
                     b.Property<int>("Answer")
-                        .HasColumnName("Answer")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Answer");
 
                     b.Property<string>("Comment")
                         .IsRequired()
-                        .HasColumnName("Comment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comment");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<int>("Point")
-                        .HasColumnName("Point")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Point");
 
                     b.Property<int>("Score")
-                        .HasColumnName("Score")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Score");
 
                     b.Property<int>("StaffShadowingId")
-                        .HasColumnName("StaffShadowingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffShadowingId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("StaffShadowingTaskId");
 
                     b.HasIndex("StaffShadowingId");
 
-                    b.ToTable("tbl_StaffShadowingTask");
+                    b.ToTable("tbl_StaffShadowingTask", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
                 {
                     b.Property<int>("StaffShiftBookingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffShiftBookingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffShiftBookingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffShiftBookingId"), 1L, 1);
 
                     b.Property<int?>("RotaId")
                         .HasColumnType("int");
 
                     b.Property<int>("ShiftBookingId")
-                        .HasColumnName("ShiftBookingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ShiftBookingId");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("StaffShiftBookingId");
 
@@ -9784,117 +10094,119 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffShiftBooking");
+                    b.ToTable("tbl_StaffShiftBooking", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBookingDay", b =>
                 {
                     b.Property<int>("StaffShiftBookingDayId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffShiftBookingDayId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffShiftBookingDayId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffShiftBookingDayId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Day")
                         .IsRequired()
-                        .HasColumnName("Day")
+                        .HasMaxLength(2)
                         .HasColumnType("nvarchar(2)")
-                        .HasMaxLength(2);
+                        .HasColumnName("Day");
 
                     b.Property<int>("StaffShiftBookingId")
-                        .HasColumnName("StaffShiftBookingId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffShiftBookingId");
 
                     b.Property<string>("WeekDay")
                         .IsRequired()
-                        .HasColumnName("WeekDay")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("WeekDay");
 
                     b.HasKey("StaffShiftBookingDayId");
 
                     b.HasIndex("StaffShiftBookingId");
 
-                    b.ToTable("tbl_StaffShiftBookingDay");
+                    b.ToTable("tbl_StaffShiftBookingDay", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSpotCheck", b =>
                 {
                     b.Property<int>("SpotCheckId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpotCheckId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("AreaComments")
                         .IsRequired()
-                        .HasColumnName("AreaComments")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AreaComments");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("ClientId")
-                        .HasColumnName("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ClientId");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffArriveOnTime")
-                        .HasColumnName("StaffArriveOnTime")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffArriveOnTime");
 
                     b.Property<int>("StaffDressCode")
-                        .HasColumnName("StaffDressCode")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffDressCode");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("SpotCheckId");
 
@@ -9902,291 +10214,295 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_SpotCheck");
+                    b.ToTable("tbl_Staff_SpotCheck", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
                 {
                     b.Property<int>("StaffSupervisionAppraisalId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffSupervisionAppraisalId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("CondourAndWhistleBlowing")
                         .IsRequired()
-                        .HasColumnName("CondourAndWhistleBlowing")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CondourAndWhistleBlowing");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<string>("FiveStarRating")
                         .IsRequired()
-                        .HasColumnName("FiveStarRating")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("FiveStarRating");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("NoAbilityToSupport")
                         .IsRequired()
-                        .HasColumnName("NoAbilityToSupport")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NoAbilityToSupport");
 
                     b.Property<string>("NoCondourAndWhistleBlowing")
                         .IsRequired()
-                        .HasColumnName("NoCondourAndWhistleBlowing")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NoCondourAndWhistleBlowing");
 
                     b.Property<int>("ProfessionalDevelopment")
-                        .HasColumnName("ProfessionalDevelopment")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProfessionalDevelopment");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<string>("StaffAbility")
                         .IsRequired()
-                        .HasColumnName("StaffAbility")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffAbility");
 
                     b.Property<int>("StaffComplaints")
-                        .HasColumnName("StaffComplaints")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffComplaints");
 
                     b.Property<string>("StaffDevelopment")
                         .IsRequired()
-                        .HasColumnName("StaffDevelopment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffDevelopment");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("StaffRating")
-                        .HasColumnName("StaffRating")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffRating");
 
                     b.Property<int>("StaffSupportAreas")
-                        .HasColumnName("StaffSupportAreas")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffSupportAreas");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.HasKey("StaffSupervisionAppraisalId");
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_SupervisionAppraisal");
+                    b.ToTable("tbl_Staff_SupervisionAppraisal", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
                 {
                     b.Property<int>("StaffSurveyId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffSurveyId"), 1L, 1);
 
                     b.Property<int>("AccessToPolicies")
-                        .HasColumnName("AccessToPolicies")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AccessToPolicies");
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<int>("AdequateTrainingReceived")
-                        .HasColumnName("AdequateTrainingReceived")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AdequateTrainingReceived");
 
                     b.Property<string>("AreaRequiringImprovements")
                         .IsRequired()
-                        .HasColumnName("AreaRequiringImprovements")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("AreaRequiringImprovements");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<int>("CompanyManagement")
-                        .HasColumnName("CompanyManagement")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyManagement");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("Deadline")
-                        .HasColumnName("Deadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Deadline");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Details");
 
                     b.Property<int>("HealthCareServicesSatisfaction")
-                        .HasColumnName("HealthCareServicesSatisfaction")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HealthCareServicesSatisfaction");
 
                     b.Property<DateTime>("NextCheckDate")
-                        .HasColumnName("NextCheckDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("NextCheckDate");
 
                     b.Property<string>("Reference")
                         .IsRequired()
-                        .HasColumnName("Reference")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reference");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffId")
-                        .HasColumnName("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffId");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("SupportFromCompany")
-                        .HasColumnName("SupportFromCompany")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("SupportFromCompany");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnName("URL")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("URL");
 
                     b.Property<string>("WorkEnvironmentSuggestions")
                         .IsRequired()
-                        .HasColumnName("WorkEnvironmentSuggestions")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WorkEnvironmentSuggestions");
 
                     b.HasKey("StaffSurveyId");
 
                     b.HasIndex("StaffId");
 
-                    b.ToTable("tbl_Staff_Survey");
+                    b.ToTable("tbl_Staff_Survey", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTax", b =>
                 {
                     b.Property<int>("StaffTaxId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffTaxId"), 1L, 1);
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("NI")
-                        .HasColumnName("NI")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("NI");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<decimal>("Tax")
-                        .HasColumnName("Tax")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Tax");
 
                     b.HasKey("StaffTaxId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffTax");
+                    b.ToTable("tbl_StaffTax", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLead", b =>
                 {
                     b.Property<int>("TeamLeadId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ClientInvolved")
-                        .HasColumnName("ClientInvolved")
                         .HasColumnType("int");
 
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeamLeadId"), 1L, 1);
+
+                    b.Property<int>("ClientInvolved")
+                        .HasColumnType("int")
+                        .HasColumnName("ClientInvolved");
+
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("DidYouDo")
                         .IsRequired()
-                        .HasColumnName("DidYouDo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DidYouDo");
 
                     b.Property<string>("DidYouObserved")
                         .IsRequired()
-                        .HasColumnName("DidYouObserved")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("DidYouObserved");
 
                     b.Property<string>("OfficeToDo")
                         .IsRequired()
-                        .HasColumnName("OfficeToDo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("OfficeToDo");
 
                     b.Property<int>("Rota")
-                        .HasColumnName("Rota")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Rota");
 
                     b.Property<int>("StaffInvolved")
-                        .HasColumnName("StaffInvolved")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffInvolved");
 
                     b.Property<int>("StaffStoppedWorking")
-                        .HasColumnName("StaffStoppedWorking")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffStoppedWorking");
 
                     b.HasKey("TeamLeadId");
 
@@ -10194,175 +10510,181 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffInvolved");
 
-                    b.ToTable("tbl_StaffTeamLead");
+                    b.ToTable("tbl_StaffTeamLead", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLeadTasks", b =>
                 {
                     b.Property<int>("TeamLeadTaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TeamLeadTaskId"), 1L, 1);
 
                     b.Property<string>("Comments")
                         .IsRequired()
-                        .HasColumnName("Comments")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Comments");
 
                     b.Property<bool>("Deleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnName("Status")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Status");
 
                     b.Property<int>("TeamLeadId")
-                        .HasColumnName("TeamLeadId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TeamLeadId");
 
                     b.Property<int>("Title")
-                        .HasColumnName("Title")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Title");
 
                     b.HasKey("TeamLeadTaskId");
 
                     b.HasIndex("TeamLeadId");
 
-                    b.ToTable("tbl_StaffTeamLeadTasks");
+                    b.ToTable("tbl_StaffTeamLeadTasks", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
                 {
                     b.Property<int>("StaffTrainingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffTrainingId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffTrainingId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffTrainingId"), 1L, 1);
 
                     b.Property<string>("Certificate")
                         .IsRequired()
-                        .HasColumnName("Certificate")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Certificate");
 
                     b.Property<string>("CertificateAttachment")
-                        .HasColumnName("CertificateAttachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CertificateAttachment");
 
                     b.Property<string>("ExpiredDate")
-                        .HasColumnName("ExpiredDate")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("ExpiredDate");
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnName("Location")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Location");
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
-                        .HasColumnName("StartDate")
+                        .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)")
-                        .HasMaxLength(25);
+                        .HasColumnName("StartDate");
 
                     b.Property<string>("Trainer")
                         .IsRequired()
-                        .HasColumnName("Trainer")
+                        .HasMaxLength(125)
                         .HasColumnType("nvarchar(125)")
-                        .HasMaxLength(125);
+                        .HasColumnName("Trainer");
 
                     b.Property<string>("Training")
                         .IsRequired()
-                        .HasColumnName("Training")
+                        .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
-                        .HasMaxLength(255);
+                        .HasColumnName("Training");
 
                     b.HasKey("StaffTrainingId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffTraining");
+                    b.ToTable("tbl_StaffTraining", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrix", b =>
                 {
                     b.Property<int>("MatrixId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MatrixId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.HasKey("MatrixId");
 
                     b.HasIndex("StaffPersonalInfoId");
 
-                    b.ToTable("tbl_StaffTrainingMatrix");
+                    b.ToTable("tbl_StaffTrainingMatrix", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrixList", b =>
                 {
                     b.Property<int>("TrainingId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrainingId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<int>("MatrixId")
-                        .HasColumnName("MatrixId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MatrixId");
 
                     b.HasKey("TrainingId");
 
                     b.HasIndex("MatrixId");
 
-                    b.ToTable("tbl_StaffTrainingMatrixList");
+                    b.ToTable("tbl_StaffTrainingMatrixList", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffWorkTeam", b =>
                 {
                     b.Property<int>("StaffWorkTeamId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("StaffWorkTeamId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("StaffWorkTeamId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StaffWorkTeamId"), 1L, 1);
 
                     b.Property<string>("WorkTeam")
                         .IsRequired()
-                        .HasColumnName("WorkTeam")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("WorkTeam");
 
                     b.HasKey("StaffWorkTeamId");
 
-                    b.ToTable("tbl_StaffWorkTeam");
+                    b.ToTable("tbl_StaffWorkTeam", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionOfficerToAct", b =>
                 {
                     b.Property<int>("SupervisionOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SupervisionOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SupervisionOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupervisionOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("StaffSupervisionAppraisalId")
-                        .HasColumnName("StaffSupervisionAppraisalId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffSupervisionAppraisalId");
 
                     b.HasKey("SupervisionOfficerToActId");
 
@@ -10370,24 +10692,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffSupervisionAppraisalId");
 
-                    b.ToTable("tbl_Supervision_OfficerToAct");
+                    b.ToTable("tbl_Supervision_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionWorkteam", b =>
                 {
                     b.Property<int>("SupervisionWorkteamId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SupervisionWorkteamId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SupervisionWorkteamId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupervisionWorkteamId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("StaffSupervisionAppraisalId")
-                        .HasColumnName("StaffSupervisionAppraisalId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffSupervisionAppraisalId");
 
                     b.HasKey("SupervisionWorkteamId");
 
@@ -10395,24 +10718,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffSupervisionAppraisalId");
 
-                    b.ToTable("tbl_Supervision_StaffName");
+                    b.ToTable("tbl_Supervision_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SurveyOfficerToAct", b =>
                 {
                     b.Property<int>("SurveyOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SurveyOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SurveyOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SurveyOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("StaffSurveyId")
-                        .HasColumnName("StaffSurveyId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffSurveyId");
 
                     b.HasKey("SurveyOfficerToActId");
 
@@ -10420,24 +10744,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffSurveyId");
 
-                    b.ToTable("tbl_Survey_OfficerToAct");
+                    b.ToTable("tbl_Survey_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SurveyWorkteam", b =>
                 {
                     b.Property<int>("SurveyWorkteamId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("SurveyWorkteamId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("SurveyWorkteamId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SurveyWorkteamId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("StaffSurveyId")
-                        .HasColumnName("StaffSurveyId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffSurveyId");
 
                     b.HasKey("SurveyWorkteamId");
 
@@ -10445,68 +10770,70 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("StaffSurveyId");
 
-                    b.ToTable("tbl_Survey_StaffName");
+                    b.ToTable("tbl_Survey_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoard", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskId"), 1L, 1);
 
                     b.Property<int>("AssignedBy")
-                        .HasColumnName("AssignedBy")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("AssignedBy");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<DateTime>("CompletionDate")
-                        .HasColumnName("CompletionDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CompletionDate");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnName("Note")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Note");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<string>("TaskImage")
                         .IsRequired()
-                        .HasColumnName("TaskImage")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TaskImage");
 
                     b.Property<string>("TaskName")
                         .IsRequired()
-                        .HasColumnName("TaskName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("TaskName");
 
                     b.HasKey("TaskId");
 
-                    b.ToTable("tbl_TaskBoard");
+                    b.ToTable("tbl_TaskBoard", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoardAssignedTo", b =>
                 {
                     b.Property<int>("TaskBoardAssignedToId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TaskBoardAssignedToId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TaskBoardAssignedToId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaskBoardAssignedToId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("TaskBoardId")
-                        .HasColumnName("TaskBoardId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TaskBoardId");
 
                     b.HasKey("TaskBoardAssignedToId");
 
@@ -10514,24 +10841,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("TaskBoardId");
 
-                    b.ToTable("tbl_TaskBoardAssignedTo");
+                    b.ToTable("tbl_TaskBoardAssignedTo", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernManager", b =>
                 {
                     b.Property<int>("TrackingConcernManagerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TrackingConcernManagerId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TrackingConcernManagerId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrackingConcernManagerId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("TrackingConcernNoteId")
-                        .HasColumnName("TrackingConcernNoteId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TrackingConcernNoteId");
 
                     b.HasKey("TrackingConcernManagerId");
 
@@ -10539,80 +10867,82 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("TrackingConcernNoteId");
 
-                    b.ToTable("tbl_TrackingConcernManager");
+                    b.ToTable("tbl_TrackingConcernManager", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernNote", b =>
                 {
                     b.Property<int>("Ref")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Ref"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("Attachment")
                         .IsRequired()
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("ConcernNote")
                         .IsRequired()
-                        .HasColumnName("ConcernNote")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ConcernNote");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<DateTime>("DateOfIncident")
-                        .HasColumnName("DateOfIncident")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DateOfIncident");
 
                     b.Property<DateTime>("ExpectedDeadline")
-                        .HasColumnName("ExpectedDeadline")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExpectedDeadline");
 
                     b.Property<int>("ManagerCopied")
-                        .HasColumnName("ManagerCopied")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ManagerCopied");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
-                        .HasColumnName("Remarks")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Remarks");
 
                     b.Property<int>("StaffNotify")
-                        .HasColumnName("StaffNotify")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffNotify");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.HasKey("Ref");
 
-                    b.ToTable("tbl_TrackingConcernNote");
+                    b.ToTable("tbl_TrackingConcernNote", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernStaff", b =>
                 {
                     b.Property<int>("TrackingConcernStaffId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("TrackingConcernManagerId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("TrackingConcernManagerId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrackingConcernStaffId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("TrackingConcernNoteId")
-                        .HasColumnName("TrackingConcernNoteId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TrackingConcernNoteId");
 
                     b.HasKey("TrackingConcernStaffId");
 
@@ -10620,170 +10950,172 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("TrackingConcernNoteId");
 
-                    b.ToTable("tbl_TrackingConcernStaff");
+                    b.ToTable("tbl_TrackingConcernStaff", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Untowards", b =>
                 {
                     b.Property<int>("UntowardsId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UntowardsId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("UntowardsId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UntowardsId"), 1L, 1);
 
                     b.Property<string>("ActionRequired")
                         .IsRequired()
-                        .HasColumnName("ActionRequired")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("ActionRequired");
 
                     b.Property<string>("ActionStatus")
                         .IsRequired()
-                        .HasColumnName("ActionStatus")
+                        .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)")
-                        .HasMaxLength(7);
+                        .HasColumnName("ActionStatus");
 
                     b.Property<string>("ActionTaken")
                         .IsRequired()
-                        .HasColumnName("ActionTaken")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("ActionTaken");
 
                     b.Property<string>("Attachment")
-                        .HasColumnName("Attachment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Attachment");
 
                     b.Property<string>("Date")
                         .IsRequired()
-                        .HasColumnName("Date")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("Date");
 
                     b.Property<string>("Details")
                         .IsRequired()
-                        .HasColumnName("Details")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Details");
 
                     b.Property<string>("EntryHospitalName")
-                        .HasColumnName("EntryHospitalName")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("EntryHospitalName");
 
                     b.Property<string>("ExitHospitalName")
-                        .HasColumnName("ExitHospitalName")
+                        .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasColumnName("ExitHospitalName");
 
                     b.Property<string>("ExpectedDateAndTimeOfFeedback")
                         .IsRequired()
-                        .HasColumnName("ExpectedDateAndTimeOfFeedback")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("ExpectedDateAndTimeOfFeedback");
 
                     b.Property<string>("FinalActionToCloseCase")
-                        .HasColumnName("FinalActionToCloseCase")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("FinalActionToCloseCase");
 
                     b.Property<int>("HomeCareClientId")
-                        .HasColumnName("HomeCareClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("HomeCareClientId");
 
                     b.Property<string>("HospitalEntryReason")
-                        .HasColumnName("HospitalEntryReason")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("HospitalEntryReason");
 
                     b.Property<string>("HospitalExitDetails")
-                        .HasColumnName("HospitalExitDetails")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("HospitalExitDetails");
 
                     b.Property<bool>("IsBlackListRequired")
-                        .HasColumnName("IsBlackListRequired")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsBlackListRequired");
 
                     b.Property<bool>("IsHospitalEntry")
-                        .HasColumnName("IsHospitalEntry")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsHospitalEntry");
 
                     b.Property<bool>("IsHospitalExit")
-                        .HasColumnName("IsHospitalExit")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("IsHospitalExit");
 
                     b.Property<string>("Others")
-                        .HasColumnName("Others")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Others");
 
                     b.Property<string>("PersonReporting")
-                        .HasColumnName("PersonReporting")
+                        .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnName("PersonReporting");
 
                     b.Property<string>("PersonReportingEmail")
-                        .HasColumnName("PersonReportingEmail")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("PersonReportingEmail");
 
                     b.Property<string>("PersonReportingTelephone")
-                        .HasColumnName("PersonReportingTelephone")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("PersonReportingTelephone");
 
                     b.Property<string>("Priority")
                         .IsRequired()
-                        .HasColumnName("Priority")
+                        .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)")
-                        .HasMaxLength(7);
+                        .HasColumnName("Priority");
 
                     b.Property<bool>("ShouldNotifyInvolvingStaff")
-                        .HasColumnName("ShouldNotifyInvolvingStaff")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("ShouldNotifyInvolvingStaff");
 
                     b.Property<string>("Subject")
                         .IsRequired()
-                        .HasColumnName("Subject")
+                        .HasMaxLength(225)
                         .HasColumnType("nvarchar(225)")
-                        .HasMaxLength(225);
+                        .HasColumnName("Subject");
 
                     b.Property<string>("TicketNumber")
                         .IsRequired()
-                        .HasColumnName("TicketNumber")
+                        .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasColumnName("TicketNumber");
 
                     b.Property<string>("TimeOfCall")
                         .IsRequired()
-                        .HasColumnName("TimeOfCall")
+                        .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)")
-                        .HasMaxLength(15);
+                        .HasColumnName("TimeOfCall");
 
                     b.Property<int>("TypeofRequiredNotification")
-                        .HasColumnName("TypeofRequiredNotification")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TypeofRequiredNotification");
 
                     b.HasKey("UntowardsId");
 
-                    b.ToTable("tbl_Untowards");
+                    b.ToTable("tbl_Untowards", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.UntowardsOfficerToAct", b =>
                 {
                     b.Property<int>("UntowardsOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UntowardsOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("UntowardsOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UntowardsOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("UntowardsId")
-                        .HasColumnName("UntowardsId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UntowardsId");
 
                     b.HasKey("UntowardsOfficerToActId");
 
@@ -10791,24 +11123,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("UntowardsId");
 
-                    b.ToTable("tbl_UntowardsOfficerToAct");
+                    b.ToTable("tbl_UntowardsOfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.UntowardsStaffInvolved", b =>
                 {
                     b.Property<int>("UntowardsStaffInvolvedId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("UntowardsStaffInvolvedId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("UntowardsStaffInvolvedId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UntowardsStaffInvolvedId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("UntowardsId")
-                        .HasColumnName("UntowardsId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UntowardsId");
 
                     b.HasKey("UntowardsStaffInvolvedId");
 
@@ -10816,24 +11149,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("UntowardsId");
 
-                    b.ToTable("tbl_UntowardsStaffInvolved");
+                    b.ToTable("tbl_UntowardsStaffInvolved", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VisitOfficerToAct", b =>
                 {
                     b.Property<int>("VisitOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VisitOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VisitOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VisitOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VisitId")
-                        .HasColumnName("VisitId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VisitId");
 
                     b.HasKey("VisitOfficerToActId");
 
@@ -10841,24 +11175,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("tbl_Visit_OfficerToAct");
+                    b.ToTable("tbl_Visit_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VisitStaffName", b =>
                 {
                     b.Property<int>("VisitStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VisitStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VisitStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VisitStaffNameId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VisitId")
-                        .HasColumnName("VisitId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VisitId");
 
                     b.HasKey("VisitStaffNameId");
 
@@ -10866,24 +11201,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VisitId");
 
-                    b.ToTable("tbl_Visit_StaffName");
+                    b.ToTable("tbl_Visit_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceCallerName", b =>
                 {
                     b.Property<int>("VoiceCallerNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VoiceCallerNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VoiceCallerNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoiceCallerNameId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VoiceId")
-                        .HasColumnName("VoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VoiceId");
 
                     b.HasKey("VoiceCallerNameId");
 
@@ -10891,24 +11227,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VoiceId");
 
-                    b.ToTable("tbl_Voice_CallerName");
+                    b.ToTable("tbl_Voice_CallerName", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceGoodStaff", b =>
                 {
                     b.Property<int>("VoiceGoodStaffId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VoiceGoodStaffId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VoiceGoodStaffId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoiceGoodStaffId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VoiceId")
-                        .HasColumnName("VoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VoiceId");
 
                     b.HasKey("VoiceGoodStaffId");
 
@@ -10916,24 +11253,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VoiceId");
 
-                    b.ToTable("tbl_Voice_GoodStaff");
+                    b.ToTable("tbl_Voice_GoodStaff", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceOfficerToAct", b =>
                 {
                     b.Property<int>("VoiceOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VoiceOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VoiceOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoiceOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VoiceId")
-                        .HasColumnName("VoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VoiceId");
 
                     b.HasKey("VoiceOfficerToActId");
 
@@ -10941,24 +11279,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VoiceId");
 
-                    b.ToTable("tbl_Voice_OfficerToAct");
+                    b.ToTable("tbl_Voice_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoicePoorStaff", b =>
                 {
                     b.Property<int>("VoicePoorStaffId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("VoicePoorStaffId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("VoicePoorStaffId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoicePoorStaffId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("VoiceId")
-                        .HasColumnName("VoiceId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("VoiceId");
 
                     b.HasKey("VoicePoorStaffId");
 
@@ -10966,78 +11305,80 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("VoiceId");
 
-                    b.ToTable("tbl_Voice_PoorStaff");
+                    b.ToTable("tbl_Voice_PoorStaff", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WhisttleBlower", b =>
                 {
                     b.Property<int>("WhisttleBlowerId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WhisttleBlowerId"), 1L, 1);
 
                     b.Property<DateTime>("Date")
-                        .HasColumnName("Date")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Date");
 
                     b.Property<string>("Evidence")
                         .IsRequired()
-                        .HasColumnName("Evidence")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Evidence");
 
                     b.Property<string>("Happening")
                         .IsRequired()
-                        .HasColumnName("Happening")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Happening");
 
                     b.Property<string>("IncidentDate")
                         .IsRequired()
-                        .HasColumnName("IncidentDate")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("IncidentDate");
 
                     b.Property<int>("LikeCalling")
-                        .HasColumnName("LikeCalling")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("LikeCalling");
 
                     b.Property<string>("StaffName")
                         .IsRequired()
-                        .HasColumnName("StaffName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("StaffName");
 
                     b.Property<int>("Status")
-                        .HasColumnName("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Status");
 
                     b.Property<int>("UserName")
-                        .HasColumnName("UserName")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("UserName");
 
                     b.Property<int>("Witness")
-                        .HasColumnName("Witness")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Witness");
 
                     b.HasKey("WhisttleBlowerId");
 
                     b.HasIndex("UserName");
 
-                    b.ToTable("tbl_Whisttle_Blower");
+                    b.ToTable("tbl_Whisttle_Blower", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareOfficerToAct", b =>
                 {
                     b.Property<int>("WoundCareOfficerToActId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("WoundCareOfficerToActId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("WoundCareOfficerToActId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WoundCareOfficerToActId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("WoundCareId")
-                        .HasColumnName("WoundCareId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WoundCareId");
 
                     b.HasKey("WoundCareOfficerToActId");
 
@@ -11045,24 +11386,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("WoundCareId");
 
-                    b.ToTable("tbl_WoundCare_OfficerToAct");
+                    b.ToTable("tbl_WoundCare_OfficerToAct", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCarePhysician", b =>
                 {
                     b.Property<int>("WoundCarePhysicianId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("WoundCarePhysicianId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("WoundCarePhysicianId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WoundCarePhysicianId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("WoundCareId")
-                        .HasColumnName("WoundCareId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WoundCareId");
 
                     b.HasKey("WoundCarePhysicianId");
 
@@ -11070,24 +11412,25 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("WoundCareId");
 
-                    b.ToTable("tbl_WoundCare_Physician");
+                    b.ToTable("tbl_WoundCare_Physician", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareStaffName", b =>
                 {
                     b.Property<int>("WoundCareStaffNameId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("WoundCareStaffNameId")
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnName("WoundCareStaffNameId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WoundCareStaffNameId"), 1L, 1);
 
                     b.Property<int>("StaffPersonalInfoId")
-                        .HasColumnName("StaffPersonalInfoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("StaffPersonalInfoId");
 
                     b.Property<int>("WoundCareId")
-                        .HasColumnName("WoundCareId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WoundCareId");
 
                     b.HasKey("WoundCareStaffNameId");
 
@@ -11095,7 +11438,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("WoundCareId");
 
-                    b.ToTable("tbl_WoundCare_StaffName");
+                    b.ToTable("tbl_WoundCare_StaffName", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -11108,29 +11451,30 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -11146,15 +11490,16 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -11170,7 +11515,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -11192,7 +11537,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -11207,7 +11552,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -11226,7 +11571,7 @@ namespace AwesomeCare.DataAccess.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.AdlObsOfficerToAct", b =>
@@ -11242,6 +11587,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("AdlObs");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.AuditTrail", b =>
@@ -11251,51 +11600,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
-                        .WithMany("OfficerToAct")
-                        .HasForeignKey("BMIChartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
-                        .WithMany()
-                        .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
-                        .WithMany("Physician")
-                        .HasForeignKey("BMIChartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
-                        .WithMany()
-                        .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
-                        .WithMany("StaffName")
-                        .HasForeignKey("BMIChartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
-                        .WithMany()
-                        .HasForeignKey("StaffPersonalInfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Balance", b =>
@@ -11305,6 +11611,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordItemModel", b =>
@@ -11314,6 +11622,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("BaseRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BaseRecord");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BelieveTask", b =>
@@ -11323,6 +11633,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("BestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BestInterestAssessment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BestInterestAssessment", b =>
@@ -11332,6 +11644,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagOfficerToAct", b =>
@@ -11347,6 +11661,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodCoagulation");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagPhysician", b =>
@@ -11362,6 +11680,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodCoagulation");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodCoagStaffName", b =>
@@ -11377,6 +11699,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodCoagulation");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureOfficerToAct", b =>
@@ -11392,6 +11718,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodPressure");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressurePhysician", b =>
@@ -11407,6 +11737,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodPressure");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BloodPressureStaffName", b =>
@@ -11422,6 +11756,67 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BloodPressure");
+
+                    b.Navigation("StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartOfficerToAct", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("OfficerToAct")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BMIChart");
+
+                    b.Navigation("StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartPhysician", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("Physician")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BMIChart");
+
+                    b.Navigation("StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BMIChartStaffName", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.ClientBMIChart", "BMIChart")
+                        .WithMany("StaffName")
+                        .HasForeignKey("BMIChartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany()
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BMIChart");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempOfficerToAct", b =>
@@ -11437,6 +11832,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BodyTemp");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempPhysician", b =>
@@ -11452,6 +11851,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BodyTemp");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BodyTempStaffName", b =>
@@ -11467,6 +11870,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BodyTemp");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementOfficerToAct", b =>
@@ -11482,6 +11889,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BowelMovement");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementPhysician", b =>
@@ -11497,6 +11908,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BowelMovement");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.BowelMovementStaffName", b =>
@@ -11512,6 +11927,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BowelMovement");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
@@ -11521,6 +11940,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.Capacity", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CapacityIndicator", b =>
@@ -11530,6 +11951,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("CapacityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Capacity");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareIssuesTask", b =>
@@ -11539,6 +11962,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("BestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BestInterestAssessment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareObjPersonToAct", b =>
@@ -11554,6 +11979,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientCareObj");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CarePlanNutrition", b =>
@@ -11563,6 +11992,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CareReview", b =>
@@ -11572,15 +12003,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
-                        .WithMany("ClientBMIChart")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", b =>
@@ -11590,6 +12014,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodPressure", b =>
@@ -11599,6 +12025,19 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.Client", "Client")
+                        .WithMany("ClientBMIChart")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBodyTemp", b =>
@@ -11608,6 +12047,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientBowelMovement", b =>
@@ -11617,6 +12058,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetails", b =>
@@ -11632,6 +12075,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("ClientCareDetailsTask");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsTask", b =>
@@ -11641,6 +12088,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientCareDetailsHeadingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientCareDetailsHeading");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareObj", b =>
@@ -11650,6 +12099,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientCleaning", b =>
@@ -11665,6 +12116,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("STAFFId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("ClientNutrition");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
@@ -11674,6 +12129,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientDailyTask", b =>
@@ -11683,6 +12140,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
@@ -11692,6 +12151,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientFoodIntake", b =>
@@ -11701,6 +12162,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHealthCondition", b =>
@@ -11710,6 +12173,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHeartRate", b =>
@@ -11719,6 +12184,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientHobbies", b =>
@@ -11728,6 +12195,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingParty", b =>
@@ -11743,6 +12212,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientInvolvingPartyItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("ClientInvolvingPartyItem");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
@@ -11756,6 +12229,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientLogAudit")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealDays", b =>
@@ -11777,6 +12252,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("NutritionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientMealType");
+
+                    b.Navigation("ClientNutrition");
+
+                    b.Navigation("MealDayofWeek");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
@@ -11790,6 +12271,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientMedAudit")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
@@ -11811,6 +12294,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("MedicationManufacturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Medication");
+
+                    b.Navigation("MedicationManufacturer");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
@@ -11830,6 +12319,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.ClientMedicationDay", "RotaDayofWeekId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientMedication");
+
+                    b.Navigation("RotaDayofWeek");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationPeriod", b =>
@@ -11845,6 +12338,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientRotaTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientMedicationDay");
+
+                    b.Navigation("ClientRotaType");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientMgtVisit", b =>
@@ -11858,6 +12355,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientMgtVisit")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
@@ -11873,6 +12372,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientOxygenLvl", b =>
@@ -11882,6 +12385,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPainChart", b =>
@@ -11891,6 +12396,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPerformanceIndicatorTask", b =>
@@ -11900,6 +12407,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("PerformanceIndicatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientPerformanceIndicator");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientProgram", b =>
@@ -11913,6 +12422,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientProgram")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientPulseRate", b =>
@@ -11922,6 +12433,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRegulatoryContact", b =>
@@ -11937,6 +12450,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BaseRecordItem");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRota", b =>
@@ -11952,6 +12469,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientRotaTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("ClientRotaType");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
@@ -11973,6 +12494,12 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("RotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientRota");
+
+                    b.Navigation("Rota");
+
+                    b.Navigation("RotaDayofWeek");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaTask", b =>
@@ -11988,6 +12515,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("RotaTaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientRotaDays");
+
+                    b.Navigation("RotaTask");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientSeizure", b =>
@@ -11997,6 +12528,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailItem", b =>
@@ -12006,6 +12539,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientServiceDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientServiceDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetailReceipt", b =>
@@ -12015,6 +12550,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientServiceDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientServiceDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceWatch", b =>
@@ -12028,6 +12565,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientServiceWatch")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientShopping", b =>
@@ -12043,6 +12582,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("STAFFId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("ClientNutrition");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
@@ -12056,6 +12599,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", null)
                         .WithMany("ClientVoice")
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ClientWoundCare", b =>
@@ -12065,6 +12610,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CompanyContactModel", b =>
@@ -12074,6 +12621,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.CompanyContactModel", "CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ComplainOfficerToAct", b =>
@@ -12089,6 +12638,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ComplainRegister");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ComplainStaffName", b =>
@@ -12104,6 +12657,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ComplainRegister");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentCare", b =>
@@ -12113,6 +12670,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.ConsentCare", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentData", b =>
@@ -12122,6 +12681,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.ConsentData", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
@@ -12131,6 +12692,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.ConsentLandLine", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandlineLog", b =>
@@ -12140,6 +12703,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("LandlineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ConsentLandLine");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.CuidiBuddy", b =>
@@ -12149,6 +12714,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCall", b =>
@@ -12158,6 +12725,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonResponsible", b =>
@@ -12173,6 +12742,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DutyOnCall");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCallPersonToAct", b =>
@@ -12188,6 +12761,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DutyOnCall");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Enotice", b =>
@@ -12197,6 +12774,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("PublishTo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Equipment", b =>
@@ -12212,6 +12791,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthOfficerToAct", b =>
@@ -12227,6 +12810,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EyeHealth");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthPhysician", b =>
@@ -12242,6 +12829,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EyeHealth");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.EyeHealthStaffName", b =>
@@ -12257,6 +12848,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("EyeHealth");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FilesAndRecord", b =>
@@ -12272,6 +12867,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeOfficerToAct", b =>
@@ -12287,6 +12886,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FoodIntake");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakePhysician", b =>
@@ -12302,6 +12905,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FoodIntake");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.FoodIntakeStaffName", b =>
@@ -12317,6 +12924,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("FoodIntake");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthAndLiving", b =>
@@ -12326,6 +12937,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask", b =>
@@ -12335,6 +12948,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("BestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BestInterestAssessment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HealthTask2", b =>
@@ -12344,6 +12959,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("BestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BestInterestAssessment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateOfficerToAct", b =>
@@ -12359,6 +12976,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HeartRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRatePhysician", b =>
@@ -12374,6 +12995,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HeartRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HeartRateStaffName", b =>
@@ -12389,6 +13014,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HeartRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HistoryOfFall", b =>
@@ -12398,6 +13027,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessment", b =>
@@ -12407,6 +13038,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessmentTask", b =>
@@ -12416,6 +13049,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("HomeRiskAssessmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HomeRiskAssessment");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
@@ -12425,6 +13060,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryPersonToTakeAction", b =>
@@ -12440,6 +13077,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HospitalEntry");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntryStaffInvolved", b =>
@@ -12455,6 +13096,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HospitalEntry");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
@@ -12464,6 +13109,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExitOfficerToTakeAction", b =>
@@ -12479,6 +13126,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("HospitalExit");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncidentReporting", b =>
@@ -12488,6 +13139,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.IncomingMeds", b =>
@@ -12497,6 +13150,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("UserName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InfectionControl", b =>
@@ -12506,6 +13161,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Interest", b =>
@@ -12515,6 +13172,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("GoalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("InterestAndObjective");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
@@ -12524,6 +13183,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.InvestigationAttachment", b =>
@@ -12533,6 +13194,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("InvestigationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Investigation");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicatorLog", b =>
@@ -12542,6 +13205,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("KeyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("KeyIndicators");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
@@ -12551,6 +13216,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.KeyIndicators", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerOfficerToAct", b =>
@@ -12566,6 +13233,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("KeyWorker");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.KeyWorkerWorkteam", b =>
@@ -12581,6 +13252,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("KeyWorker");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.LogAuditOfficerToAct", b =>
@@ -12596,6 +13271,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("LogAudit");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ManagingTasks", b =>
@@ -12605,6 +13284,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditOfficerToAct", b =>
@@ -12620,6 +13301,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MedAudit");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedAuditStaffName", b =>
@@ -12635,6 +13320,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MedAudit");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.MedCompOfficerToAct", b =>
@@ -12650,6 +13339,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("MedComp");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OfficeAttendance", b =>
@@ -12657,6 +13350,8 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
                         .WithMany()
                         .HasForeignKey("StaffPersonalInfoId");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OneToOneOfficerToAct", b =>
@@ -12672,6 +13367,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OneToOne");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlOfficerToAct", b =>
@@ -12687,6 +13386,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OxygenLvl");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlPhysician", b =>
@@ -12702,6 +13405,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OxygenLvl");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.OxygenLvlStaffName", b =>
@@ -12717,6 +13424,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OxygenLvl");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartOfficerToAct", b =>
@@ -12732,6 +13443,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PainChart");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartPhysician", b =>
@@ -12747,6 +13462,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PainChart");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PainChartStaffName", b =>
@@ -12762,6 +13481,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PainChart");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicatorTask", b =>
@@ -12771,24 +13494,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("PerformanceIndicatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
-                        .WithMany("PersonCentred")
-                        .HasForeignKey("PersonalDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
-                {
-                    b.HasOne("AwesomeCare.Model.Models.PersonCentred", "PersonCentre")
-                        .WithMany("Focus")
-                        .HasForeignKey("PersonCentredId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("PerformanceIndicator");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Personal", b =>
@@ -12798,6 +13505,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.Personal", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
@@ -12807,6 +13516,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalHygiene", b =>
@@ -12816,6 +13527,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PersonalityTest", b =>
@@ -12825,6 +13538,30 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("GoalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("InterestAndObjective");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonalDetail", "PersonalDetail")
+                        .WithMany("PersonCentred")
+                        .HasForeignKey("PersonalDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonalDetail");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentredFocus", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.PersonCentred", "PersonCentre")
+                        .WithMany("Focus")
+                        .HasForeignKey("PersonCentredId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PersonCentre");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Pets", b =>
@@ -12834,6 +13571,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PhysicalAbility", b =>
@@ -12843,6 +13582,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ProgramOfficerToAct", b =>
@@ -12858,6 +13599,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Program");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateOfficerToAct", b =>
@@ -12873,6 +13618,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PulseRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRatePhysician", b =>
@@ -12888,6 +13637,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PulseRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.PulseRateStaffName", b =>
@@ -12903,6 +13656,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PulseRate");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Resources", b =>
@@ -12912,6 +13669,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("PublishTo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.Review", b =>
@@ -12921,6 +13680,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("AwesomeCare.Model.Models.Review", "PersonalDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("PersonalDetail");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SalaryAllowance", b =>
@@ -12930,6 +13691,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SalaryDeduction", b =>
@@ -12939,6 +13702,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizureOfficerToAct", b =>
@@ -12954,6 +13719,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Seizure");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizurePhysician", b =>
@@ -12969,6 +13738,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Seizure");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SeizureStaffName", b =>
@@ -12984,6 +13757,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Seizure");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ServiceOfficerToAct", b =>
@@ -12999,6 +13776,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ServiceStaffName", b =>
@@ -13014,6 +13795,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Service");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SetupStaffHoliday", b =>
@@ -13023,6 +13808,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBookingBlockedDays", b =>
@@ -13032,6 +13819,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ShiftBookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShiftBooking");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthAndMedication", b =>
@@ -13041,6 +13830,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpecialHealthCondition", b =>
@@ -13050,6 +13841,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SpotCheckOfficerToAct", b =>
@@ -13065,6 +13858,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("SpotCheck");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffAdlObs", b =>
@@ -13080,6 +13877,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffBlackList", b =>
@@ -13095,6 +13896,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTest", b =>
@@ -13104,6 +13909,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTestTask", b =>
@@ -13113,6 +13920,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffCompetenceTestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffCompetenceTest");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEducation", b =>
@@ -13122,6 +13931,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffEmergencyContact", b =>
@@ -13131,6 +13942,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealth", b =>
@@ -13140,6 +13953,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealthTask", b =>
@@ -13149,6 +13964,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffHealthId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffHealth");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffHoliday", b =>
@@ -13158,6 +13975,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInfectionControl", b =>
@@ -13167,6 +13986,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterview", b =>
@@ -13176,6 +13997,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterviewTask", b =>
@@ -13185,6 +14008,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffInterviewId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffInterview");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffKeyWorkerVoice", b =>
@@ -13200,6 +14025,21 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffLateness", b =>
+                {
+                    b.HasOne("AwesomeCare.Model.Models.StaffPersonalInfo", "StaffPersonalInfo")
+                        .WithMany("StaffLateness")
+                        .HasForeignKey("StaffPersonalInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
@@ -13215,6 +14055,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedRota", b =>
@@ -13224,6 +14068,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("RotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Rota");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffOfficeLocation", b =>
@@ -13239,6 +14085,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("Staff")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("OfficeLocation");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
@@ -13248,6 +14098,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
@@ -13259,6 +14111,10 @@ namespace AwesomeCare.DataAccess.Migrations
                     b.HasOne("AwesomeCare.Model.Models.StaffWorkTeam", "StaffWorkTeam")
                         .WithMany("StaffPersonalInfo")
                         .HasForeignKey("StaffWorkTeamId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("StaffWorkTeam");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfoComment", b =>
@@ -13268,6 +14124,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalityTest", b =>
@@ -13277,6 +14135,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRating", b =>
@@ -13286,6 +14146,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReferee", b =>
@@ -13295,6 +14157,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffReference", b =>
@@ -13310,6 +14174,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRegulatoryContact", b =>
@@ -13325,6 +14193,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("BaseRecordItem");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRota", b =>
@@ -13334,6 +14206,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("RotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Rota");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaItem", b =>
@@ -13343,6 +14217,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffRotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffRota");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPartner", b =>
@@ -13352,6 +14228,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffRotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffRota");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPeriod", b =>
@@ -13367,6 +14245,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffRotaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ClientRotaType");
+
+                    b.Navigation("StaffRota");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaTask", b =>
@@ -13376,6 +14258,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffRotaPeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffRotaPeriod");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowing", b =>
@@ -13385,6 +14269,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowingTask", b =>
@@ -13394,6 +14280,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffShadowingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffShadowing");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
@@ -13413,6 +14301,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShiftBooking");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBookingDay", b =>
@@ -13422,6 +14314,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffShiftBookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ShiftBooking");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSpotCheck", b =>
@@ -13437,6 +14331,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
@@ -13446,6 +14344,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
@@ -13455,6 +14355,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTax", b =>
@@ -13464,6 +14366,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLead", b =>
@@ -13479,6 +14383,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffInvolved")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLeadTasks", b =>
@@ -13488,6 +14396,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("TeamLeadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffTeamLead");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTraining", b =>
@@ -13497,6 +14407,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrix", b =>
@@ -13506,6 +14418,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffPersonalInfoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrixList", b =>
@@ -13515,6 +14429,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("MatrixId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffTrainingMatrix");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionOfficerToAct", b =>
@@ -13530,6 +14446,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffSupervisionAppraisalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Supervision");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SupervisionWorkteam", b =>
@@ -13545,6 +14465,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffSupervisionAppraisalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Supervision");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SurveyOfficerToAct", b =>
@@ -13560,6 +14484,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffSurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Survey");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.SurveyWorkteam", b =>
@@ -13575,6 +14503,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("StaffSurveyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Survey");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoardAssignedTo", b =>
@@ -13590,6 +14522,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("TaskBoardId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("TaskBoard");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernManager", b =>
@@ -13605,6 +14541,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("TrackingConcernNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("TrackingConcernNote");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernStaff", b =>
@@ -13620,6 +14560,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("TrackingConcernNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("TrackingConcernNote");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.UntowardsOfficerToAct", b =>
@@ -13635,6 +14579,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("UntowardsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Untowards");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.UntowardsStaffInvolved", b =>
@@ -13650,6 +14598,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("UntowardsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Untowards");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VisitOfficerToAct", b =>
@@ -13665,6 +14617,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VisitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Visit");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VisitStaffName", b =>
@@ -13680,6 +14636,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VisitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Visit");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceCallerName", b =>
@@ -13695,6 +14655,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Voice");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceGoodStaff", b =>
@@ -13710,6 +14674,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Voice");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoiceOfficerToAct", b =>
@@ -13725,6 +14693,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Voice");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.VoicePoorStaff", b =>
@@ -13740,6 +14712,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("VoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("Voice");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WhisttleBlower", b =>
@@ -13749,6 +14725,8 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("UserName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareOfficerToAct", b =>
@@ -13764,6 +14742,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("WoundCareId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("WoundCare");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCarePhysician", b =>
@@ -13779,6 +14761,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("WoundCareId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("WoundCare");
                 });
 
             modelBuilder.Entity("AwesomeCare.Model.Models.WoundCareStaffName", b =>
@@ -13794,6 +14780,10 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("WoundCareId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("StaffPersonalInfo");
+
+                    b.Navigation("WoundCare");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -13845,6 +14835,730 @@ namespace AwesomeCare.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BaseRecordModel", b =>
+                {
+                    b.Navigation("BaseRecordItems");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.BestInterestAssessment", b =>
+                {
+                    b.Navigation("BelieveTask");
+
+                    b.Navigation("CareIssuesTask");
+
+                    b.Navigation("HealthTask");
+
+                    b.Navigation("HealthTask2");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Capacity", b =>
+                {
+                    b.Navigation("Indicator");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Client", b =>
+                {
+                    b.Navigation("AuditTrail");
+
+                    b.Navigation("Balance");
+
+                    b.Navigation("BestInterestAssessment");
+
+                    b.Navigation("CarePlanNutrition");
+
+                    b.Navigation("CareReview");
+
+                    b.Navigation("ClientBMIChart");
+
+                    b.Navigation("ClientBloodCoagulationRecord");
+
+                    b.Navigation("ClientBloodPressure");
+
+                    b.Navigation("ClientBodyTemp");
+
+                    b.Navigation("ClientBowelMovement");
+
+                    b.Navigation("ClientCareDetails");
+
+                    b.Navigation("ClientCareObj");
+
+                    b.Navigation("ClientDailyTask");
+
+                    b.Navigation("ClientEyeHealthMonitoring");
+
+                    b.Navigation("ClientFoodIntake");
+
+                    b.Navigation("ClientHealthCondition");
+
+                    b.Navigation("ClientHeartRate");
+
+                    b.Navigation("ClientHobbies");
+
+                    b.Navigation("ClientLogAudit");
+
+                    b.Navigation("ClientMedAudit");
+
+                    b.Navigation("ClientMedication");
+
+                    b.Navigation("ClientMgtVisit");
+
+                    b.Navigation("ClientNutrition");
+
+                    b.Navigation("ClientOxygenLvl");
+
+                    b.Navigation("ClientPainChart");
+
+                    b.Navigation("ClientProgram");
+
+                    b.Navigation("ClientPulseRate");
+
+                    b.Navigation("ClientRota");
+
+                    b.Navigation("ClientSeizure");
+
+                    b.Navigation("ClientServiceWatch");
+
+                    b.Navigation("ClientVoice");
+
+                    b.Navigation("ClientWoundCare");
+
+                    b.Navigation("ComplainRegister");
+
+                    b.Navigation("CuidiBuddy");
+
+                    b.Navigation("DutyOnCall");
+
+                    b.Navigation("Enotice");
+
+                    b.Navigation("FilesAndRecord");
+
+                    b.Navigation("HealthAndLiving");
+
+                    b.Navigation("HistoryOfFall");
+
+                    b.Navigation("HomeRiskAssessment");
+
+                    b.Navigation("HospitalEntry");
+
+                    b.Navigation("HospitalExit");
+
+                    b.Navigation("IncidentReporting");
+
+                    b.Navigation("IncomingMeds");
+
+                    b.Navigation("InfectionControl");
+
+                    b.Navigation("InterestAndObjective");
+
+                    b.Navigation("InvolvingParties");
+
+                    b.Navigation("ManagingTasks");
+
+                    b.Navigation("PersonalDetail");
+
+                    b.Navigation("PersonalHygiene");
+
+                    b.Navigation("Pets");
+
+                    b.Navigation("PhysicalAbility");
+
+                    b.Navigation("RegulatoryContact");
+
+                    b.Navigation("Resources");
+
+                    b.Navigation("SpecialHealthAndMedication");
+
+                    b.Navigation("SpecialHealthCondition");
+
+                    b.Navigation("StaffAdlObs");
+
+                    b.Navigation("StaffBlackList");
+
+                    b.Navigation("StaffKeyWorkerVoice");
+
+                    b.Navigation("StaffMedCompObs");
+
+                    b.Navigation("StaffReference");
+
+                    b.Navigation("StaffSpotCheck");
+
+                    b.Navigation("StaffTeamLead");
+
+                    b.Navigation("WhisttleBlower");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodCoagulationRecord", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBloodPressure", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBMIChart", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBodyTemp", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientBowelMovement", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsHeading", b =>
+                {
+                    b.Navigation("ClientCareDetailsTasks");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareDetailsTask", b =>
+                {
+                    b.Navigation("ClientCareDetails");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientCareObj", b =>
+                {
+                    b.Navigation("PersonToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientComplainRegister", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientEyeHealthMonitoring", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientFoodIntake", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientHeartRate", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientInvolvingPartyItem", b =>
+                {
+                    b.Navigation("ClientInvolvingParty");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientLogAudit", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMealType", b =>
+                {
+                    b.Navigation("ClientMeal");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedAudit", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedication", b =>
+                {
+                    b.Navigation("ClientMedicationDay");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMedicationDay", b =>
+                {
+                    b.Navigation("ClientMedicationPeriod");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientMgtVisit", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientNutrition", b =>
+                {
+                    b.Navigation("ClientCleaning");
+
+                    b.Navigation("ClientMealDays");
+
+                    b.Navigation("ClientShopping");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientOxygenLvl", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPainChart", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPerformanceIndicator", b =>
+                {
+                    b.Navigation("ClientPerformanceIndicatorTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientProgram", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientPulseRate", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientRota", b =>
+                {
+                    b.Navigation("ClientRotaDays");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaDays", b =>
+                {
+                    b.Navigation("ClientRotaTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientRotaType", b =>
+                {
+                    b.Navigation("ClientMedicationPeriod");
+
+                    b.Navigation("ClientRota");
+
+                    b.Navigation("StaffRotaPeriods");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientSeizure", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceDetail", b =>
+                {
+                    b.Navigation("ClientServiceDetailItems");
+
+                    b.Navigation("ClientServiceDetailReceipts");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientServiceWatch", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientVoice", b =>
+                {
+                    b.Navigation("CallerName");
+
+                    b.Navigation("GoodStaff");
+
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("PoorStaff");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ClientWoundCare", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Physician");
+
+                    b.Navigation("StaffName");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.CompanyModel", b =>
+                {
+                    b.Navigation("CompanyContact");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ConsentLandLine", b =>
+                {
+                    b.Navigation("LogMethod");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.DutyOnCall", b =>
+                {
+                    b.Navigation("PersonResponsible");
+
+                    b.Navigation("PersonToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HomeRiskAssessment", b =>
+                {
+                    b.Navigation("HomeRiskAssessmentTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalEntry", b =>
+                {
+                    b.Navigation("PersonToTakeAction");
+
+                    b.Navigation("StaffInvolved");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.HospitalExit", b =>
+                {
+                    b.Navigation("OfficerToTakeAction");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.InterestAndObjective", b =>
+                {
+                    b.Navigation("Interest");
+
+                    b.Navigation("PersonalityTest");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Investigation", b =>
+                {
+                    b.Navigation("InvestigationAttachments");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.KeyIndicators", b =>
+                {
+                    b.Navigation("LogMethod");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.OfficeLocation", b =>
+                {
+                    b.Navigation("StaffOfficeLocation");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PerformanceIndicator", b =>
+                {
+                    b.Navigation("PerformanceIndicatorTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonalDetail", b =>
+                {
+                    b.Navigation("Capacity");
+
+                    b.Navigation("ConsentCare");
+
+                    b.Navigation("ConsentData");
+
+                    b.Navigation("ConsentLandLine");
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("KeyIndicators");
+
+                    b.Navigation("PersonCentred");
+
+                    b.Navigation("Personal");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.PersonCentred", b =>
+                {
+                    b.Navigation("Focus");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Rota", b =>
+                {
+                    b.Navigation("ClientRotaDays");
+
+                    b.Navigation("ShiftBookings");
+
+                    b.Navigation("StaffRota");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.RotaDayofWeek", b =>
+                {
+                    b.Navigation("ClientMealDays");
+
+                    b.Navigation("ClientMedicationDay");
+
+                    b.Navigation("ClientRotaDays");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.RotaTask", b =>
+                {
+                    b.Navigation("ClientRotaTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.ShiftBooking", b =>
+                {
+                    b.Navigation("ShiftBookingBlockedDays");
+
+                    b.Navigation("StaffShiftBooking");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffAdlObs", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffCompetenceTest", b =>
+                {
+                    b.Navigation("StaffCompetenceTestTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffHealth", b =>
+                {
+                    b.Navigation("StaffHealthTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffInterview", b =>
+                {
+                    b.Navigation("StaffInterviewTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffKeyWorkerVoice", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Workteam");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffMedComp", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffOneToOne", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffPersonalInfo", b =>
+                {
+                    b.Navigation("ClientCleaning");
+
+                    b.Navigation("ClientLogAudit");
+
+                    b.Navigation("ClientMedAudit");
+
+                    b.Navigation("ClientMgtVisit");
+
+                    b.Navigation("ClientNutrition");
+
+                    b.Navigation("ClientProgram");
+
+                    b.Navigation("ClientServiceWatch");
+
+                    b.Navigation("ClientShopping");
+
+                    b.Navigation("ClientVoice");
+
+                    b.Navigation("Education");
+
+                    b.Navigation("EmergencyContacts");
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("FilesAndRecord");
+
+                    b.Navigation("HospitalEntryPersonToTakeAction");
+
+                    b.Navigation("HospitalEntryStaffInvolved");
+
+                    b.Navigation("HospitalExitOfficerToTakeAction");
+
+                    b.Navigation("References");
+
+                    b.Navigation("RegulatoryContact");
+
+                    b.Navigation("SalaryAllowance");
+
+                    b.Navigation("SalaryDeduction");
+
+                    b.Navigation("SetupStaffHoliday");
+
+                    b.Navigation("ShiftBookings");
+
+                    b.Navigation("StaffAdlObs");
+
+                    b.Navigation("StaffBlackList");
+
+                    b.Navigation("StaffCompetenceTest");
+
+                    b.Navigation("StaffHealth");
+
+                    b.Navigation("StaffHoliday");
+
+                    b.Navigation("StaffInfectionControl");
+
+                    b.Navigation("StaffInterview");
+
+                    b.Navigation("StaffKeyWorkerVoice");
+
+                    b.Navigation("StaffLateness");
+
+                    b.Navigation("StaffMedCompObs");
+
+                    b.Navigation("StaffOfficeLocation");
+
+                    b.Navigation("StaffOneToOne");
+
+                    b.Navigation("StaffPersonalInfoComments");
+
+                    b.Navigation("StaffPersonalityTest");
+
+                    b.Navigation("StaffRating");
+
+                    b.Navigation("StaffReference");
+
+                    b.Navigation("StaffShadowing");
+
+                    b.Navigation("StaffSpotCheck");
+
+                    b.Navigation("StaffSupervisionAppraisal");
+
+                    b.Navigation("StaffSurvey");
+
+                    b.Navigation("StaffTax");
+
+                    b.Navigation("StaffTeamLead");
+
+                    b.Navigation("StaffTrainingMatrix");
+
+                    b.Navigation("Trainings");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRota", b =>
+                {
+                    b.Navigation("StaffRotaItem");
+
+                    b.Navigation("StaffRotaPartners");
+
+                    b.Navigation("StaffRotaPeriods");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffRotaPeriod", b =>
+                {
+                    b.Navigation("StaffRotaTasks");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShadowing", b =>
+                {
+                    b.Navigation("StaffShadowingTask");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffShiftBooking", b =>
+                {
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSpotCheck", b =>
+                {
+                    b.Navigation("OfficerToAct");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSupervisionAppraisal", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Workteam");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffSurvey", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("Workteam");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTeamLead", b =>
+                {
+                    b.Navigation("StaffTeamLeadTasks");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffTrainingMatrix", b =>
+                {
+                    b.Navigation("StaffTrainingMatrixList");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.StaffWorkTeam", b =>
+                {
+                    b.Navigation("StaffPersonalInfo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TaskBoard", b =>
+                {
+                    b.Navigation("AssignedTo");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.TrackingConcernNote", b =>
+                {
+                    b.Navigation("ManagerInvolved");
+
+                    b.Navigation("StaffInvolved");
+                });
+
+            modelBuilder.Entity("AwesomeCare.Model.Models.Untowards", b =>
+                {
+                    b.Navigation("OfficerToAct");
+
+                    b.Navigation("StaffInvolved");
                 });
 #pragma warning restore 612, 618
         }

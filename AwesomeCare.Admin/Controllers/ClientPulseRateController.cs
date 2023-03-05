@@ -132,14 +132,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int pulseId)
-        {
-            var PulseRate = await _clientPulseRateService.Get(pulseId);
-            var json = JsonConvert.SerializeObject(PulseRate);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientPulseRate.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -215,7 +207,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(), model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -228,7 +220,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ChartAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_ChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream(),model.ChartAttachment.ContentType);
                 model.Chart = path;
             }
             else
@@ -241,7 +233,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetPulseAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_TargetPulseAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream(),model.TargetPulseAttachment.ContentType);
                 model.TargetPulseAttach = path;
             }
             else
@@ -295,7 +287,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(),model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -308,7 +300,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ChartAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_ChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ChartAttachment.OpenReadStream(), model.ChartAttachment.ContentType);
                 model.Chart = path;
             }
             else
@@ -321,7 +313,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetPulseAttachment.FileName);
                 string folder = "clientpulserate";
                 string filename = string.Concat(folder, "_TargetPulseAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetPulseAttachment.OpenReadStream(), model.TargetPulseAttachment.ContentType);
                 model.TargetPulseAttach = path;
             }
             else
@@ -363,6 +355,52 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int pulseId)
+        {
+            var entity = await GetDownload(pulseId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientPulseRate> GetDownload(int Id)
+        {
+            var i = await _clientPulseRateService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientPulseRate
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TargetPulseAttach = i.TargetPulseAttach,
+                CurrentPulse = i.CurrentPulse,
+                Chart = i.Chart,
+                SeeChartAttach = i.SeeChartAttach,
+                Comment = i.Comment,
+                PhysicianResponse = i.PhysicianResponse,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                TargetPulseName = _baseService.GetBaseRecordItemById(i.TargetPulse).Result.ValueName,
+                SeeChartName = _baseService.GetBaseRecordItemById(i.SeeChart).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

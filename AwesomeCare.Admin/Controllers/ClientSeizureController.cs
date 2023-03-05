@@ -133,14 +133,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int SeizId)
-        {
-            var Seizure = await _clientSeizureService.Get(SeizId);
-            var json = JsonConvert.SerializeObject(Seizure);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientSeizure.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -217,7 +209,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -230,7 +222,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureTypeAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream(), model.SeizureTypeAttachment.ContentType);
                 model.SeizureTypeAttach = path;
             }
             else
@@ -243,7 +235,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureLengthAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream(), model.SeizureLengthAttachment.ContentType);
                 model.SeizureLengthAttach = path;
             }
             else
@@ -298,7 +290,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -311,7 +303,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureTypeAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureTypeAttachment.OpenReadStream(), model.SeizureTypeAttachment.ContentType);
                 model.SeizureTypeAttach = path;
             }
             else
@@ -324,7 +316,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeizureLengthAttachment.FileName);
                 string folder = "clientseizure";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeizureLengthAttachment.OpenReadStream(), model.SeizureLengthAttachment.ContentType);
                 model.SeizureLengthAttach = path;
             }
             else
@@ -367,6 +359,53 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int SeizId)
+        {
+            var entity = await GetDownload(SeizId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientSeizure> GetDownload(int Id)
+        {
+            var i = await _clientSeizureService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientSeizure
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                SeizureTypeAttach = i.SeizureTypeAttach,
+                SeizureLengthAttach = i.SeizureLengthAttach,
+                WhatHappened = i.WhatHappened,
+                StatusAttach = i.StatusAttach,
+                PhysicianResponse = i.PhysicianResponse,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                SeizureTypeName = _baseService.GetBaseRecordItemById(i.SeizureType).Result.ValueName,
+                SeizureLengthName = _baseService.GetBaseRecordItemById(i.SeizureLength).Result.ValueName,
+                OftenName = _baseService.GetBaseRecordItemById(i.Often).Result.ValueName,
+                StatusImageName = _baseService.GetBaseRecordItemById(i.StatusImage).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

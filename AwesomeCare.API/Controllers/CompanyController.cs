@@ -3,7 +3,6 @@ using AutoMapper.QueryableExtensions;
 using AwesomeCare.DataAccess.Repositories;
 using AwesomeCare.DataTransferObject.DTOs.Company;
 using AwesomeCare.Model.Models;
-using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;

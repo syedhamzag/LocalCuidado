@@ -73,6 +73,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         [Required]
         [MaxLength(4)]
         public string Pin { get; set; }
+
+        [Display(Name = "Clock In/Out Distance")]
+        public double LocationDistance { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }
     }

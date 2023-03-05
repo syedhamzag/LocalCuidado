@@ -194,6 +194,7 @@ namespace AwesomeCare.API.Controllers
                                        ClientManager = client.ClientManager,
                                        Aid = client.Aid,
                                        Pin = client.Pin,
+                                       LocationDistance = client.LocationDistance,
                                        Denture = client.Denture,
                                        InvolvingParties = (from inv in client.InvolvingParties
                                                            select new GetClientInvolvingPartyForEdit
@@ -212,10 +213,13 @@ namespace AwesomeCare.API.Controllers
                                                         {
                                                             CuidiBuddyId = cu.CuidiBuddyId,
                                                         }).ToList(),
-                                       GetClientHealthCondition = (from hc in client.ClientHealthCondition
+                                       GetClientHealthCondition = (from chc in client.ClientHealthCondition
+                                                                   join hc in _healthconRepository.Table on chc.HCId equals hc.HCId
                                                                    select new GetClientHealthCondition
                                                                    {
-                                                                       HCId = hc.HCId,
+                                                                       HCId = chc.HCId,
+                                                                       Name = hc.Name,
+                                                                       Desc = hc.Description
                                                                    
                                                                    }).ToList(),
                                        GetClientHobbies = (from hc in client.ClientHobbies
@@ -577,7 +581,9 @@ namespace AwesomeCare.API.Controllers
                                                                    select new GetClientHealthCondition
                                                                    {
                                                                        HCId = chc.HCId,
-                                                                       Name = hc.Name
+                                                                       Name = hc.Name,
+                                                                       Desc = hc.Description
+                                                                       
                                                                    }).ToList(),
                                        GetClientHobbies =       (from ch in client.ClientHobbies
                                                                    join h in _hobbyRepository.Table on ch.HId equals h.HId

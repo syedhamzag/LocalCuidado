@@ -31,6 +31,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         public string ActiveTab { get; set; } = "medaudit";
         public int MedAuditId { get; set; }
         public string Reference { get; set; }
@@ -85,5 +87,14 @@ namespace AwesomeCare.Admin.ViewModels.ClientMedAudit
         [Required]
         public string LogURL { get; set; }
         public string Attachment { get; set; }
+        public string MedicationConcernName { get; set; }
+        public string MarChartReviewName { get; set; }
+        public string HardCopyReviewName { get; set; }
+        public string GapsInAdmistrationName { get; set; }
+        public string MedicationSupplyEfficiencyName { get; set; }
+        public string MedicationInfoUploadEefficiencyName { get; set; }
+        public string RepeatOfIncidentName { get; set; }
+
+
     }
 }

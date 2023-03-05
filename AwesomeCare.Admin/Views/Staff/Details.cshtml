@@ -105,6 +105,7 @@
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" id="@Model.StaffPersonalInfoId" onclick="getstaffholiday(this)" href="#holiday" id="@Model.StaffPersonalInfoId" onclick="GetDetails(this)">Holidays</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" id="@Model.StaffPersonalInfoId" onclick="getsalaryallowance(this)" href="#salaryallowance">Salary Allowance</a></li>
                 <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" id="@Model.StaffPersonalInfoId" onclick="getsalarydeduction(this)" href="#salarydeduction">Salary Deduction</a></li>
+                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" id="@Model.StaffPersonalInfoId" onclick="getlateness(this)" href="#lateness">Lateness</a></li>
                 @if (Model.IsTeamLeader.Equals("Yes"))
                 {
                     <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#staffteamlead">Staff Team Lead</a></li>
@@ -206,7 +207,7 @@
                                     {
                                         <label asp-for="DrivingLicense" class="control-label"></label>
                                         <br />
-                                        <a asp-action="DownloadFile" asp-route-file="@Model.DrivingLicense">Download</a>
+                                        <a asp-action="DownloadFile"  target="_blank" asp-route-file="@Model.DrivingLicense">Download</a>
                                     }
                                 </div>
                             </div>
@@ -259,11 +260,11 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    @if (Model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                    @if (Model.RightToWork.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(Model.RightToWorkAttachment))
                                     {
                                         <label asp-for="RightToWorkAttachment" class="control-label"></label>
                                         <br />
-                                        <a asp-action="DownloadFile" asp-route-file="@Model.RightToWorkAttachment">Download</a>
+                                        <a asp-action="DownloadFile" target="_blank" asp-route-file="@Model.RightToWorkAttachment">Download</a>
                                     }
                                 </div>
                             </div>
@@ -295,7 +296,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    @if (Model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                    @if (Model.DBS.Equals("Yes", StringComparison.InvariantCultureIgnoreCase)  && !string.IsNullOrEmpty(Model.DBSAttachment))
                                     {
                                         <label asp-for="DBSAttachment" class="control-label"></label>
                                         <br />
@@ -326,7 +327,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    @if (Model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                    @if (Model.NI.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(Model.NIAttachment))
                                     {
                                         <label asp-for="NIAttachment" class="control-label"></label>
                                         <br />
@@ -362,7 +363,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-4 col-md-4">
                                 <div class="form-group">
-                                    @if (Model.Self_PYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase))
+                                    @if (Model.Self_PYE.Equals("Yes", StringComparison.InvariantCultureIgnoreCase) && !string.IsNullOrEmpty(Model.Self_PYEAttachment))
                                     {
                                         <label asp-for="Self_PYEAttachment" class="control-label"></label>
                                         <br />
@@ -1095,6 +1096,32 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="tbl_salarydeduction">
+                                                    
+
+                                                </tbody>
+                                                </table>
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                    <div class="tab-pane fade" id="lateness">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="dropdown profile-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="material-icons">more_vert</i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right" style="">
+                                                        <a asp-action="Index" asp-controller="StaffLateness">Create</a>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>SN</th>
+                                                            <th>Date</th>
+                                                            <th>Time Critical</th>
+                                                            <th>Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="tbl_lateness">
                                                     
 
                                                 </tbody>

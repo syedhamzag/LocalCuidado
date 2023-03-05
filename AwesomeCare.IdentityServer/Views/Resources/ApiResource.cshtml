@@ -7,7 +7,7 @@
 
 
 <h2>Api Resource</h2>
-@if (!User.IsAuthenticated())
+@if (User.IsAuthenticated())
 {
     <a asp-route="AddApiResource" class="btn btn-primary pull-right">Add Api Resource</a>
 }

@@ -42,6 +42,8 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         #endregion
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         public string ActiveTab { get; set; } = "voice";
         public string Reference { get; set; }
         public int VoiceId { get; set; }
@@ -97,5 +99,10 @@ namespace AwesomeCare.Admin.ViewModels.ClientVoice
         [Required]
         public string URL { get; set; }
         public string Attachment { get; set; }
+        public string RateServiceRecievingName { get; set; }
+        public string RateStaffAttendingName { get; set; }
+        public string OfficeStaffSupportName { get; set; }
+        public string InterestedInProgramsName { get; set; }
+        public string OfficerToActName { get; set; }
     }
 }

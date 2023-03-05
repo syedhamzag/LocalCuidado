@@ -11,7 +11,7 @@ namespace AwesomeCare.DataAccess.Migrations
 {
     [DbContext(typeof(AwesomeCareDbContext))]
     [Migration("20220706104049_Update_Medication")]
-    partial class Update_Medication
+    partial class Updated_Medication
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

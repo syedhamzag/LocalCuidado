@@ -1,0 +1,38 @@
+﻿@using IdentityServer4.Extensions;
+@model List<IdentityServer4.EntityFramework.Entities.IdentityResource>
+@{
+    ViewData["Title"] = "ApiResource";
+}
+
+
+<h2>Identity Resource</h2>
+
+<a asp-route="AddIdentityResource" class="btn btn-primary pull-right">Add Identity Resource</a>
+
+
+<br />
+<div class="table-responsive">
+    <table class="table table-condensed table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Display Name</th>
+                <th>Description</th>
+                <th>Created On</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Model)
+            {
+                <tr>
+                    <td>@client.Name</td>
+                    <td>@client.DisplayName</td>
+                    <td>@client.Description</td>
+
+                    <td>@client.Created.ToString("dd-MMM-yyyy")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

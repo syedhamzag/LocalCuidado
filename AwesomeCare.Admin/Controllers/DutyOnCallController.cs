@@ -12,11 +12,12 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Reflection;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DocumentFormat.OpenXml;
+using Microsoft.AspNetCore.Http;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -26,13 +27,16 @@ namespace AwesomeCare.Admin.Controllers
         private IClientService _clientService;
         private IStaffService _staffService;
         private IBaseRecordService _baseService;
+        private IMailChimpService _emailService;
 
-        public DutyOnCallController(IDutyOnCallService dutyoncallService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService, IStaffService staffService) : base(fileUpload)
+        public DutyOnCallController(IDutyOnCallService dutyoncallService, IFileUpload fileUpload, IClientService clientService, IBaseRecordService baseService, IStaffService staffService,
+            IMailChimpService emailService) : base(fileUpload)
         {
             _dutyoncallService = dutyoncallService;
             _clientService = clientService;
             _baseService = baseService;
             _staffService = staffService;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Reports()
@@ -83,6 +87,36 @@ namespace AwesomeCare.Admin.Controllers
             var putEntity = await GetDutyOnCall(DutyOnCallId);
             return View(putEntity);
         }
+        public async Task<IActionResult> Email(int DutyOnCallId)
+        {
+            var email = new List<DataTransferObject.Models.MailChimp.Recipient>();
+            var attachments = new List<IFormFile>();
+            var entity = await GetDutyDownload(DutyOnCallId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            email.Add(new DataTransferObject.Models.MailChimp.Recipient { Name = client.FullName,Type = DataTransferObject.Enums.EmailTypeEnum.to, Email = client.Email });
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            IFormFile file = new FormFile(stream, 0, stream.Length, null, client.FullName + ".docx")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            };
+            attachments.Add(file);
+            await _emailService.SendAsync($"{client.FullName}", "", false, email,attachments);
+            stream.Close();
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = entity.ClientId });
+        }
+        public async Task<IActionResult> Download(int DutyOnCallId)
+        {
+            var entity = await GetDutyDownload(DutyOnCallId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+
+        }
         public async Task<CreateDutyOnCall> GetDutyOnCall(int DutyOnCallId)
         {
             var i = await _dutyoncallService.Get(DutyOnCallId);
@@ -120,7 +154,59 @@ namespace AwesomeCare.Admin.Controllers
         };
             return putEntity;
         }
+        public async Task<CreateDutyOnCall> GetDutyDownload(int DutyOnCallId)
+        {
+            var i = await _dutyoncallService.Get(DutyOnCallId);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
 
+            var putEntity = new CreateDutyOnCall
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s=>s.ClientId==i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s=>s.ClientId==i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s=>s.ClientId==i.ClientId).FirstOrDefault().DateOfBirth,
+                Remarks = i.Remarks,
+                NotificationStatusName = _baseService.GetBaseRecordItemById(i.NotificationStatus).Result.ValueName,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                ActionTaken = i.ActionTaken,
+                Attachment = i.Attachment,
+                ClientInitial = i.ClientInitial,
+                DateOfCall = i.DateOfCall,
+                DateOfIncident = i.DateOfIncident,
+                DetailsOfIncident = i.DetailsOfIncident,
+                DetailsRequired = i.DetailsRequired,
+                DutyOnCallId = i.DutyOnCallId,
+                NotifyPerson = i.NotifyPerson,
+                NotifyStaffInvolved = i.NotifyStaffInvolved,
+                PositionOfReportingName = _baseService.GetBaseRecordItemById(i.PositionOfReporting).Result.ValueName,
+                PriorityName = _baseService.GetBaseRecordItemById(i.Priority).Result.ValueName,
+                RefNo = i.RefNo,
+                ReportedBy = i.ReportedBy,
+                StaffBlacklisted = i.StaffBlacklisted,
+                Subject = i.Subject,
+                TelephoneToCallName = _baseService.GetBaseRecordItemById(i.TelephoneToCall).Result.ValueName,
+                TimeOfCall = i.TimeOfCall,
+                TypeOfDutyCallName = _baseService.GetBaseRecordItemById(i.TypeOfDutyCall).Result.ValueName,
+                TypeOfIncidentName = _baseService.GetBaseRecordItemById(i.TypeOfIncident).Result.ValueName,
+            };
+            foreach (var item in i.PersonResponsible.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.PersonResponsibleName))
+                    putEntity.PersonResponsibleName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.PersonResponsibleName = putEntity.PersonResponsibleName +", "+ staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            foreach (var item in i.PersonToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.PersonToActName))
+                    putEntity.PersonToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.PersonToActName = putEntity.PersonToActName +", "+ staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CreateDutyOnCall model)
@@ -140,7 +226,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.RefNo + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "dutyoncall";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -201,7 +287,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.RefNo + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "dutyoncall";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -249,350 +335,6 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        public async Task<IActionResult> Download(int DutyOnCallId)
-        {
-            var entity = await GetDutyOnCall(DutyOnCallId);
-            var client = await _clientService.GetClientDetail();
-            var stream = new MemoryStream();
-            int row = 0;
-            int cel = 0;
-            #region Word Document
-            using (WordprocessingDocument doc =
-                WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mdp = doc.MainDocumentPart;
-                mdp = doc.AddMainDocumentPart();
-                Document document = new Document(new Body());
-                Table table = new Table();
-                TableProperties tblProp = new TableProperties(
-                    new TableBorders(
-                        new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 },
-                        new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 },
-                        new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 },
-                        new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 },
-                        new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 },
-                        new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.BasicThinLines), Size = 12 }
-                    )
-                );
-                Paragraph para = new Paragraph();
-                Paragraph para1 = new Paragraph();
-                Paragraph para2 = new Paragraph();
-                StyleRunProperties stylRunProps = new StyleRunProperties();
-                Run run = para.AppendChild(new Run());
-                RunProperties runProperties = run.AppendChild(new RunProperties());
-                Bold bold = new Bold();
-                bold.Val = OnOffValue.FromBoolean(true);
-                FontSize fn = new FontSize();
-                fn.Val = "60";
-                runProperties.AppendChild(fn);
-                runProperties.AppendChild(bold);
-                runProperties.AppendChild(new Justification() { Val = JustificationValues.Center });
-                run.AppendChild(new Text("Sheffield City Council - Communities"));
-                
-
-                Run run1 = para1.AppendChild(new Run());
-                run1.AppendChild(new Text("Untoward Incident"));
-
-                Run run2 = para2.AppendChild(new Run());
-                run2.AppendChild(new Text("Please find below untoward incident as detail below:"));
-
-                #region Table
-                // Append the TableProperties object to the empty table.
-                table.AppendChild<TableProperties>(tblProp);
-                List<TableRow> trow = new List<TableRow>();
-                List<TableCell> cells = new List<TableCell>();
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Service User initials"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.ClientInitial))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge{ Val = MergedCellValues.Continue}));
-                trow[row].AppendChild(cells[cel]);
-                
-                cel++;                        
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Care First No."))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.RefNo))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Team Responsible"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Sheffield Social Services"))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Date Of Incident"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.DateOfIncident.ToString("dd.MM.yyyy")))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("NB: Initials only to be used for Service Users, their family members or any other party mentioned in this Untoward."))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Provider:"))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Reported By:"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.ReportedBy))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Position:"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(_baseService.GetBaseRecordItemById(entity.PositionOfReporting).Result.ValueName))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Tel:"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("20210150365206"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Date:"))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.DateOfIncident.ToString("dd.MM.yyyy")))));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.DetailsOfIncident))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Details of action taken:"))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.ActionTaken))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text("Details of any action required by service:"))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                row++;
-                trow.Add(new TableRow());
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text(entity.DetailsRequired))));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Restart }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                cells.Add(new TableCell());
-                cells[cel].AppendChild(new Paragraph(new Run(new Text())));
-                cells[cel].AppendChild(new TableCellProperties(new HorizontalMerge { Val = MergedCellValues.Continue }));
-                trow[row].AppendChild(cells[cel]);
-                cel++;
-                #endregion
-                foreach (TableRow item in trow)
-                {
-                    table.AppendChild(item);
-                }
-                document.AppendChild(para);
-                document.AppendChild(para1);
-                document.AppendChild(para2);
-                document.AppendChild(table);
-                document.Save(mdp);
-                
-                mdp.Document.Save();
-                
-            }
-            #endregion
-            stream.Position = 0;
-            string fileName = $"Untowatds-{client.FirstOrDefault(s=>s.ClientId == entity.ClientId).FullName}.docx";
-            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
-        }
+        
     }
 }

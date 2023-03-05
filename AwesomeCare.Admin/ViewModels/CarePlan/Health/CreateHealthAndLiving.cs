@@ -20,6 +20,8 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         public int HLId { get; set; }
         public int ClientId { get; set; }
         public string ClientName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         public string BriefHealth { get; set; }
         public string ObserveHealth { get; set; }
         public string WakeUp { get; set; }
@@ -58,5 +60,28 @@ namespace AwesomeCare.Admin.ViewModels.CarePlan.Health
         public string SpecialCaution { get; set; }
 
         public string EmailName { get; set; }
+
+        public string DehydrationRiskName { get; set; }
+        public string LifeStyleName { get; set; }
+        public string PressureSoreName { get; set; }
+        public string ContinenceIssueName { get; set; }
+        public string ConstraintRequiredName { get; set; }
+        public string MeansOfCommName { get; set; }
+        public string SmokingName { get; set; }
+        public string TextFontSizeName { get; set; }
+        public string FinanceManagementName { get; set; }
+        public string PostalServiceName { get; set; }
+        public string LetterOpeningName { get; set; }
+        public string ShoppingRequiredName { get; set; }
+        public string SpecialCleaningName { get; set; }
+        public string LaundaryRequiredName { get; set; }
+        public string VideoCallRequiredName { get; set; }
+        public string EatingWithStaffName { get; set; }
+        public string AllowChatsName { get; set; }
+        public string TeaChocolateCoffeeName { get; set; }
+        public string NeighbourInvolmentName { get; set; }
+        public string FamilyUpdateName { get; set; }
+        public string AlcoholicDrinkName { get; set; }
+        public string TVandMusicName { get; set; }
     }
 }

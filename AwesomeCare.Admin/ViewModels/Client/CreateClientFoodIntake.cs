@@ -31,6 +31,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "foodintake";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int FoodIntakeId { get; set; }
         [Required]
@@ -67,5 +69,10 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+        public string GoalName { get; set; }
+        public string CurrentIntakeName { get; set; }
+        public string StatusImageName { get; set; }
+        public string OfficerToActName { get; set; }
+
     }
 }

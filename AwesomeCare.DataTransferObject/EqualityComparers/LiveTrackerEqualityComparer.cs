@@ -36,7 +36,7 @@ namespace AwesomeCare.DataTransferObject.EqualityComparers
 
             if (x == null || y == null) return false;
 
-            if ((x.PERIOD == y.PERIOD)) return true;
+            if ((x.PERIOD == y.PERIOD) && (x.StaffRotaPeriodId == y.StaffRotaPeriodId)) return true;
 
             return false;
         }

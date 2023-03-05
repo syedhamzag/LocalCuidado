@@ -215,7 +215,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "staffkeyworker";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -271,7 +271,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.StaffId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "staffkeyworker";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
 
             }

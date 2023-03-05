@@ -44,9 +44,9 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
-        public ClientLogAuditController(IClientLogAuditService clientlogAuditService, IFileUpload fileUpload, 
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache,  IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+        public ClientLogAuditController(IClientLogAuditService clientlogAuditService, IFileUpload fileUpload,
+            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientlogAuditService = clientlogAuditService;
             _clientService = clientService;
@@ -61,9 +61,9 @@ namespace AwesomeCare.Admin.Controllers
         public async Task<IActionResult> Reports()
         {
             var entities = await _clientlogAuditService.Get();
-            
+
             var client = await _clientService.GetClientDetail();
-            List<CreateClientLogAudit> reports = new List<CreateClientLogAudit>();         
+            List<CreateClientLogAudit> reports = new List<CreateClientLogAudit>();
             foreach (GetClientLogAudit item in entities)
             {
                 var report = new CreateClientLogAudit();
@@ -126,7 +126,7 @@ namespace AwesomeCare.Admin.Controllers
             };
             return View(putEntity);
         }
-        public async Task<IActionResult> Email(int logId, string sender,string password, string recipient, string Smtp)
+        public async Task<IActionResult> Email(int logId, string sender, string password, string recipient, string Smtp)
         {
             List<string> rcpt = new List<string>();
             var LogAudit = await _clientlogAuditService.Get(logId);
@@ -140,14 +140,14 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendAsync(rcpt, subject, body, byte1, filename, "pdf", true);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int logId)
-        {
-            var LogAudit = await _clientlogAuditService.Get(logId);
-            var json = JsonConvert.SerializeObject(LogAudit);
-            byte[] byte1 = GeneratePdf(json);
+        //public async Task<IActionResult> Download(int logId)
+        //{
+        //    var LogAudit = await _clientlogAuditService.Get(logId);
+        //    var json = JsonConvert.SerializeObject(LogAudit);
+        //    byte[] byte1 = GeneratePdf(json);
 
-            return File(byte1, "application/pdf", "ClientLogAudit.pdf");
-        }
+        //    return File(byte1, "application/pdf", "ClientLogAudit.pdf");
+        //}
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -163,7 +163,7 @@ namespace AwesomeCare.Admin.Controllers
                         pdfDoc.SetDefaultPageSize(PageSize.A4);
                         pdfDoc.SetCloseWriter(true);
                         Document document = new Document(pdfDoc);
-                        var para = new Paragraph(paragraphs.Replace("{","").Replace("}","").Replace("\"","").Replace(",","\n"));
+                        var para = new Paragraph(paragraphs.Replace("{", "").Replace("}", "").Replace("\"", "").Replace(",", "\n"));
                         document.Add(para);
                         buffer = memStream.ToArray();
                         document.Close();
@@ -208,7 +208,7 @@ namespace AwesomeCare.Admin.Controllers
                 ThinkingStaff = LogAudit.Result.ThinkingStaff,
                 ThinkingStaffStop = LogAudit.Result.ThinkingStaffStop,
                 OFFICERTOACT = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]
@@ -231,7 +231,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.EvidenceOfActionTaken = path;
             }
             else
@@ -243,7 +243,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.EvidenceFilePath = path;
             }
             else
@@ -251,34 +251,34 @@ namespace AwesomeCare.Admin.Controllers
                 model.EvidenceFilePath = "No Image";
             }
             #endregion
-            
-                postlog.ActionRecommended = model.ActionRecommended;
-                postlog.ClientId = model.ClientId;
-                postlog.Reference = model.Reference;
-                postlog.ActionRecommended = model.ActionRecommended;
-                postlog.ActionTaken = model.ActionTaken;
-                postlog.EvidenceFilePath = model.EvidenceFilePath;
-                postlog.Date = model.Date;
-                postlog.NextDueDate = model.NextDueDate;
-                postlog.Deadline = model.Deadline;
-                postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
-                postlog.LessonLearntAndShared = model.LessonLearntAndShared;
-                postlog.LogURL = model.LogURL;
-                postlog.NameOfAuditor = model.NameOfAuditor;
-                postlog.Observations = model.Observations;
-                postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
-                postlog.Remarks = model.Remarks;
-                postlog.RepeatOfIncident = model.RepeatOfIncident;
-                postlog.RotCause = model.RotCause;
-                postlog.Status = model.Status;
-                postlog.ThinkingServiceUsers = model.ThinkingServiceUsers;
-                postlog.Communication = model.Communication;
-                postlog.ImproperDocumentation = model.ImproperDocumentation;
-                postlog.IsCareDifference = model.IsCareDifference;
-                postlog.IsCareExpected = model.IsCareExpected;
-                postlog.ProperDocumentation = model.ProperDocumentation;
-                postlog.ThinkingStaff = model.ThinkingStaff;
-                postlog.ThinkingStaffStop = model.ThinkingStaffStop;
+
+            postlog.ActionRecommended = model.ActionRecommended;
+            postlog.ClientId = model.ClientId;
+            postlog.Reference = model.Reference;
+            postlog.ActionRecommended = model.ActionRecommended;
+            postlog.ActionTaken = model.ActionTaken;
+            postlog.EvidenceFilePath = model.EvidenceFilePath;
+            postlog.Date = model.Date;
+            postlog.NextDueDate = model.NextDueDate;
+            postlog.Deadline = model.Deadline;
+            postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            postlog.LessonLearntAndShared = model.LessonLearntAndShared;
+            postlog.LogURL = model.LogURL;
+            postlog.NameOfAuditor = model.NameOfAuditor;
+            postlog.Observations = model.Observations;
+            postlog.OfficerToAct = model.OfficerToTakeAction.Select(o => new PostLogAuditOfficerToAct { StaffPersonalInfoId = o, LogAuditId = model.LogAuditId }).ToList();
+            postlog.Remarks = model.Remarks;
+            postlog.RepeatOfIncident = model.RepeatOfIncident;
+            postlog.RotCause = model.RotCause;
+            postlog.Status = model.Status;
+            postlog.ThinkingServiceUsers = model.ThinkingServiceUsers;
+            postlog.Communication = model.Communication;
+            postlog.ImproperDocumentation = model.ImproperDocumentation;
+            postlog.IsCareDifference = model.IsCareDifference;
+            postlog.IsCareExpected = model.IsCareExpected;
+            postlog.ProperDocumentation = model.ProperDocumentation;
+            postlog.ThinkingStaff = model.ThinkingStaff;
+            postlog.ThinkingStaffStop = model.ThinkingStaffStop;
 
             var result = await _clientlogAuditService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
@@ -306,7 +306,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.EvidenceOfActionTaken = path;
             }
             else
@@ -318,7 +318,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientlogaudit";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.EvidenceFilePath = path;
             }
             else
@@ -355,7 +355,7 @@ namespace AwesomeCare.Admin.Controllers
             put.ProperDocumentation = model.ProperDocumentation;
             put.ThinkingStaff = model.ThinkingStaff;
             put.ThinkingStaffStop = model.ThinkingStaffStop;
-            
+
             var entity = await _clientlogAuditService.Put(put);
             SetOperationStatus(new Models.OperationStatus
             {
@@ -367,6 +367,54 @@ namespace AwesomeCare.Admin.Controllers
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
+        }
+        public async Task<IActionResult> Download(int logId)
+        {
+            var entity = await GetDownload(logId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientLogAudit> GetDownload(int Id)
+        {
+            var i = await _clientlogAuditService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientLogAudit
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                NextDueDate = i.NextDueDate,
+                IsCareExpected = i.IsCareExpected,
+                IsCareDifference = i.IsCareDifference,
+                ProperDocumentation = i.ProperDocumentation,
+                ImproperDocumentation = i.ImproperDocumentation,
+                Communication = i.Communication,
+                ThinkingServiceUsers = i.ThinkingServiceUsers,
+                ThinkingStaff = i.ThinkingStaff,
+                ThinkingStaffStop = i.ThinkingStaffStop,
+                Observations = i.Observations,
+                NameOfAuditor = i.NameOfAuditor,
+                ActionRecommended = i.ActionRecommended,
+                ActionTaken = i.ActionTaken,
+                EvidenceOfActionTaken = i.EvidenceOfActionTaken,
+                Remarks = i.Remarks,
+                RotCause = i.RotCause,
+                LessonLearntAndShared = i.LessonLearntAndShared,
+                LogURL = i.LogURL,
+                EvidenceFilePath = i.EvidenceFilePath,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                RepeatOfIncidentName = _baseService.GetBaseRecordItemById(i.RepeatOfIncident).Result.ValueName,
+            };
+            return putEntity;
 
         }
     }

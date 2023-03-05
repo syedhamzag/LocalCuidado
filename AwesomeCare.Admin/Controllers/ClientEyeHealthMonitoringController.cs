@@ -135,14 +135,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int eyeId)
-        {
-            var EyeHealthMonitoring = await _clientEyeHealthMonitoringService.Get(eyeId);
-            var json = JsonConvert.SerializeObject(EyeHealthMonitoring);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientEyeHealthMonitoring.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -221,7 +213,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_StatusAttachment_",extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -234,7 +226,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ToolUsedAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_ToolUsedAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream(), model.ToolUsedAttachment.ContentType);
                 model.ToolUsedAttach = path;
             }
             else
@@ -247,7 +239,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.MethodUsedAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_MethodUsedAttachment_",extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream(), model.MethodUsedAttachment.ContentType);
                 model.MethodUsedAttach = path;
             }
             else
@@ -304,7 +296,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_StatusAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -317,7 +309,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ToolUsedAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_ToolUsedAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ToolUsedAttachment.OpenReadStream(), model.ToolUsedAttachment.ContentType);
                 model.ToolUsedAttach = path;
             }
             else
@@ -330,7 +322,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.MethodUsedAttachment.FileName);
                 string folder = "clienteyehealth";
                 string filename = string.Concat(folder, "_MethodUsedAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.MethodUsedAttachment.OpenReadStream(), model.MethodUsedAttachment.ContentType);
                 model.MethodUsedAttach = path;
             }
             else
@@ -374,6 +366,55 @@ namespace AwesomeCare.Admin.Controllers
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
+        }
+        public async Task<IActionResult> Download(int eyeId)
+        {
+            var entity = await GetDownload(eyeId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientEyeHealthMonitoring> GetDownload(int Id)
+        {
+            var i = await _clientEyeHealthMonitoringService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientEyeHealthMonitoring
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                ToolUsedAttach = i.ToolUsedAttach,
+                MethodUsedAttach = i.MethodUsedAttach,
+                StatusAttach = i.StatusAttach,
+                Comment = i.Comment,
+                Deadline = i.Deadline,
+                PhysicianResponse = i.PhysicianResponse,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                ToolUsedName = _baseService.GetBaseRecordItemById(i.ToolUsed).Result.ValueName,
+                MethodUsedName = _baseService.GetBaseRecordItemById(i.MethodUsed).Result.ValueName,
+                TargetSetName = _baseService.GetBaseRecordItemById(i.TargetSet).Result.ValueName,
+                CurrentScoreName = _baseService.GetBaseRecordItemById(i.CurrentScore).Result.ValueName,
+                PatientGlassesName = _baseService.GetBaseRecordItemById(i.PatientGlasses).Result.ValueName,
+                StatusImageName = _baseService.GetBaseRecordItemById(i.StatusImage).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

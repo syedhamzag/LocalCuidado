@@ -114,6 +114,22 @@ namespace AwesomeCare.Admin.Controllers
             }
 
         }
+        public async Task<IActionResult> Staffs()
+        {
+            try
+            {
+                var staffs = await _staffService.GetStaffs();
+                var approved = staffs.Where(s => s.Status == "Approved").OrderBy(s => s.StaffPersonalInfoId).ToList();
+
+                return View(approved);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Index");
+                throw;
+            }
+
+        }
         public async Task<IActionResult> StaffRate()
         {
             var entities = await _staffService.GetAsync();
@@ -218,7 +234,7 @@ namespace AwesomeCare.Admin.Controllers
             if (staffCommunication.FileAttachment != null)
             {
                 string attachmentFolder = "staffcommunication";
-                var file = await _fileUpload.UploadFile(attachmentFolder, false, string.Concat(attachmentFolder, DateTime.Now.ToString("yyyyMMddhhmmss"), "_", staffCommunication.FileAttachment.FileName), staffCommunication.FileAttachment.OpenReadStream());
+                var file = await _fileUpload.UploadFile(attachmentFolder, false, string.Concat(attachmentFolder, DateTime.Now.ToString("yyyyMMddhhmmss"), "_", staffCommunication.FileAttachment.FileName), staffCommunication.FileAttachment.OpenReadStream(), staffCommunication.FileAttachment.ContentType);
                 staffCommunication.Attachment = file;
             }
             var model = Mapper.Map<PostStaffCommunication>(staffCommunication);
@@ -459,51 +475,51 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.ProfilePixFile != null && model.ProfilePixFile.Length > 0)
             {
-                var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePixFile.OpenReadStream());
+                var profilePix = await UploadFile(profilePixFolder, string.Concat(profilePixFolder, "_", model.Telephone), true, model.ProfilePixFile.OpenReadStream(), model.ProfilePixFile.ContentType);
                 model.ProfilePix = profilePix;
             }
 
             if (model.DrivingLicenseFile != null && model.DrivingLicenseFile.Length > 0)
             {
-                var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicenseFile.OpenReadStream());
+                var drivingLicense = await UploadFile(drivingFolder, string.Concat(drivingFolder, "_", model.Telephone), false, model.DrivingLicenseFile.OpenReadStream(),model.DrivingLicenseFile.ContentType);
                 model.DrivingLicense = drivingLicense;
             }
 
 
             if (model.RightToWorkFile != null && model.RightToWorkFile.Length > 0)
             {
-                var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkFile.OpenReadStream());
+                var righttowork = await UploadFile(rightToFolder, string.Concat(rightToFolder, "_", model.Telephone), false, model.RightToWorkFile.OpenReadStream(), model.RightToWorkFile.ContentType);
                 model.RightToWorkAttachment = righttowork;
             }
 
             if (model.DbsFile != null && model.DbsFile.Length > 0)
             {
 
-                var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DbsFile.OpenReadStream());
+                var dbs = await UploadFile(dbsFolder, string.Concat(dbsFolder, "_", model.Telephone), false, model.DbsFile.OpenReadStream(),model.DbsFile.ContentType);
                 model.DBSAttachment = dbs;
             }
 
             if (model.NiFile != null && model.NiFile.Length > 0)
             {
-                var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NiFile.OpenReadStream());
+                var ni = await UploadFile(niFolder, string.Concat(niFolder, "_", model.Telephone), false, model.NiFile.OpenReadStream(), model.NiFile.ContentType);
                 model.NIAttachment = ni;
             }
 
             if (model.SelfPyeFile != null && model.SelfPyeFile.Length > 0)
             {
-                var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.SelfPyeFile.OpenReadStream());
+                var selfpye = await UploadFile(selfpyeFolder, string.Concat(selfpyeFolder, "_", model.Telephone), false, model.SelfPyeFile.OpenReadStream(), model.SelfPyeFile.ContentType);
                 model.SelfPYEAttachment = selfpye;
             }
 
             if (model.CoverLetterFile != null && model.CoverLetterFile.Length > 0)
             {
-                var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetterFile.OpenReadStream());
+                var coverletter = await UploadFile(coverLetterFolder, string.Concat(coverLetterFolder, "_", model.Telephone), true, model.CoverLetterFile.OpenReadStream(), model.CoverLetterFile.ContentType);
                 model.CoverLetter = coverletter;
             }
 
             if (model.CvFile != null && model.CvFile.Length > 0)
             {
-                var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CvFile.OpenReadStream());
+                var cv = await UploadFile(cvFolder, string.Concat(cvFolder, "_", model.Telephone), true, model.CvFile.OpenReadStream(), model.CvFile.ContentType);
                 model.CV = cv;
             }
 
@@ -519,6 +535,7 @@ namespace AwesomeCare.Admin.Controllers
             var profile = Mapper.Map<PutStaffPersonalInfo>(model);
 
             var json = JsonConvert.SerializeObject(profile);
+            
             var result = await _staffService.UpdateStaffPersonalProfile(profile);
             var content = await result.Content.ReadAsStringAsync();
 
@@ -544,7 +561,7 @@ namespace AwesomeCare.Admin.Controllers
                 var edu = model.Education[i];
                 if (edu.UploadCertificate != null && edu.UploadCertificate.Length > 0)
                 {
-                    var edufile = await UploadFile(educationFolder, string.Concat(educationFolder, "_", model.Telephone), false, edu.UploadCertificate.OpenReadStream());
+                    var edufile = await UploadFile(educationFolder, string.Concat(educationFolder, "_", model.Telephone), false, edu.UploadCertificate.OpenReadStream(),edu.UploadCertificate.ContentType);
                     edu.CertificateAttachment = edufile;
                 };
 
@@ -558,7 +575,7 @@ namespace AwesomeCare.Admin.Controllers
                 var training = model.Trainings[i];
                 if (training.UploadAttachment != null && training.UploadAttachment.Length > 0)
                 {
-                    var edufile = await UploadFile(trainingFolder, string.Concat(trainingFolder, "_", model.Telephone), false, training.UploadAttachment.OpenReadStream());
+                    var edufile = await UploadFile(trainingFolder, string.Concat(trainingFolder, "_", model.Telephone), false, training.UploadAttachment.OpenReadStream(), training.UploadAttachment.ContentType);
                     training.CertificateAttachment = edufile;
                 };
 
@@ -572,7 +589,7 @@ namespace AwesomeCare.Admin.Controllers
                 var referee = model.References[i];
                 if (referee.UploadAttachment != null && referee.UploadAttachment.Length > 0)
                 {
-                    var refereefile = await UploadFile(refereeFolder, string.Concat(refereeFolder, "_", model.Telephone), false, referee.UploadAttachment.OpenReadStream());
+                    var refereefile = await UploadFile(refereeFolder, string.Concat(refereeFolder, "_", model.Telephone), false, referee.UploadAttachment.OpenReadStream(), referee.UploadAttachment.ContentType);
                     referee.Attachment = refereefile;
                 };
 
@@ -606,9 +623,9 @@ namespace AwesomeCare.Admin.Controllers
 
         }
 
-        async Task<string> UploadFile(string folder, string filename, bool isPublic, Stream fileStream)
+        async Task<string> UploadFile(string folder, string filename, bool isPublic, Stream fileStream,string contentType)
         {
-            string path = await _fileUpload.UploadFile(folder, isPublic, filename, fileStream);
+            string path = await _fileUpload.UploadFile(folder, isPublic, filename, fileStream,contentType);
             return path;
         }
 

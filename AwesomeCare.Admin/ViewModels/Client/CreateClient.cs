@@ -155,6 +155,9 @@ namespace AwesomeCare.Admin.ViewModels.Client
         [Required]
         [MaxLength(4)]
         public string Pin { get; set; }
+
+        [Display(Name = "Clock In/Out Distance")]
+        public double LocationDistance { get; set; }
         #endregion
         public List<SelectListItem> StaffList {get;set;}
         public List<ClientInvolvingParty> InvolvingParties { get; set; }

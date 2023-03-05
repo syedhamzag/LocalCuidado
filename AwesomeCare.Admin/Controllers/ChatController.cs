@@ -171,7 +171,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = System.IO.Path.GetExtension(files[i].FileName);
                 string folder = "chatimages";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, files[i].OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, files[i].OpenReadStream(), files[i].ContentType);
                 list.Add(path);
             }
             return Json(list.ToArray());

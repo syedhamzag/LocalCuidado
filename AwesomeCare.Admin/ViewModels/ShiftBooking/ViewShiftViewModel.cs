@@ -33,6 +33,5 @@ namespace AwesomeCare.Admin.ViewModels.ShiftBooking
             };
         public List<SelectListItem> Team { get; set; }
         public string RequiresDriver { get; set; }
-        public Array Ids { get; set; }
     }
 }

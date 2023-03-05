@@ -17,6 +17,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using AwesomeCare.DataTransferObject.EqualityComparers;
 using AwesomeCare.DataTransferObject.DTOs.StaffRota;
+using Microsoft.Extensions.Configuration;
+using AwesomeCare.Services.Services;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.API.Controllers
 {
@@ -39,7 +42,9 @@ namespace AwesomeCare.API.Controllers
         private readonly IGenericRepository<ShiftBooking> shiftBookingRepository;
         private readonly IGenericRepository<StaffShiftBooking> staffShiftBookingRepository;
         private readonly IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository;
+        private readonly IConfiguration configuration;
         private AwesomeCareDbContext _dbContext;
+        private readonly IGoogleService googleService;
 
         public RoteringController(ILogger<RoteringController> logger, IGenericRepository<ClientRota> clientRotaRepository,
             IGenericRepository<ClientRotaType> clientRotaTypeRepository, IGenericRepository<Client> clientRepository,
@@ -52,7 +57,9 @@ namespace AwesomeCare.API.Controllers
              IGenericRepository<ShiftBooking> shiftBookingRepository,
              IGenericRepository<RotaDayofWeek> rotaDayOfWeekRepository,
              IGenericRepository<StaffShiftBooking> staffShiftBookingRepository,
-             AwesomeCareDbContext dbContext)
+             IConfiguration configuration,
+             AwesomeCareDbContext dbContext,
+             IGoogleService googleService)
         {
             _logger = logger;
             _clientRotaRepository = clientRotaRepository;
@@ -69,7 +76,9 @@ namespace AwesomeCare.API.Controllers
             this.shiftBookingRepository = shiftBookingRepository;
             this.staffShiftBookingRepository = staffShiftBookingRepository;
             this.rotaDayOfWeekRepository = rotaDayOfWeekRepository;
+            this.configuration = configuration;
             _dbContext = dbContext;
+            this.googleService = googleService;
         }
         /// <summary>
         /// 
@@ -91,46 +100,6 @@ namespace AwesomeCare.API.Controllers
             {
                 return BadRequest($"Invalid Date format, Format is {format}");
             }
-            //var rotas = (from cr in _clientRotaRepository.Table
-            //             join crt in _clientRotaTypeRepository.Table on cr.ClientRotaTypeId equals crt.ClientRotaTypeId
-            //             join c in _clientRepository.Table on cr.ClientId equals c.ClientId
-            //             select new RotaAdmin
-            //             {
-            //                 ClientRotaId = cr.ClientRotaId,
-            //                 ClientId = cr.ClientId,
-            //                 Period = crt.RotaType,
-            //                 ClientName = c.Firstname + " " + c.Middlename + " " + c.Surname,
-            //                 ClientPostCode = c.PostCode,
-            //                 ClientKeySafe = c.KeySafe,
-            //                 RotaDays = (from crd in cr.ClientRotaDays
-            //                                 // join r in _rotaRepository.Table on new {rotaId = crd.RotaId, dayofweekId = crd.RotaDayofWeekId } crd.RotaId equals r.RotaId
-            //                                 //  join rd in _rotaDayofWeekRepository.Table on crd.RotaDayofWeekId equals rd.RotaDayofWeekId
-            //                             join sr in _staffRotaRepository.Table on new { key1 = crd.RotaId, key2 = crd.RotaDayofWeekId } equals new { key1 = sr.RotaId, key2 = sr.RotaDayofWeekId.Value }
-            //                             join srp in _staffRotaPeriodRepository.Table on sr.StaffRotaId equals srp.StaffRotaId
-            //                             join st in _staffPersonalInfoRepository.Table on sr.Staff equals st.StaffPersonalInfoId
-            //                             where sr.RotaDate >= startDate && sr.RotaDate <= endDate && srp.ClientRotaTypeId == cr.ClientRotaTypeId
-            //                             select new RotaDays
-            //                             {
-
-            //                                 StartTime = crd.StartTime,
-            //                                 StopTime = crd.StopTime,
-            //                                 ClockInTime = srp.ClockInTime,
-            //                                 ClockOutTime = srp.ClockOutTime,
-            //                                 Rota = "",// r.RotaName,
-            //                                 Staff = st.FirstName + " " + st.MiddleName + " " + st.LastName,
-            //                                 RotaDate = sr.RotaDate,
-            //                                 Remark = sr.Remark,
-            //                                 ReferenceNumber = sr.ReferenceNumber,
-            //                                 Partners = (from p in sr.StaffRotaPartners
-            //                                             join stp in _staffPersonalInfoRepository.Table on p.StaffId equals stp.StaffPersonalInfoId
-            //                                             select new StaffPartner
-            //                                             {
-            //                                                 Partner = stp.FirstName + " " + stp.MiddleName + " " + stp.LastName,
-            //                                                 Telephone = stp.Telephone
-            //                                             }).ToList()
-            //                             }).OrderByDescending(o => o.RotaDate).ToList()
-
-            //             }).ToList();
 
             var rotas = GetRotaAdmins(startDate, endDate);
 
@@ -514,6 +483,7 @@ namespace AwesomeCare.API.Controllers
             var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == model.StaffRotaPeriodId);
 
             rota.Feedback = model.Feedback;
+            rota.HandOver = model.HandOver;
             foreach (var item in model.StaffRotaTasks)
             {
                 rota.StaffRotaTasks.Add(new StaffRotaTask
@@ -539,6 +509,8 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ScanQrCodeClockIn(string rotaId, string distance, string geolocation, string channel = "")
         {
+            var email = this.User.Email();
+            _logger.LogInformation($"ClockIn for {email} with rotaId {rotaId} distance {distance} geolocation {geolocation} channel {channel ??= "QRCode"}");
 
             int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
             var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
@@ -546,8 +518,27 @@ namespace AwesomeCare.API.Controllers
                 return NotFound();
 
             string clockInMode = "";
+            string clockInAddress = "";
+            string clockInDistance = "";
             if (string.IsNullOrEmpty(channel) || channel.Equals("QRCode"))
             {
+                if (rota.ClientId.HasValue)
+                {
+                    (bool status, string address, string distance) locationResult = await IsLocationValid(rota.ClientId.Value, rotaId, distance, geolocation);
+                    if (!locationResult.status)
+                    {
+                        _logger.LogInformation($"ClockIn Invalid location for rotaId:{rotaId} with geolocation {geolocation}");
+
+                        rota.ClockInAddress = locationResult.address;
+                        rota.ClockInDistance = locationResult.distance;
+                        rota.ClockInCount = rota.ClockInCount ?? 0 + 1;
+
+                        await _staffRotaPeriodRepository.UpdateEntity(rota);
+                        return BadRequest($"You are clocking in from a wrong location, {clockInAddress}");
+                    }
+                    clockInAddress = locationResult.address;
+                    clockInDistance = locationResult.distance;
+                }
                 clockInMode = ClockModeEnum.ScanCode.ToString();
             }
             else
@@ -557,7 +548,10 @@ namespace AwesomeCare.API.Controllers
 
             rota.ClockInTime = DateTimeOffset.UtcNow;
             rota.ClockInMode = clockInMode;
-            rota.ClockInAddress = geolocation;
+            rota.ClockInGeolocation = geolocation;
+            rota.ClockInAddress = clockInAddress;
+            rota.ClockInDistance = clockInDistance;
+            rota.ClockInCount = rota.ClockInCount ?? 0 + 1;
 
             var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
 
@@ -571,6 +565,9 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> ScanQrCodeClockOut(string rotaId, string distance, string geolocation, string channel = "")
         {
+            var email = this.User.Email();
+            _logger.LogInformation($"ClockOut for {email} with rotaId {rotaId} distance {distance} geolocation {geolocation} channel {channel}");
+
 
             int staffRotaId = int.TryParse(rotaId, out int rtId) ? rtId : 0;
             var rota = await _staffRotaPeriodRepository.Table.FirstOrDefaultAsync(r => r.StaffRotaPeriodId == staffRotaId);
@@ -578,9 +575,25 @@ namespace AwesomeCare.API.Controllers
                 return NotFound();
 
             string clockInMode = "";
+            string clockOutAddress = "";
+            string clockOutDistance = "";
             if (string.IsNullOrEmpty(channel) || channel.Equals("QRCode"))
             {
+                (bool status, string address, string distance) locationResult = await IsLocationValid(rota.ClientId.Value, rotaId, distance, geolocation);
+                if (!locationResult.status)
+                {
+                    _logger.LogInformation($"ClockOut Invalid location for rotaId:{rotaId} with geolocation {geolocation}");
+                    rota.ClockOutAddress = locationResult.address;
+                    rota.ClockOutDistance = locationResult.distance;
+                    rota.ClockOutCount = rota.ClockOutCount ?? 0 + 1;
+
+                    await _staffRotaPeriodRepository.UpdateEntity(rota);
+
+                    return BadRequest($"You are clocking out from a wrong location, {clockOutAddress}");
+                }
+                clockOutAddress = locationResult.address;
                 clockInMode = ClockModeEnum.ScanCode.ToString();
+                clockOutDistance = locationResult.distance;
             }
             else
             {
@@ -589,7 +602,10 @@ namespace AwesomeCare.API.Controllers
 
             rota.ClockOutTime = DateTimeOffset.UtcNow;
             rota.ClockOutMode = clockInMode;
-            rota.ClockOutAddress = geolocation;
+            rota.ClockOutGeolocation = geolocation;
+            rota.ClockOutAddress = clockOutAddress;
+            rota.ClockOutDistance = clockOutDistance;
+            rota.ClockOutCount = rota.ClockOutCount ?? 0  + 1;
 
             var result = await _staffRotaPeriodRepository.UpdateEntity(rota);
 
@@ -599,7 +615,38 @@ namespace AwesomeCare.API.Controllers
                 return BadRequest();
         }
 
+        async Task<(bool status, string address, string distance)> IsLocationValid(int clientId, string rotaId, string distance, string staffGeolocation)
+        {
+            var client = await _clientRepository.GetEntity(clientId);
+            if (client != null)
+            {
+                var staffGeo = staffGeolocation.Split(';');
+                var origin = $"{staffGeo[0]},{staffGeo[1]}";
+                var destination = $"{client.Latitude},{client.Longitude}";
 
+                var getDistance = await googleService.DistanceMatrix(origin, destination, "imperial", "walking", configuration["Google:key"].ToString());
+                if (!getDistance.IsSuccessStatusCode) return (false, "", "");
+
+                var content = getDistance.Content;
+                var jsonResult = JsonConvert.SerializeObject(content);
+                _logger.LogInformation($"Google Distance Matrix for RotaId {rotaId} ClientId {clientId} response is {jsonResult}");
+
+                if (content.Rows.Count == 0) return (false, "", "");
+
+                var element = content.Rows[0].Elements[0];
+                if (!element.Status.Equals("ok", System.StringComparison.OrdinalIgnoreCase)) return (false, "", "");
+
+                var distanceValue = double.Parse(element.Distance.Value.ToString());
+
+                //  var clockInDistance = double.TryParse(distance, out double clockDistance) ? clockDistance : 0;
+                _logger.LogInformation($"{client.Firstname} with clientId {clientId} has location distance {client.LocationDistance}");
+                var status = (distanceValue <= client.LocationDistance);
+
+
+                return (status, content.OriginAddresses[0], element.Distance.Text);
+            }
+            return (false, "", "");
+        }
         List<RotaAdmin> GetRotaAdmins(DateTime startDate, DateTime endDate)
         {
             var rotas = (from sr in _staffRotaRepository.Table
@@ -646,7 +693,6 @@ namespace AwesomeCare.API.Controllers
         [ProducesResponseType(typeof(List<LiveTracker>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [AllowAnonymous]
         public IActionResult LiveRota2(string sdate, string edate)
         {
             string format = "yyyy-MM-dd";
@@ -702,7 +748,11 @@ namespace AwesomeCare.API.Controllers
                              HandOver = srp.HandOver,
                              Comment = srp.Comment,
                              ClockInAddress = srp.ClockInAddress,
+                             ClockInGeolocation = srp.ClockInGeolocation,
                              ClockOutAddress = srp.ClockOutAddress,
+                             ClockOutGeolocation = srp.ClockOutGeolocation,
+                             ClockOutClientTelephone = srp.ClockOutClientTelephone,
+                             ClockInClientTelephone = srp.ClockInClientTelephone,
                              NumberOfStaff = c.NumberOfStaff,
                              StaffTelephone = st.Telephone,
                              StaffRate = st.Rate,
@@ -711,7 +761,12 @@ namespace AwesomeCare.API.Controllers
                              StaffRotaPeriodId = srp.StaffRotaPeriodId,
                              BowelMovement = srp.BowelMovement,
                              OralCare = srp.OralCare,
-                             FluidIntake = srp.FluidIntake
+                             FluidIntake = srp.FluidIntake,
+                             ClockInCount = srp.ClockInCount,
+                             ClockOutCount = srp.ClockOutCount,
+                             ClockOutDistance = srp.ClockOutDistance,
+                             ClockInDistance = srp.ClockInDistance,
+
                          }).OrderBy(o => o.RotaDate).ToList();
 
             var distinctRotas = rotas.Distinct(new LiveTrackerEqualityComparer()).ToList();

@@ -63,10 +63,9 @@ function gettelehealth(nId, oId, aId, rId, ctxChart, clientId) {
         url: '/Dashboard/Telehealth',
         data: { 'nId': nId, 'oId': oId, 'aId': aId, 'rId': rId, 'clientId': clientId },
         success: function (response) {
-            var ctx = document.getElementById(ctxChart).getContext('2d');
-            if (ctx != undefined) {
-                ctx.destroy();
-            }
+            var canvas = document.getElementById(ctxChart);
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             var labels = [];
             var data = [];
             response.teleHealth.forEach(function (result, index) { labels.push(result.key) });
@@ -101,10 +100,9 @@ function getongoing(carePId, careCId, careLId, ctxChart, clientId) {
         url: '/Dashboard/Ongoing',
         data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId, 'clientId': clientId },
         success: function (response) {
-            var ctx = document.getElementById(ctxChart).getContext('2d');
-            if (ctx != undefined) {
-                ctx.destroy();
-            }
+            var canvas = document.getElementById(ctxChart);
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             var labels = [];
             var data = [];
             response.forEach(function (result, index) { labels.push(result.key) });
@@ -139,11 +137,9 @@ function getpindicator(carePId, careCId, careLId, ctxChart, clientId) {
         url: '/Dashboard/Performance',
         data: { 'carePId': carePId, 'careCId': careCId, 'careLId': careLId, 'clientId': clientId },
         success: function (response) {
-            var ctx = document.getElementById(ctxChart).getContext('2d');
-            if (ctx != undefined)
-            {
-                ctx.destroy();
-            }
+            var canvas = document.getElementById(ctxChart);
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             var labels = [];
             var data = [];
             response.clientMatrix.forEach(function (result, index) { labels.push(result.key) });
@@ -172,13 +168,16 @@ function getpindicator(carePId, careCId, careLId, ctxChart, clientId) {
     });
 }
 
-function getSupervision(pId, cId, lId, ctx) {
+function getSupervision(pId, cId, lId, ctxChart) {
     console.log(pId + '' + cId + '' + lId)
     $.ajax({
         type: 'GET',
         url: '/Dashboard/Supervision',
         data: { 'pId': pId, 'cId': cId, 'lId': lId },
         success: function (response) {
+            var canvas = document.getElementById(ctxChart);
+            var ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             var labels = [];
             var data = [];
             response.forEach(function (result, index) { labels.push(result.key) });
@@ -193,7 +192,6 @@ function getSupervision(pId, cId, lId, ctx) {
                     data: data
                 }]
             };
-            console.log(care);
             var Care = new Chart(ctx, {
                 options: hidelabel,
                 data: care,

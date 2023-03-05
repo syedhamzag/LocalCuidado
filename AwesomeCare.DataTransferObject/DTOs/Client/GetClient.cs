@@ -193,6 +193,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int KeyworkerId { get; set; }
         public string Pin { get; set; }
 
+        [Display(Name = "Clock In/Out Distance")]
+        public double LocationDistance { get; set; }
+
         public virtual ICollection<GetClientComplainRegister> GetClientComplain { get; set; }
         public virtual ICollection<GetClientInvolvingPartyForEdit> InvolvingParties { get; set; }
         public virtual ICollection<GetClientRegulatoryContactForEdit> RegulatoryContact { get; set; }

@@ -132,14 +132,7 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int mgtId)
-        {
-            var MgtVisit = await _clientMgtVisitService.Get(mgtId);
-            var json = JsonConvert.SerializeObject(MgtVisit);
-            byte[] byte1 = GeneratePdf(json);
 
-            return File(byte1, "application/pdf", "ClientMgtVisit.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -219,8 +212,8 @@ namespace AwesomeCare.Admin.Controllers
             {
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientmgtvisit";
-                string filename = string.Concat(folder, "_Evidence_",extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream());
+                string filename = string.Concat(folder, "_Evidence_", extention);
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Evidence.OpenReadStream(), model.Evidence.ContentType);
                 model.EvidenceOfActionTaken = path;
             }
             else
@@ -234,7 +227,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientmgtvisit";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -243,28 +236,28 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                postlog.Reference = model.Reference;
-                postlog.ClientId = model.ClientId;
-                postlog.Attachment = model.Attachment;
-                postlog.Date = model.Date;
-                postlog.Deadline = model.Deadline;
-                postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
-                postlog.LessonLearntAndShared = model.LessonLearntAndShared;
-                postlog.URL = model.URL;
-                postlog.HowToComplain = model.HowToComplain;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
-                postlog.Remarks = model.Remarks;
-                postlog.RotCause = model.RotCause;
-                postlog.Status = model.Status;
-                postlog.ActionRequired = model.ActionRequired;
-                postlog.ActionsTakenByMPCC = model.ActionsTakenByMPCC;
-                postlog.ImprovementExpect = model.ImprovementExpect;
-                postlog.Observation = model.Observation;
-                postlog.RateManagers = model.RateManagers;
-                postlog.ServiceRecommended = model.ServiceRecommended;
-                postlog.NextCheckDate = model.NextCheckDate;
-                postlog.RateServiceRecieving = model.RateServiceRecieving;
-                postlog.StaffName = model.StaffBestSupport.Select(o => new PostVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+            postlog.Reference = model.Reference;
+            postlog.ClientId = model.ClientId;
+            postlog.Attachment = model.Attachment;
+            postlog.Date = model.Date;
+            postlog.Deadline = model.Deadline;
+            postlog.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            postlog.LessonLearntAndShared = model.LessonLearntAndShared;
+            postlog.URL = model.URL;
+            postlog.HowToComplain = model.HowToComplain;
+            postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+            postlog.Remarks = model.Remarks;
+            postlog.RotCause = model.RotCause;
+            postlog.Status = model.Status;
+            postlog.ActionRequired = model.ActionRequired;
+            postlog.ActionsTakenByMPCC = model.ActionsTakenByMPCC;
+            postlog.ImprovementExpect = model.ImprovementExpect;
+            postlog.Observation = model.Observation;
+            postlog.RateManagers = model.RateManagers;
+            postlog.ServiceRecommended = model.ServiceRecommended;
+            postlog.NextCheckDate = model.NextCheckDate;
+            postlog.RateServiceRecieving = model.RateServiceRecieving;
+            postlog.StaffName = model.StaffBestSupport.Select(o => new PostVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
 
             var result = await _clientMgtVisitService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
@@ -292,7 +285,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Evidence.FileName);
                 string folder = "clientmgtvisit";
                 string filename = string.Concat(folder, "_Evidence_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
 
             }
@@ -305,7 +298,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientmgtvisit";
                 string filename = string.Concat(folder, "_Attach_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -315,29 +308,29 @@ namespace AwesomeCare.Admin.Controllers
             #endregion
 
             PutClientMgtVisit put = new PutClientMgtVisit();
-                put.VisitId = model.VisitId;
-                put.Reference = model.Reference;
-                put.ClientId = model.ClientId;
-                put.Attachment = model.Attachment;
-                put.Date = model.Date;
-                put.Deadline = model.Deadline;
-                put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
-                put.LessonLearntAndShared = model.LessonLearntAndShared;
-                put.URL = model.URL;
-                put.HowToComplain = model.HowToComplain;
-                put.OfficerToAct = model.OfficerToAct.Select(o => new PutVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
-                put.Remarks = model.Remarks;
-                put.RotCause = model.RotCause;
-                put.Status = model.Status;
-                put.ActionRequired = model.ActionRequired;
-                put.ActionsTakenByMPCC = model.ActionsTakenByMPCC;
-                put.ImprovementExpect = model.ImprovementExpect;
-                put.Observation = model.Observation;
-                put.RateManagers = model.RateManagers;
-                put.ServiceRecommended = model.ServiceRecommended;
-                put.NextCheckDate = model.NextCheckDate;
-                put.RateServiceRecieving = model.RateServiceRecieving;
-                put.StaffName = model.StaffBestSupport.Select(o => new PutVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+            put.VisitId = model.VisitId;
+            put.Reference = model.Reference;
+            put.ClientId = model.ClientId;
+            put.Attachment = model.Attachment;
+            put.Date = model.Date;
+            put.Deadline = model.Deadline;
+            put.EvidenceOfActionTaken = model.EvidenceOfActionTaken;
+            put.LessonLearntAndShared = model.LessonLearntAndShared;
+            put.URL = model.URL;
+            put.HowToComplain = model.HowToComplain;
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutVisitOfficerToAct { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
+            put.Remarks = model.Remarks;
+            put.RotCause = model.RotCause;
+            put.Status = model.Status;
+            put.ActionRequired = model.ActionRequired;
+            put.ActionsTakenByMPCC = model.ActionsTakenByMPCC;
+            put.ImprovementExpect = model.ImprovementExpect;
+            put.Observation = model.Observation;
+            put.RateManagers = model.RateManagers;
+            put.ServiceRecommended = model.ServiceRecommended;
+            put.NextCheckDate = model.NextCheckDate;
+            put.RateServiceRecieving = model.RateServiceRecieving;
+            put.StaffName = model.StaffBestSupport.Select(o => new PutVisitStaffName { StaffPersonalInfoId = o, VisitId = model.VisitId }).ToList();
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientMgtVisitService.Put(put);
             SetOperationStatus(new Models.OperationStatus
@@ -350,7 +343,57 @@ namespace AwesomeCare.Admin.Controllers
                 return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
+        }
+        public async Task<IActionResult> Download(int mgtId)
+        {
+            var entity = await GetDownload(mgtId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientMgtVisit> GetDownload(int Id)
+        {
+            var i = await _clientMgtVisitService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
 
+            var putEntity = new CreateClientMgtVisit
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                NextCheckDate = i.NextCheckDate,
+                ImprovementExpect = i.ImprovementExpect,
+                Observation = i.Observation,
+                ActionRequired = i.ActionRequired,
+                ActionsTakenByMPCC = i.ActionsTakenByMPCC,
+                EvidenceOfActionTaken = i.EvidenceOfActionTaken,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                RotCause = i.RotCause,
+                LessonLearntAndShared = i.LessonLearntAndShared,
+                URL = i.URL,
+                Attachment = i.Attachment,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                RateServiceRecievingName = _baseService.GetBaseRecordItemById(i.RateServiceRecieving).Result.ValueName,
+                RateManagersName = _baseService.GetBaseRecordItemById(i.RateManagers).Result.ValueName,
+                HowToComplainName = _baseService.GetBaseRecordItemById(i.HowToComplain).Result.ValueName,
+                ServiceRecommendedName = _baseService.GetBaseRecordItemById(i.ServiceRecommended).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

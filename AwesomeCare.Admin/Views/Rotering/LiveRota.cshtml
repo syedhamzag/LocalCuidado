@@ -88,9 +88,13 @@
                                     <th>Client Address</th>
                                     <th>Client Geolocation (lat;long)</th>
                                     <th>Clock In Address</th>
+                                    <th>Clock In Location</th>
                                     <th>Clock In Distance</th>
+                                    <th>Clock In Count</th>
                                     <th>Clock Out Address</th>
+                                    <th>Clock Out Location</th>
                                     <th>Clock Out Distance</th>
+                                    <th>Clock Out Count</th>
                                     <th>Staff Name</th>
                                     <th>Staff Tel.</th>
                                     <th>Allocated Date</th>
@@ -101,6 +105,8 @@
                                     <th>ClockIn Method</th>
                                     <th>ClockOut Method</th>
                                     <th>Clock Diff.(Mins)</th>
+                                    <th>Clock In Client Telephone</th>
+                                    <th>Clock Out Client Telephone</th>
                                     <th>Feedback</th>
                                     <th>No. of Staffs</th>
                                     <th>Rate</th>
@@ -143,93 +149,20 @@
                                             <td>@rota.ClientPostCode</td>
                                             <td>@rota.ClientLatitude;@rota.ClientLongitude</td>
                                             <td>@rota.ClockInAddress</td>
+                                            <td>@rota.ClockInGeolocation</td>
                                             <td>
-                                                @{
-                                                    try
-                                                    {
-                                                        if (!string.IsNullOrWhiteSpace(rota.ClockInAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
-                                                        {
-                                                            double careerlat = 0;
-                                                            double careerlongi = 0;
-                                                            double clientlat = 0;
-                                                            double clientlongi = 0;
-                                                            // int decimalPlaces = 5;
-
-                                                            var clockInLocation = rota.ClockInAddress.Split(";");
-                                                            var clockInLatitude = clockInLocation[0];
-                                                            var clockInLongitude = clockInLocation[1];
-
-                                                            var careerLocation = new Location();
-
-                                                            careerLocation.Latitude = double.TryParse(clockInLatitude, out careerlat) ? careerlat : 0;
-                                                            careerLocation.Longitude = double.TryParse(clockInLongitude, out careerlongi) ? careerlongi : 0;
-
-                                                            var clientLocation = new Location();
-                                                            clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlat) ? clientlat : 0;
-                                                            clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongi) ? clientlongi : 0;
-
-                                                            var clockInDistance = rota.CalculateDistance(clientLocation, careerLocation);
-                                                            @clockInDistance;
-                                                        }
-                                                        else
-                                                        {
-                                                            var dist = "N/A";
-                                                            @dist
-                                                        }
-                                                    }
-                                                    catch (Exception)
-                                                    {
-                                                        var dist = "err";
-                                                        @dist
-                                                    }
-                                                }
-
+                                               @rota.ClockInDistance
+                                            </td>
+                                            <td>
+                                                @rota.ClockInCount
                                             </td>
                                             <td>@rota.ClockOutAddress</td>
+                                            <td>@rota.ClockOutGeolocation</td>
                                             <td>
-                                                @{
-                                                    try
-                                                    {
-                                                        if (!string.IsNullOrWhiteSpace(rota.ClockOutAddress) && !string.IsNullOrWhiteSpace(rota.ClientLongitude) && !string.IsNullOrWhiteSpace(rota.ClientLatitude))
-                                                        {
-                                                            double careerlat = 0;
-                                                            double careerlongi = 0;
-                                                            double clientlatOut = 0;
-                                                            double clientlongiOut = 0;
-                                                            //  int decimalPlaces = 5;
-
-
-                                                            var clockOutLocation = rota.ClockOutAddress.Split(";");
-                                                            var clockOutLatitude = clockOutLocation[0];
-                                                            var clockOutLongitude = clockOutLocation[1];
-
-                                                            var careerLocation = new Location();
-
-                                                            careerLocation.Latitude = double.TryParse(clockOutLatitude, out careerlat) ? careerlat : 0;
-                                                            careerLocation.Longitude = double.TryParse(clockOutLongitude, out careerlongi) ? careerlongi : 0;
-
-                                                            var clientLocation = new Location();
-                                                            clientLocation.Latitude = double.TryParse(rota.ClientLatitude, out clientlatOut) ? clientlatOut : 0;
-                                                            clientLocation.Longitude = double.TryParse(rota.ClientLongitude, out clientlongiOut) ? clientlongiOut : 0;
-
-                                                            var clockOutDistance = rota.CalculateDistance(clientLocation, careerLocation);
-                                                            @clockOutDistance;
-                                                        }
-                                                        else
-                                                        {
-                                                            var dist = "N/A";
-                                                            @dist
-                                                        }
-                                                    }
-                                                    catch (Exception )
-                                                    {
-
-                                                        var dist = "err";
-                                                        @dist
-                                                    }
-                                                }
-
-
+                                                @rota.ClockOutDistance
+                                            </td>
+                                            <td>
+                                                @rota.ClockOutCount
                                             </td>
                                             <td>@rota.Staff</td>
                                             <td>@rota.StaffTelephone</td>
@@ -276,6 +209,8 @@
 
                                                 }
                                             </td>
+                                            <td>@rota.ClockInClientTelephone</td>
+                                            <td>@rota.ClockOutClientTelephone</td>
                                             <td>@rota.Feedback</td>
                                             <td>@rota.NumberOfStaff</td>
                                             <td>@rota.ClientRate</td>

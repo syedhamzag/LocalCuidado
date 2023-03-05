@@ -37,6 +37,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "painchart";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int PainChartId { get; set; }
         [Required]
@@ -62,9 +64,11 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string StatusAttach { get; set; }
         [Required]
         public List<int> StaffName { get; set; }
+        public string _StaffName { get; set; }
         public List<string> Staff_Name { get; set; }
         [Required]
         public List<int> Physician { get; set; }
+        public string _PhysicianName { get; set; }
         public List<string> PhysicianName { get; set; }
         [Required]
         public string PhysicianResponse { get; set; }
@@ -77,5 +81,11 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+        public string TypeName { get; set; }
+        public string LocationName { get; set; }
+        public string PainLvlName { get; set; }
+        public string StatusImageName { get; set; }
+        public string OfficerToActName { get; set; }
+
     }
 }

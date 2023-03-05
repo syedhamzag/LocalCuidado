@@ -37,6 +37,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "eyehealth";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int EyeHealthId { get; set; }
         [Required]
@@ -81,5 +83,15 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
-    }
-}
+        public string ToolUsedName { get; set; }
+        public string MethodUsedName { get; set; }
+        public string TargetSetName { get; set; }
+        public string CurrentScoreName { get; set; }
+        public string PatientGlassesName { get; set; }
+        public string StatusImageName { get; set; }
+        public string OfficerToActName { get; set; }}
+
+ }
+
+
+

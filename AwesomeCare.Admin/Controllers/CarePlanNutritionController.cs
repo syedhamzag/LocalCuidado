@@ -42,7 +42,7 @@ namespace AwesomeCare.Admin.Controllers
         {
             var sp = await _nutritionService.GetbyClient(clientId);
             await _nutritionService.Delete(sp.NutritionId);
-            return RedirectToAction("Reports");
+            return RedirectToAction("HomeCareDetails", "Client", new { clientId = clientId });
         }
 
         [HttpPost]
@@ -152,7 +152,7 @@ namespace AwesomeCare.Admin.Controllers
             });
             if (entity.IsSuccessStatusCode)
             {
-                return RedirectToAction("Reports");
+                return RedirectToAction("HomeCareDetails", "Client", new { clientId = model.ClientId });
             }
             return View(model);
 

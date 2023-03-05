@@ -125,14 +125,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int serviceId)
-        {
-            var ServiceWatch = await _clientServiceWatchService.Get(serviceId);
-            var json = JsonConvert.SerializeObject(ServiceWatch);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientServiceWatch.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -207,7 +199,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientservicewatch";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
             }
             else
@@ -216,23 +208,23 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-            
-                postlog.ClientId = model.ClientId;
-                postlog.Reference = model.Reference;
-                postlog.Attachment = model.Attachment;
-                postlog.Date = model.Date;
-                postlog.NextCheckDate = model.NextCheckDate;
-                postlog.Deadline = model.Deadline;
-                postlog.Contact = model.Contact;
-                postlog.Details = model.Details;
-                postlog.URL = model.URL;
-                postlog.Incident = model.Incident;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
-                postlog.Remarks = model.Remarks;
-                postlog.Observation = model.Observation;
-                postlog.Status = model.Status;
-                postlog.ActionRequired = model.ActionRequired;
-                postlog.StaffName = model.PersonInvolved.Select(o => new PostServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+
+            postlog.ClientId = model.ClientId;
+            postlog.Reference = model.Reference;
+            postlog.Attachment = model.Attachment;
+            postlog.Date = model.Date;
+            postlog.NextCheckDate = model.NextCheckDate;
+            postlog.Deadline = model.Deadline;
+            postlog.Contact = model.Contact;
+            postlog.Details = model.Details;
+            postlog.URL = model.URL;
+            postlog.Incident = model.Incident;
+            postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+            postlog.Remarks = model.Remarks;
+            postlog.Observation = model.Observation;
+            postlog.Status = model.Status;
+            postlog.ActionRequired = model.ActionRequired;
+            postlog.StaffName = model.PersonInvolved.Select(o => new PostServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
 
             var result = await _clientServiceWatchService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
@@ -260,7 +252,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.Attach.FileName);
                 string folder = "clientservicewatch";
                 string filename = string.Concat(folder, "_Attachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.Attachment = path;
 
             }
@@ -270,24 +262,24 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                PutClientServiceWatch put = new PutClientServiceWatch();
-                put.WatchId = model.WatchId;
-                put.ClientId = model.ClientId;
-                put.Reference = model.Reference;
-                put.Attachment = model.Attachment;
-                put.Date = model.Date;
-                put.NextCheckDate = model.NextCheckDate;
-                put.Deadline = model.Deadline;
-                put.Contact = model.Contact;
-                put.Details = model.Details;
-                put.URL = model.URL;
-                put.Incident = model.Incident;
-                put.OfficerToAct = model.OfficerToAct.Select(o => new PutServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
-                put.Remarks = model.Remarks;
-                put.Observation = model.Observation;
-                put.Status = model.Status;
-                put.ActionRequired = model.ActionRequired;
-                put.StaffName = model.PersonInvolved.Select(o => new PutServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+            PutClientServiceWatch put = new PutClientServiceWatch();
+            put.WatchId = model.WatchId;
+            put.ClientId = model.ClientId;
+            put.Reference = model.Reference;
+            put.Attachment = model.Attachment;
+            put.Date = model.Date;
+            put.NextCheckDate = model.NextCheckDate;
+            put.Deadline = model.Deadline;
+            put.Contact = model.Contact;
+            put.Details = model.Details;
+            put.URL = model.URL;
+            put.Incident = model.Incident;
+            put.OfficerToAct = model.OfficerToAct.Select(o => new PutServiceOfficerToAct { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
+            put.Remarks = model.Remarks;
+            put.Observation = model.Observation;
+            put.Status = model.Status;
+            put.ActionRequired = model.ActionRequired;
+            put.StaffName = model.PersonInvolved.Select(o => new PutServiceStaffName { StaffPersonalInfoId = o, ServiceId = model.WatchId }).ToList();
             var json = JsonConvert.SerializeObject(put);
             var entity = await _clientServiceWatchService.Put(put);
             SetOperationStatus(new Models.OperationStatus
@@ -301,6 +293,51 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int serviceId)
+        {
+            var entity = await GetDownload(serviceId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientServiceWatch> GetDownload(int Id)
+        {
+            var i = await _clientServiceWatchService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientServiceWatch
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                NextCheckDate = i.NextCheckDate,
+                Observation = i.Observation,
+                ActionRequired = i.ActionRequired,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                URL = i.URL,
+                Attachment = i.Attachment,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                IncidentName = _baseService.GetBaseRecordItemById(i.Incident).Result.ValueName,
+                DetailsName = _baseService.GetBaseRecordItemById(i.Details).Result.ValueName,
+                ContactName = _baseService.GetBaseRecordItemById(i.Contact).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

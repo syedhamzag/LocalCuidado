@@ -33,8 +33,11 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using IdentityExpress.Manager.BusinessLogic.Interfaces.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Mandrill;
 
-namespace HealthCare.IdentityServer
+namespace AwesomeCare.IdentityServer
 {
     public class Startup
     {
@@ -77,10 +80,18 @@ category == DbLoggerCategory.Database.Command.Name
 
             //  services.AddScoped<UserManager<IdentityUser>>();
 
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("SuperAdminPolicy", new AuthorizationPolicyBuilder()
+            //        .RequireAuthenticatedUser()
+            //        .RequireClaim("role", "Staff,SuperAdmin")
+            //        .Build());
+            //});
+
             services.AddDbContext<AwesomeCareDbContext>(options =>
             {
                 options.UseLoggerFactory(DbLoggerFactory);
-                options.UseSqlServer(Configuration.GetConnectionString("HealthCareConnectionString"));
+                options.UseSqlServer(Configuration.GetConnectionString("AwesomeCareConnectionString"));
                 options.EnableSensitiveDataLogging(true);
             });
 
@@ -103,11 +114,12 @@ category == DbLoggerCategory.Database.Command.Name
                 .AddDefaultTokenProviders();
 
 
-            var connectionString = Configuration.GetConnectionString("HealthCareConnectionString");
+            var connectionString = Configuration.GetConnectionString("AwesomeCareConnectionString");
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             var builder = services.AddIdentityServer(options =>
                 {
+                   
                     options.Events.RaiseErrorEvents = true;
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
@@ -146,80 +158,13 @@ category == DbLoggerCategory.Database.Command.Name
 
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
-           // builder.AddSigningCredential(GetSigningCertificate());
-            //builder.Services.Configure<IdentityOptions>(c =>
-            //{
-            //    c.Tokens.ProviderMap.Add("Default", new TokenProviderDescriptor(typeof(DataProtectorTokenProvider<ApplicationUser>)));
-            //});
+            services.AddOidcStateDataFormatterCache();
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //   .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+            //   options =>
+            //   {
 
-            //this must be the same thing configured on all clients
-            // services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;//
-            //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-
-
-            //})
-            //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
-            //    {
-            //        //  options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-            //        options.Cookie.Name = ".HealthCare.Cookie";
-            //        options.Events = new CookieAuthenticationEvents
-            //        {
-            //            OnRedirectToAccessDenied = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnRedirectToAccessDenied");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnRedirectToLogin = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnRedirectToLogin");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnRedirectToLogout = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnRedirectToLogout");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnRedirectToReturnUrl = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnRedirectToReturnUrl");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnSignedIn = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnSignedIn");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnSigningOut = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnSigningOut");
-            //                return Task.CompletedTask;
-            //            },
-            //            OnValidatePrincipal = ctx =>
-            //            {
-            //                var tt = ctx;
-            //                logger.LogInformation($"OnValidatePrincipal");
-            //                return Task.CompletedTask;
-            //            }
-            //        };
-            //    });
-
-            //services.AddAuthentication()
-            //    .AddGoogle(options =>
-            //    {
-            //        // register your IdentityServer with Google at https://console.developers.google.com
-            //        // enable the Google+ API
-            //        // set the redirect URI to http://localhost:5000/signin-google
-            //        options.ClientId = "copy client ID from Google here";
-            //        options.ClientSecret = "copy client secret from Google here";
-            //    });
+            //   });
 
             //This is preventing Password Reset Toke, Phone Number Confirmation Token and other tokens from working
             //if (Environment.IsDevelopment())
@@ -235,6 +180,10 @@ category == DbLoggerCategory.Database.Command.Name
                 string senderName = Configuration["senderName"];
                 return new EmailService(key, senderEmail, senderName, logger);
             });
+            services.AddScoped<IMandrillApi>(c => { return new MandrillApi(Configuration["MailChimpSettings:Key"]); });
+
+            services.AddScoped<IMailChimpService, MailChimpService>();
+
             services.AddLogging(c =>
             {
                 c.AddConsole();
@@ -279,6 +228,7 @@ category == DbLoggerCategory.Database.Command.Name
 
             app.UseRouting();
             app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //if (Environment.IsDevelopment())

@@ -36,7 +36,7 @@ function getdutyoncall(element) {
                     var dateOfCall = new Date(result.dateOfCall);
                     var pin = '<input id="dutyoncall-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="dutyoncalledit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/Print?DutyOnCallId=' + result.dutyOnCallId + '">Print</a>';
+                    var print = '<a class="btn btn-secondary" href="/DutyOnCall/View?DutyOnCallId=' + result.dutyOnCallId + '">Print</a>';
                     var email = '<a class="btn btn-success" href="/DutyOnCall/Email?DutyOnCallId=' + result.dutyOnCallId + '">Email</a>';
                     var download = '<a class="btn btn-info" href="/DutyOnCall/Download?DutyOnCallId=' + result.dutyOnCallId + '">Download</a>';
                     var del = '<a class="btn btn-danger" href="/DutyOnCall/Delete?DutyOnCallId=' + result.dutyOnCallId
@@ -448,11 +448,12 @@ function getbmichart(element) {
 
                     var pin = '<input id="clientbmichart-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="clientbmichartedit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/ClientBMIChart/Print?BMIId=' + result.bMIChartId + '">Print</a>';
-                    var email = '<a class="btn btn-success" href="/ClientBMIChart/Email?BMIId=' + result.bMIChartId + '">Email</a>';
-                    var download = '<a class="btn btn-info" href="/ClientBMIChart/Download?BMIId=' + result.bMIChartId + '">Download</a>';
-                    var del = '<a class="btn btn-danger" href="/ClientBMIChart/Delete?BMIId=' + result.bMIChartId + '">Delete</a>';
+                    var print = '<a class="btn btn-secondary" href="/ClientBMIChart/Print?BMIId=' + result.bmiChartId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/ClientBMIChart/Email?BMIId=' + result.bmiChartId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/ClientBMIChart/Download?BMIId=' + result.bmiChartId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/ClientBMIChart/Delete?BMIId=' + result.bmiChartId + '">Delete</a>';
                     var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.comment + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
+                    console.log(result);
                     $('#tbl_' + name).append(row);
 
                 });
@@ -787,8 +788,16 @@ function checkPIN(element)
         success: function (response) {
             if (response == "OK")
             {
-                $('#' + name + 'edit').attr('href', '/' + name + '/' + 'Index?clientId=' + clientId + '');
-                $('#' + name + '-' + clientId).remove();
+                if (name == 'homeriskassessment')
+                {
+                    $('#' + name + 'edit').attr('href', '/' + name + '/' + 'ListHeading?clientId=' + clientId + '');
+                    $('#' + name + '-' + clientId).remove();
+                }
+                else
+                {
+                    $('#' + name + 'edit').attr('href', '/' + name + '/' + 'Index?clientId=' + clientId + '');
+                    $('#' + name + '-' + clientId).remove();
+                }
             }
         },
         error: function () {
@@ -1069,10 +1078,10 @@ function getbalance(element) {
                 response.getBalance.forEach(function (result, index) {
                     var pin = '<input id="balance-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="balanceedit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/Balance/Print?clientId=' + resuolt.balanceId + '">Print</a>';
-                    var email = '<a class="btn btn-success" href="/Balance/Email?clientId=' + resuolt.balanceId + '">Email</a>';
-                    var download = '<a class="btn btn-info" href="/Balance/Download?clientId=' + resuolt.balanceId + '">Download</a>';
-                    var del = '<a class="btn btn-danger" href="/Balance/Delete?clientId=' + resuolt.balanceId + '">Delete</a>';
+                    var print = '<a class="btn btn-secondary" href="/Balance/Print?clientId=' + result.balanceId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/Balance/Email?clientId=' + result.balanceId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/Balance/Download?clientId=' + result.balanceId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/Balance/Delete?clientId=' + result.balanceId + '">Delete</a>';
                     var row = '<tr><td>' + result.name + '</td><td>' + result.description + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
 
@@ -1133,13 +1142,13 @@ function gethealthliving(element) {
                 response.getHealthAndLiving.forEach(function (result, index) {
                     var pin = '<input id="healthliving-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="healthlivingedit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/HealthLiving/Print?clientId=' + result.hLId + '">Print</a>';
-                    var email = '<a class="btn btn-success" href="/HealthLiving/Email?clientId=' + result.hLId + '">Email</a>';
-                    var download = '<a class="btn btn-info" href="/HealthLiving/Download?clientId=' + result.hLId + '">Download</a>';
-                    var del = '<a class="btn btn-danger" href="/HealthLiving/Delete?clientId=' + result.hLId + '">Delete</a>';
+                    var print = '<a class="btn btn-secondary" href="/HealthLiving/Print?id=' + result.hlId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/HealthLiving/Email?id=' + result.hlId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/HealthLiving/Download?id=' + result.hlId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/HealthLiving/Delete?id=' + result.hlId + '">Delete</a>';
                     var row = '<tr><td>' + result.briefHealth + '</td><td>' + result.wakeUp + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-
+                    console.log(result);
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
                 });
@@ -1166,13 +1175,13 @@ function getspecialhealthmed(element) {
 
                     var pin = '<input id="specialhealthandmedication-' + clientId + '" type="password" placeholder="Enter Pin" class="dropdown-item" onblur="checkPIN(this)" />';
                     var edit = '<a id="specialhealthandmedicationedit" class="btn btn-warning" href="#">Edit</a>';
-                    var print = '<a class="btn btn-secondary" href="/SpecialHealthAndMedication/Print?clientId=' + result.sHMId + '">Print</a>';
-                    var email = '<a class="btn btn-success" href="/SpecialHealthAndMedication/Email?clientId=' + result.sHMId + '">Email</a>';
-                    var download = '<a class="btn btn-info" href="/SpecialHealthAndMedication/Download?clientId=' + result.sHMId + '">Download</a>';
-                    var del = '<a class="btn btn-danger" href="/SpecialHealthAndMedication/Delete?clientId=' + result.sHMId + '">Delete</a>';
+                    var print = '<a class="btn btn-secondary" href="/SpecialHealthAndMedication/Print?Id=' + result.shmId + '">Print</a>';
+                    var email = '<a class="btn btn-success" href="/SpecialHealthAndMedication/Email?Id=' + result.shmId + '">Email</a>';
+                    var download = '<a class="btn btn-info" href="/SpecialHealthAndMedication/Download?Id=' + result.shmId + '">Download</a>';
+                    var del = '<a class="btn btn-danger" href="/SpecialHealthAndMedication/Delete?Id=' + result.shmId + '">Delete</a>';
                     var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.by + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
-
+                    console.log(result)
                     var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
                     $(menu).children().remove();
 
@@ -1306,8 +1315,6 @@ function getdailytask(element) {
                     $('#tbl_' + name).append(row);
 
                 });
-                var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
-                $(menu).children().remove();
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -1337,8 +1344,6 @@ function getmcabest(element) {
                     var row = '<tr><td>' + date.toLocaleDateString() + '</td><td>' + result.name + '</td><td>' + result.signature + '</td><td>' + result.position + '</td><td>' + pin + edit + print + email + download + del + '</td></tr>';
                     $('#tbl_' + name).append(row);
                 });
-                var menu = $('#tbl_' + name).parent().parent().children('div').children('div');
-                $(menu).children().remove();
             },
             error: function () {
                 alert('Failed to receive the Data');
@@ -1432,7 +1437,7 @@ function getPersonalInfo(clientId)
                 if (health <= 0)
                 { 
                     response.getClientHealthCondition.forEach(function (result, index) {
-                        var row = '<tr><td>' + result.name + '</td></tr>';
+                        var row = '<tr><td>' + result.name + '</td><td>' + result.desc + '</td></tr>';
                         $('#tbl_healthcon').append(row);
                     
                         //var edit = '<a class="dropdown-item" href="/ManagingTasks/Index?clientId=' + clientId + '">Edit</a>';

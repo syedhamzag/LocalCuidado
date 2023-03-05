@@ -17,6 +17,7 @@ using AwesomeCare.Admin.Models;
 using AutoMapper;
 using AwesomeCare.DataTransferObject.DTOs.Untowards;
 using AwesomeCare.Services.Services;
+using AwesomeCare.DataTransferObject.Models.MailChimp;
 
 namespace AwesomeCare.Admin.Controllers
 {
@@ -26,20 +27,20 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<UnTowardsController> _logger;
         private IClientService _clientService;
         private IUntowardsService _untowardsService;
-        private readonly IEmailService emailService;
+        private readonly IMailChimpService mailChimpService;
 
         public UnTowardsController(IStaffService staffService,
             IFileUpload fileUpload,
             ILogger<UnTowardsController> logger,
             IClientService clientService,
             IUntowardsService untowardsService,
-            IEmailService emailService) : base(fileUpload)
+           IMailChimpService mailChimpService) : base(fileUpload)
         {
             _staffService = staffService;
             _logger = logger;
             _clientService = clientService;
             _untowardsService = untowardsService;
-            this.emailService = emailService;
+            this.mailChimpService = mailChimpService;
         }
         public async Task<IActionResult> Index()
         {
@@ -108,7 +109,7 @@ namespace AwesomeCare.Admin.Controllers
 
             if (model.FileAttachment != null)
             {
-                var filepath = await _fileUpload.UploadFile("untowards", false, model.FileAttachment.FileName, model.FileAttachment.OpenReadStream());
+                var filepath = await _fileUpload.UploadFile("untowards", false, model.FileAttachment.FileName, model.FileAttachment.OpenReadStream(),model.FileAttachment.ContentType);
                 model.Attachment = filepath;
             }
 
@@ -133,8 +134,9 @@ namespace AwesomeCare.Admin.Controllers
             try
             {
                 if (emails.Count == 0) return;
+                var recipients = emails.Select(e => new DataTransferObject.Models.MailChimp.Recipient { Email = e, Name = "", Type = DataTransferObject.Enums.EmailTypeEnum.to }).ToList();
 
-                await emailService.SendAsync(emails, $"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", true);
+                await mailChimpService.SendAsync($"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", false, recipients);
 
             }
             catch (Exception ex)
@@ -147,14 +149,16 @@ namespace AwesomeCare.Admin.Controllers
         {
             try
             {
-                List<string> staffToSendEmail = new List<string>();
+                List<Recipient> staffToSendEmail = new List<Recipient>();
                 foreach (var staff in model.StaffInvolved)
                 {
                     var email = staffs.FirstOrDefault(s => s.StaffPersonalInfoId == staff.StaffPersonalInfoId);
                     if (email != null)
-                        staffToSendEmail.Add(email.Email);
+                        staffToSendEmail.Add(new Recipient { Email = email.Email,Name = email.Fullname, Type = DataTransferObject.Enums.EmailTypeEnum.to});
                 }
-                await emailService.SendAsync(staffToSendEmail, $"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", true);
+
+                await mailChimpService.SendAsync($"Untowards - {model.Subject}", $"Hello, {Environment.NewLine} you have a pending untowards message.", false, staffToSendEmail);
+               
             }
             catch (Exception ex)
             {

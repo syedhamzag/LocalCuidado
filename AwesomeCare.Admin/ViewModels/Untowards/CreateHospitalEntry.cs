@@ -40,11 +40,21 @@ namespace AwesomeCare.Admin.ViewModels.Untowards
         public string Attachment { get; set; }
         public string Remark { get; set; }
         public int Status { get; set; }
-        public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string ClientName { get; set; }
+        public string IdNumber { get; set; }
+        public string DOB { get; set; }
+
+        public string ConditionOfAdmissionName { get; set; }
+        public string IsFamilyInformedName { get; set; }
+        public string IsHomeCleanedName { get; set; }
+        public string NameParamedicStaffName { get; set; }
+        public string ParamicStaffTeamNoName { get; set; }
 
         public List<SelectListItem> StaffList { get; set; }
         public List<int> StaffInvolved { get; set; }
+        public string StaffInvolvedName { get; set; }
         public List<int> PersonToTakeAction { get; set; }
+        public string PersonToTakeActionName { get; set; }
     }
 }

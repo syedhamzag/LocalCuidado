@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HealthCare.IdentityServer
+namespace AwesomeCare.IdentityServer
 {
     public class PasswordResetTokenProvider<TUser> : DataProtectorTokenProvider<TUser> where TUser : class
     {

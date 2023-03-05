@@ -13,7 +13,6 @@ namespace AwesomeCare.Model.Models
         public string StartTime { get; set; }
         public string StopTime { get; set; }
 
-
         public virtual ClientMedicationDay ClientMedicationDay { get; set; }
         public virtual ClientRotaType ClientRotaType { get; set; }
     }

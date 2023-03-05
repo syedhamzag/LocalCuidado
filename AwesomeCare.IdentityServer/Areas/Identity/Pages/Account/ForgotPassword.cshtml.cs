@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using AwesomeCare.Services.Services;
 using Microsoft.Extensions.Logging;
+using Mandrill.Models;
+using Newtonsoft.Json;
 
 namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 {
@@ -20,14 +22,16 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IEmailService emailService;
         private readonly ILogger<ForgotPasswordModel> logger;
+        private readonly IMailChimpService mailChimpService;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager, IEmailService emailService,ILogger<ForgotPasswordModel> logger)
+        public ForgotPasswordModel(UserManager<ApplicationUser> userManager,
+            ILogger<ForgotPasswordModel> logger,
+            IMailChimpService mailChimpService)
         {
             _userManager = userManager;
-            this.emailService = emailService;
             this.logger = logger;
+            this.mailChimpService = mailChimpService;
         }
 
         [BindProperty]
@@ -66,12 +70,18 @@ namespace AwesomeCare.IdentityServer.Areas.Identity.Pages.Account
 
                 string content = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.";
                 logger.LogInformation("Reset Password content: {0}", content);
-                await this.emailService.SendAsync(new List<string>() { Input.Email }, "Reset Password", content);
-                //await this.emailService.Send(
-                //    Input.Email,
-                //    "Reset Password",
-                //    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-             
+                var emailResult = await mailChimpService.SendAsync("Reset Password", content, true, new List<DataTransferObject.Models.MailChimp.Recipient>
+               {
+                   new DataTransferObject.Models.MailChimp.Recipient
+                   {
+                        Email = Input.Email,
+                         Name = "",
+                          Type = DataTransferObject.Enums.EmailTypeEnum.to
+                   }
+               });
+                var emailResultJson = JsonConvert.SerializeObject(emailResult);
+                logger.LogInformation($"Reset password email result {emailResultJson}");
+
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 

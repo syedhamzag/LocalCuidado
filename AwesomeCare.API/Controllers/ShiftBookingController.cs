@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -281,29 +280,6 @@ namespace AwesomeCare.API.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="shiftId">0</param>
-        /// <returns></returns>
-        [HttpGet("GetStaffShift/{shiftId}")]
-        [ProducesResponseType(type: typeof(List<StaffBooked>), statusCode: StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetStaffShift(int shiftId)
-        {
-            var entity = (from shift in _shiftBookingRepository.Table
-                          join stShift in _staffShiftBookingRepo.Table on shift.ShiftBookingId equals stShift.ShiftBookingId
-                          join staff in _staffPersonalInfoRepository.Table on stShift.StaffPersonalInfoId equals staff.StaffPersonalInfoId
-                          where shift.ShiftBookingId == shiftId
-                                select new StaffBooked
-                                {
-                                    StaffPersonalInfoId = stShift.StaffPersonalInfoId,
-                                    StaffName = staff.FirstName + " " + staff.LastName,
-                                    ShiftBookingId = shift.ShiftBookingId,
-
-                                }).ToList();
-            return Ok(entity);
-        }
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="rotaId">0</param>
         /// <returns></returns>
         [HttpGet("GetShiftBookByDate/{rotaId}")]
@@ -528,28 +504,6 @@ namespace AwesomeCare.API.Controllers
             }
             var rowCount = _dbContext.SaveChanges();
             return Ok(rowCount);
-        }
-
-        /// <summary>
-        /// Create Staff Booking
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("[action]")]
-        public async Task<IActionResult> EditStaff([FromBody] List<PutStaffShiftBooking> model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var postEntity = Mapper.Map<List<StaffShiftBooking>>(model);
-            foreach (var item in postEntity)
-            {
-                await _staffShiftBookingRepo.UpdateEntity(item);
-            }
-            return Ok();
-            // return CreatedAtRoute("GetShiftBookingById", new { id = getEntity.ShiftBookingId }, getEntity);
         }
     }
 }

@@ -703,51 +703,6 @@ namespace AwesomeCare.Admin.Controllers
                 return "Error";
             }
         }
-        public async Task<IActionResult> EditStaff(int shiftId)
-        {
-            var model = new ViewShiftViewModel();
-            var staff = await _staffService.GetStaffs(); 
-            model.Rotas = staff.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList();
-            var shift = _shiftBookingService.GetStaffShift(shiftId);
-            model.Staffs = shift.Result;
-            model.ShiftBookingId = shiftId;
-            model.Ids = model.Staffs.Select(s =>s.StaffPersonalInfoId).ToArray();
-            return View(model);
-        }
-        [HttpPost]
-        public async Task<IActionResult> EditStaff(ViewShiftViewModel model, IFormCollection form)
-        {
-            List<PutStaffShiftBooking> staffs = new List<PutStaffShiftBooking>();
-            int count = int.Parse(form["StaffCount"]);
-            for (int i=1; i<= count; i++)
-            {
-                PutStaffShiftBooking staff = new PutStaffShiftBooking();
-                string sname = $"staff{i}";
-                string name = form[sname];
-                if (!string.IsNullOrWhiteSpace(name))
-                { 
-                    staff.StaffPersonalInfoId = int.Parse(name);
-                    staff.ShiftBookingId = int.Parse(form["ShiftBookingId"]);
-                    staff.StaffShiftBookingId = int.Parse(form[$"staffShiftId{i}"]);
-                    staffs.Add(staff);
-                }
-            }
-            var result = await _shiftBookingService.EditStaff(staffs);
-            var content = await result.Content.ReadAsStringAsync();
-
-
-            if (result.IsSuccessStatusCode)
-            {
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "Operation Successful" });
-                return RedirectToAction("ShiftSchedule");
-            }
-            else
-            {
-                _logger.LogInformation(content);
-                SetOperationStatus(new Models.OperationStatus { IsSuccessful = result.IsSuccessStatusCode, Message = "An error occurred" });
-                return View(model);
-            }
-        }
         [HttpGet]
         public string RemoveDay(int dayId)
         {

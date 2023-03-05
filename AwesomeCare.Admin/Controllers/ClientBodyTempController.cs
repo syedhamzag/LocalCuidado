@@ -130,14 +130,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int TempId)
-        {
-            var BodyTemp = await _clientBodyTempService.Get(TempId);
-            var json = JsonConvert.SerializeObject(BodyTemp);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientBodyTemp.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -212,7 +204,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientbodytemp";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(), model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -225,7 +217,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetTempAttachment.FileName);
                 string folder = "clientbodytemp";
                 string filename = string.Concat(folder, "_TargetTempAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetTempAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetTempAttachment.OpenReadStream(), model.TargetTempAttachment.ContentType);
                 model.TargetTempAttach = path;
             }
             else
@@ -280,7 +272,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.SeeChartAttachment.FileName);
                 string folder = "clientbodytemp";
                 string filename = string.Concat(folder, "_SeeChartAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.SeeChartAttachment.OpenReadStream(),model.SeeChartAttachment.ContentType);
                 model.SeeChartAttach = path;
             }
             else
@@ -293,7 +285,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TargetTempAttachment.FileName);
                 string folder = "clientbodytemp";
                 string filename = string.Concat(folder, "_TargetTempAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetTempAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TargetTempAttachment.OpenReadStream(), model.TargetTempAttachment.ContentType);
                 model.TargetTempAttach = path;
             }
             else
@@ -334,6 +326,51 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int TempId)
+        {
+            var entity = await GetDownload(TempId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientBodyTemp> GetDownload(int Id)
+        {
+            var i = await _clientBodyTempService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientBodyTemp
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TargetTempAttach = i.TargetTempAttach,
+                CurrentReading = i.CurrentReading,
+                Comment = i.Comment,
+                Deadline = i.Deadline,
+                PhysicianResponse = i.PhysicianResponse,
+                SeeChartAttach = i.SeeChartAttach,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                TargetTempName = _baseService.GetBaseRecordItemById(i.TargetTemp).Result.ValueName,
+                SeeChartName = _baseService.GetBaseRecordItemById(i.SeeChart).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

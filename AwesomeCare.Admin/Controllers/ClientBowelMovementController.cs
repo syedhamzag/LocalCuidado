@@ -133,14 +133,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int bowelId)
-        {
-            var BowelMovement = await _clientBowelMovementService.Get(bowelId);
-            var json = JsonConvert.SerializeObject(BowelMovement);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientBowelMovement.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -217,7 +209,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_StatusAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(),model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -230,7 +222,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ColorAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_ColorAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ColorAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ColorAttachment.OpenReadStream(),model.ColorAttachment.ContentType);
                 model.ColorAttach = path;
             }
             else
@@ -243,7 +235,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_TypeAttachment_", model.ClientId);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream(), model.TypeAttachment.ContentType);
                 model.TypeAttach = path;
             }
             else
@@ -299,7 +291,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_StatusAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(),model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -312,7 +304,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_TypeAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream(), model.TypeAttachment.ContentType);
                 model.TypeAttach = path;
             }
             else
@@ -325,7 +317,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.ColorAttachment.FileName);
                 string folder = "clientbowelmovement";
                 string filename = string.Concat(folder, "_ColorAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.ColorAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.ColorAttachment.OpenReadStream(),model.ColorAttachment.ContentType);
                 model.ColorAttach = path;
             }
             else
@@ -370,6 +362,53 @@ namespace AwesomeCare.Admin.Controllers
             return View(model);
 
 
+        }
+        public async Task<IActionResult> Download(int bowelId)
+        {
+            var entity = await GetDownload(bowelId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientBowelMovement> GetDownload(int Id)
+        {
+            var i = await _clientBowelMovementService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientBowelMovement
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TypeAttach = i.TypeAttach,
+                ColorAttach = i.ColorAttach,
+                StatusAttach = i.StatusAttach,
+                Comment = i.Comment,
+                Deadline = i.Deadline,
+                PhysicianResponse = i.PhysicianResponse,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                TypeName = _baseService.GetBaseRecordItemById(i.Type).Result.ValueName,
+                SizeName = _baseService.GetBaseRecordItemById(i.Size).Result.ValueName,
+                ColorName = _baseService.GetBaseRecordItemById(i.Color).Result.ValueName,
+                StatusImageName = _baseService.GetBaseRecordItemById(i.StatusImage).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }

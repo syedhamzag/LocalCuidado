@@ -103,6 +103,48 @@ namespace AwesomeCare.Model.Models.Map
              .HasMaxLength(5)
              .IsRequired(false);
 
+            builder.Property(p => p.ClockInClientTelephone)
+                .HasColumnName("ClockInClientTelephone")
+                .HasMaxLength(50)
+                .IsRequired(false);
+
+            builder.Property(p => p.ClockOutClientTelephone)
+               .HasColumnName("ClockOutClientTelephone")
+               .HasMaxLength(50)
+               .IsRequired(false);
+
+            builder.Property(p => p.ClockInGeolocation)
+              .HasColumnName("ClockInGeolocation")
+              .HasMaxLength(1000)
+              .IsRequired(false);
+
+            builder.Property(p => p.ClockOutGeolocation)
+             .HasColumnName("ClockOutGeolocation")
+             .HasMaxLength(1000)
+             .IsRequired(false);
+
+            builder.Property(p => p.ClockOutClientTelephone)
+              .HasColumnName("ClockOutClientTelephone")
+              .HasMaxLength(50)
+              .IsRequired(false);
+
+            builder.Property(p => p.ClockInDistance)
+            .HasColumnName("ClockInDistance")
+            .HasMaxLength(50)
+            .IsRequired(false);
+
+            builder.Property(p => p.ClockOutDistance)
+            .HasColumnName("ClockOutDistance")
+            .HasMaxLength(50)
+            .IsRequired(false);
+
+            builder.Property(p => p.ClockInCount)
+           .HasColumnName("ClockInCount")
+           .IsRequired(false);
+
+            builder.Property(p => p.ClockOutCount)
+            .HasColumnName("ClockOutCount")
+            .IsRequired(false);
             #endregion
 
             #region Relationship

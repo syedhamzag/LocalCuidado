@@ -31,6 +31,8 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string ActiveTab { get; set; } = "bloodpressure";
         public string ClientName { get; set; }
         public string StatusName { get; set; }
+        public string DOB { get; set; }
+        public string IdNumber { get; set; }
         [Required]
         public int BloodPressureId { get; set; }
         [Required]
@@ -71,5 +73,11 @@ namespace AwesomeCare.Admin.ViewModels.Client
         public string Remarks { get; set; }
         [Required]
         public int Status { get; set; }
+        public string GoalSystolicName { get; set; }
+        public string GoalDiastolicName { get; set; }
+        public string ReadingSystolicName { get; set; }
+        public string ReadingDiastolicName { get; set; }
+        public string StatusImageName { get; set; }
+        public string OfficerToActName { get; set; }
     }
 }

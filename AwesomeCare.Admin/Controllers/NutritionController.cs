@@ -214,7 +214,7 @@ namespace AwesomeCare.Admin.Controllers
                                 {
                                     string folder = "clientcomplain";
                                     string filename = string.Concat(pictureId, model.ClientId);
-                                    path = await _fileUpload.UploadFile(folder, true, filename, picture.OpenReadStream());
+                                    path = await _fileUpload.UploadFile(folder, true, filename, picture.OpenReadStream(), picture.ContentType);
                                 }
                                 else
                                 {
@@ -278,7 +278,7 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     string folder = "clientcomplain";
                     string filename = ImageId;
-                    path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream());
+                    path = await _fileUpload.UploadFile(folder, true, filename, Image.OpenReadStream(),Image.ContentType);
                 }
 
                 Shopping.Amount = Amount;
@@ -341,13 +341,13 @@ namespace AwesomeCare.Admin.Controllers
                 {
                     string folder = "clientcomplain";
                     string filename = WhereToKeepId;
-                    pathkeep = await _fileUpload.UploadFile(folder, true, filename, WhereToKeep.OpenReadStream());
+                    pathkeep = await _fileUpload.UploadFile(folder, true, filename, WhereToKeep.OpenReadStream(), WhereToKeep.ContentType);
                 }
                 if (Image != null)
                 {
                     string _folder = "clientcomplain";
                     string _filename = ImageId;
-                    path = await _fileUpload.UploadFile(_folder, true, _filename, Image.OpenReadStream());
+                    path = await _fileUpload.UploadFile(_folder, true, _filename, Image.OpenReadStream(), Image.ContentType);
                 }
 
                 Cleaning.AreasAndItems = AreasAndItems;

@@ -124,6 +124,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
 
         public string Pin { get; set; }
 
+        [Display(Name = "Clock In/Out Distance")]
+        public double LocationDistance { get; set; }
+
         public List<PostClientInvolvingParty> InvolvingParties { get; set; }
         public List<PostClientRegulatoryContact> RegulatoryContacts { get; set; }
         public List<PostClientCareDetails> CareDetails { get; set; }

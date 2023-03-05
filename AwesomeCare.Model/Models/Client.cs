@@ -107,7 +107,7 @@ namespace AwesomeCare.Model.Models
         public int Aid { get; set; }
         public int TeamLeaderId { get; set; }
         public int KeyworkerId { get; set; }
-
+        public double LocationDistance { get; set; }
         public virtual ICollection<ClientInvolvingParty> InvolvingParties { get; set; }
         public virtual ICollection<ClientRegulatoryContact> RegulatoryContact { get; set; }
         public virtual ICollection<ClientRota> ClientRota { get; set; }

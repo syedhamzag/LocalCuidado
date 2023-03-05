@@ -110,6 +110,9 @@ namespace AwesomeCare.DataTransferObject.DTOs.Client
         public int TeamLeaderId { get; set; }
         public int KeyworkerId { get; set; }
 
+        [Display(Name = "Clock In/Out Distance")]
+        [Required]
+        public double LocationDistance { get; set; }
         public string Pin { get; set; }
     }
 }

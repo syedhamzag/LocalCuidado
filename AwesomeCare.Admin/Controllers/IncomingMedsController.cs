@@ -88,7 +88,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = System.IO.Path.GetExtension(model.Image.FileName);
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_MedsImage_", extention);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream(),model.Attach.ContentType);
                 model.MedsImage = pathA;
             }
             else
@@ -100,7 +100,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = System.IO.Path.GetExtension(model.Image.FileName);
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_MarChartImage_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream(),model.Image.ContentType);
                 model.ChartImage = path;
             }
             else
@@ -134,7 +134,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = System.IO.Path.GetExtension(model.Image.FileName);
                 string folderA = "clientcomplain";
                 string filenameA = string.Concat(folderA, "_MedsImage_", extention);
-                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream());
+                string pathA = await _fileUpload.UploadFile(folderA, true, filenameA, model.Attach.OpenReadStream(), model.Attach.ContentType);
                 model.MedsImage = pathA;
             }
             else
@@ -146,7 +146,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = System.IO.Path.GetExtension(model.Image.FileName);
                 string folder = "clientcomplain";
                 string filename = string.Concat(folder, "_MarChartImage_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.Image.OpenReadStream(), model.Image.ContentType);
                 model.ChartImage = path;
             }
             else

@@ -292,6 +292,7 @@ namespace AwesomeCare.API.Controllers
 
             return Ok(newEntity);
         }
+        [AllowAnonymous]
         [HttpGet]
         [Route("MedTracker/{sdate}/{edate}")]
         [ProducesResponseType(typeof(List<MedTracker>), StatusCodes.Status200OK)]
@@ -323,6 +324,7 @@ namespace AwesomeCare.API.Controllers
                            where smt.RotaDate >= startDate && smt.RotaDate <= stopDate
                          select new MedTracker
                          {
+                             StaffRotaPeriodId = crt.ClientRotaTypeId,
                              RotaDate = smt.RotaDate,
                              RotaName = r.RotaName,
                              ClientId = med.ClientId,

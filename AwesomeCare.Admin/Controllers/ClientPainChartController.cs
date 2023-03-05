@@ -43,9 +43,9 @@ namespace AwesomeCare.Admin.Controllers
         private ILogger<ClientController> _logger;
         private readonly IMemoryCache _cache;
 
-        public ClientPainChartController(IClientPainChartService clientPainChartService, IFileUpload fileUpload, 
-            IClientService clientService, IStaffService staffService, IWebHostEnvironment env, 
-            ILogger<ClientController> logger, IMemoryCache cache,  IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
+        public ClientPainChartController(IClientPainChartService clientPainChartService, IFileUpload fileUpload,
+            IClientService clientService, IStaffService staffService, IWebHostEnvironment env,
+            ILogger<ClientController> logger, IMemoryCache cache, IEmailService emailService, IBaseRecordService baseService) : base(fileUpload)
         {
             _clientPainChartService = clientPainChartService;
             _clientService = clientService;
@@ -133,14 +133,6 @@ namespace AwesomeCare.Admin.Controllers
             await _emailService.SendEmail(att, subject, body, sender, password, recipient, Smtp);
             return RedirectToAction("Reports");
         }
-        public async Task<IActionResult> Download(int painId)
-        {
-            var PainChart = await _clientPainChartService.Get(painId);
-            var json = JsonConvert.SerializeObject(PainChart);
-            byte[] byte1 = GeneratePdf(json);
-
-            return File(byte1, "application/pdf", "ClientPainChart.pdf");
-        }
         public byte[] GeneratePdf(string paragraphs)
         {
             byte[] buffer;
@@ -194,7 +186,7 @@ namespace AwesomeCare.Admin.Controllers
                 TypeAttach = PainChart.Result.TypeAttach,
                 LocationAttach = PainChart.Result.LocationAttach,
                 OfficerToActList = staffs.Select(s => new SelectListItem(s.Fullname, s.StaffPersonalInfoId.ToString())).ToList()
-        };
+            };
             return View(putEntity);
         }
         [HttpPost]
@@ -217,7 +209,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_StatusAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -230,7 +222,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_TypeAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream(), model.TypeAttachment.ContentType);
                 model.TypeAttach = path;
             }
             else
@@ -243,7 +235,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.LocationAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_LocationAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream(), model.LocationAttachment.ContentType);
                 model.LocationAttach = path;
             }
             else
@@ -252,25 +244,25 @@ namespace AwesomeCare.Admin.Controllers
             }
             #endregion
 
-                postlog.ClientId = model.ClientId;
-                postlog.Reference = model.Reference;
-                postlog.Date = model.Date;
-                postlog.Time = model.Time;
-                postlog.Type = model.Type;
-                postlog.Location = model.Location;
-                postlog.PainLvl = model.PainLvl;
-                postlog.StatusImage = model.StatusImage;
-                postlog.StatusAttach = model.StatusAttach;
-                postlog.Comment = model.Comment;
-                postlog.StaffName = model.StaffName.Select(o => new PostPainChartStaffName { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
-                postlog.Physician = model.Physician.Select(o => new PostPainChartPhysician { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
-                postlog.PhysicianResponse = model.PhysicianResponse;
-                postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostPainChartOfficerToAct { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
-                postlog.Deadline = model.Deadline;
-                postlog.Remarks = model.Remarks;
-                postlog.Status = model.Status;
-                postlog.TypeAttach = model.TypeAttach;
-                postlog.LocationAttach = model.LocationAttach;
+            postlog.ClientId = model.ClientId;
+            postlog.Reference = model.Reference;
+            postlog.Date = model.Date;
+            postlog.Time = model.Time;
+            postlog.Type = model.Type;
+            postlog.Location = model.Location;
+            postlog.PainLvl = model.PainLvl;
+            postlog.StatusImage = model.StatusImage;
+            postlog.StatusAttach = model.StatusAttach;
+            postlog.Comment = model.Comment;
+            postlog.StaffName = model.StaffName.Select(o => new PostPainChartStaffName { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
+            postlog.Physician = model.Physician.Select(o => new PostPainChartPhysician { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
+            postlog.PhysicianResponse = model.PhysicianResponse;
+            postlog.OfficerToAct = model.OfficerToAct.Select(o => new PostPainChartOfficerToAct { StaffPersonalInfoId = o, PainChartId = model.PainChartId }).ToList();
+            postlog.Deadline = model.Deadline;
+            postlog.Remarks = model.Remarks;
+            postlog.Status = model.Status;
+            postlog.TypeAttach = model.TypeAttach;
+            postlog.LocationAttach = model.LocationAttach;
 
             var result = await _clientPainChartService.Create(postlog);
             var content = await result.Content.ReadAsStringAsync();
@@ -298,7 +290,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.StatusAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_StatusAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.StatusAttachment.OpenReadStream(), model.StatusAttachment.ContentType);
                 model.StatusAttach = path;
             }
             else
@@ -311,7 +303,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.TypeAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_TypeAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.TypeAttachment.OpenReadStream(), model.TypeAttachment.ContentType);
                 model.TypeAttach = path;
             }
             else
@@ -324,7 +316,7 @@ namespace AwesomeCare.Admin.Controllers
                 string extention = model.ClientId + System.IO.Path.GetExtension(model.LocationAttachment.FileName);
                 string folder = "clientpainchart";
                 string filename = string.Concat(folder, "_LocationAttachment_", extention);
-                string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream());
+                string path = await _fileUpload.UploadFile(folder, true, filename, model.LocationAttachment.OpenReadStream(), model.LocationAttachment.ContentType);
                 model.LocationAttach = path;
             }
             else
@@ -367,6 +359,67 @@ namespace AwesomeCare.Admin.Controllers
             }
             return View(model);
 
+        }
+        public async Task<IActionResult> Download(int painId)
+        {
+            var entity = await GetDownload(painId);
+            var clients = await _clientService.GetClientDetail();
+            var client = clients.Where(s => s.ClientId == entity.ClientId).FirstOrDefault();
+            MemoryStream stream = _fileUpload.DownloadClientFile(entity);
+            stream.Position = 0;
+            string fileName = $"{client.FullName}.docx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        }
+        public async Task<CreateClientPainChart> GetDownload(int Id)
+        {
+            var i = await _clientPainChartService.Get(Id);
+            var staff = await _staffService.GetStaffs();
+            var client = await _clientService.GetClientDetail();
+
+            var putEntity = new CreateClientPainChart
+            {
+                ClientId = i.ClientId,
+                ClientName = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().FullName,
+                IdNumber = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().IdNumber,
+                DOB = client.Where(s => s.ClientId == i.ClientId).FirstOrDefault().DateOfBirth,
+                Reference = i.Reference,
+                Date = i.Date,
+                Time = i.Time,
+                TypeAttach = i.TypeAttach,
+                LocationAttach = i.LocationAttach,
+                StatusAttach = i.StatusAttach,
+                Comment = i.Comment,
+                PhysicianResponse = i.PhysicianResponse,
+                Deadline = i.Deadline,
+                Remarks = i.Remarks,
+                StatusName = _baseService.GetBaseRecordItemById(i.Status).Result.ValueName,
+                TypeName = _baseService.GetBaseRecordItemById(i.Type).Result.ValueName,
+                LocationName = _baseService.GetBaseRecordItemById(i.Location).Result.ValueName,
+                PainLvlName = _baseService.GetBaseRecordItemById(i.PainLvl).Result.ValueName,
+                StatusImageName = _baseService.GetBaseRecordItemById(i.StatusImage).Result.ValueName,
+            };
+            foreach (var item in i.OfficerToAct.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity.OfficerToActName))
+                    putEntity.OfficerToActName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity.OfficerToActName = putEntity.OfficerToActName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            foreach (var item in i.Physician.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity._PhysicianName))
+                    putEntity._PhysicianName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity._PhysicianName = putEntity._PhysicianName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            foreach (var item in i.StaffName.Select(s => s.StaffPersonalInfoId).ToList())
+            {
+                if (string.IsNullOrWhiteSpace(putEntity._StaffName))
+                    putEntity._StaffName = staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+                else
+                    putEntity._StaffName = putEntity._StaffName + ", " + staff.Where(s => s.StaffPersonalInfoId == item).SingleOrDefault().Fullname;
+            }
+            return putEntity;
         }
     }
 }
